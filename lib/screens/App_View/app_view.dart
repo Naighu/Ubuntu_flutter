@@ -20,9 +20,9 @@ class _AppViewState extends State<AppView> {
     final theme = Theme.of(context);
     final Size size = MediaQuery.of(context).size;
     return Positioned(
-      left: widget.app.offset.dx,
-      top: widget.app.offset.dy,
-      child: Container(
+        left: widget.app.offset.dx,
+        top: widget.app.offset.dy,
+        child: Container(
           constraints: BoxConstraints(
               maxHeight: widget.app.height, maxWidth: widget.app.width),
           child: Column(children: [
@@ -33,15 +33,16 @@ class _AppViewState extends State<AppView> {
                 onPanUpdate: (DragUpdateDetails details) {
                   _dragUpdate(details, size);
                 },
-                child: titleBar(widget.app, theme))
-          ])),
-    );
+                child: titleBar(context, widget.app, theme)),
+            widget.app.child
+          ]),
+        ));
   }
 
   void _dragUpdate(DragUpdateDetails details, Size size) {
     final newOffset =
         widget.app.offset + (details.globalPosition - startDragOffset);
-    print(newOffset);
+
     // boundary conditions to drag
     if (newOffset.dx + widget.app.width * 0.5 < size.width &&
         newOffset.dy + topAppBarHeight < size.height &&

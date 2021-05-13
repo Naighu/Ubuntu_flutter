@@ -1,21 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:ubuntu/controllers/app_controller.dart';
 
 import '../../../models/app.dart';
 import '../../../constants.dart';
 
 class MenuBar extends StatefulWidget {
-  final double menuWidth;
-
-  MenuBar({Key key, this.menuWidth}) : super(key: key);
+  final Size size;
+  MenuBar({Key key, this.size}) : super(key: key);
 
   @override
   _MenuBarState createState() => _MenuBarState();
 }
 
 class _MenuBarState extends State<MenuBar> {
+  List<App> _apps;
+  @override
+  void initState() {
+    super.initState();
+
+    _apps = getApps(widget.size);
+  }
+
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
+    print("Menubar rebuilding");
     return Container(
       decoration: BoxDecoration(
           gradient: LinearGradient(
@@ -25,22 +34,22 @@ class _MenuBarState extends State<MenuBar> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          for (App app in getApps(size))
+          for (App app in _apps)
             Padding(
               padding:
                   const EdgeInsets.symmetric(vertical: defaultPadding * 0.7),
               child: Tooltip(
                 message: app.name,
-                margin: EdgeInsets.only(left: widget.menuWidth),
+                margin: EdgeInsets.only(left: menuWidth),
                 verticalOffset: -10.0,
                 child: Container(
-                  color: app.isSelected
+                  color: context.read<AppController>().appStack.contains(app)
                       ? Colors.white.withOpacity(0.3)
                       : Colors.transparent,
                   child: Stack(
                     children: [
                       // selected app icon dot
-                      if (app.isSelected)
+                      if (context.read<AppController>().appStack.contains(app))
                         Container(
                             height: 4.0,
                             width: 4.0,
@@ -50,9 +59,13 @@ class _MenuBarState extends State<MenuBar> {
 
                       TextButton(
                         onPressed: () {
-                          this.setState(() {
-                            app.isSelected = !app.isSelected;
-                          });
+                          if (!context
+                              .read<AppController>()
+                              .appStack
+                              .contains(app)) {
+                            // this.setState(() {});
+                            context.read<AppController>().addApp(app);
+                          }
                         },
                         child: SizedBox(
                           height: 50.0,
@@ -72,7 +85,7 @@ class _MenuBarState extends State<MenuBar> {
             padding: const EdgeInsets.only(bottom: defaultPadding * 4),
             child: Tooltip(
               message: "Show Applications",
-              margin: EdgeInsets.only(left: widget.menuWidth),
+              margin: EdgeInsets.only(left: menuWidth),
               verticalOffset: -10.0,
               child: IconButton(
                   onPressed: () {}, icon: Icon(Icons.apps, size: 28)),

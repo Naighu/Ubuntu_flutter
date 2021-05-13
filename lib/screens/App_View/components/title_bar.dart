@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:ubuntu/controllers/app_controller.dart';
 
 import '../../../models/app.dart';
 import '../../../constants.dart';
 
-PreferredSizeWidget titleBar(App app, ThemeData theme) => AppBar(
+PreferredSizeWidget titleBar(BuildContext context, App app, ThemeData theme) =>
+    AppBar(
       backgroundColor: Color(0xFF161616),
       toolbarHeight: topAppBarHeight,
       centerTitle: true,
@@ -32,7 +35,8 @@ PreferredSizeWidget titleBar(App app, ThemeData theme) => AppBar(
           decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.red),
           child: InkWell(
               onTap: () {
-                print("close");
+                debugPrint("close");
+                context.read<AppController>().removeApp(app);
               },
               child: Icon(Icons.close, size: 16, color: theme.iconTheme.color)),
         )

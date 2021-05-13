@@ -15,7 +15,7 @@ desktopAppBar(ThemeData theme) => AppBar(
       ),
       centerTitle: true,
       title: Text(
-        DateFormat('E   MMM   d   H : m   a').format(DateTime.now()),
+        DateFormat('E MMM d H : m a').format(DateTime.now()),
         style: theme.textTheme.headline4,
       ),
       actions: [

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:ubuntu/controllers/app_controller.dart';
 import 'package:ubuntu/models/app.dart';
 
 import '../../constants.dart';
@@ -30,10 +32,9 @@ class Desktop extends StatelessWidget {
               left: 0,
               width: menuWidth,
               height: size.height,
-              child: MenuBar(menuWidth: menuWidth)),
-          AppView(
-            app: getApps(size)[0],
-          ),
+              child: MenuBar(size: size)),
+          for (App app in context.watch<AppController>().appStack)
+            AppView(app: app)
         ],
       ),
     );
