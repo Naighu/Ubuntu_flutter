@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
-import '../Apps/terminal/controllers/terminal_controller.dart';
 import '../Apps/terminal/terminal.dart';
 
 class App {
   final String name, icon;
   double height = 600.0, width = 600.0;
+  bool showOnScreen = true, isMaximized = false, isOpened = false;
   Offset offset;
   Widget child;
   App({
@@ -37,10 +36,7 @@ List<App> getApps(Size size) => [
       App(
           name: "Terminal",
           icon: "assets/app_icons/bash.png",
-          child: ChangeNotifierProvider(
-            create: (context) => TerminalController(Size(600, 600)),
-            child: Terminal(),
-          ),
+          child: Terminal(),
           offset: Offset(size.width * 0.5 - 600.0, size.height - 600.0)),
       App(
           name: "Spotify",

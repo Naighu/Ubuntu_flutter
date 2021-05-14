@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:ubuntu/controllers/app_controller.dart';
 import 'package:ubuntu/models/app.dart';
+import 'package:get/get.dart';
 
 import '../../constants.dart';
 import '../../screens/App_View/app_view.dart';
@@ -11,6 +11,7 @@ import 'components/menubar.dart';
 class Desktop extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    Get.put(AppController());
     final theme = Theme.of(context);
     final size = MediaQuery.of(context).size;
     return Scaffold(
@@ -33,8 +34,11 @@ class Desktop extends StatelessWidget {
               width: menuWidth,
               height: size.height,
               child: MenuBar(size: size)),
-          for (App app in context.watch<AppController>().appStack)
-            AppView(app: app)
+          GetBuilder<AppController>(
+              builder: (controller) => Stack(children: [
+                    for (App app in controller.appStack)
+                      if (app.showOnScreen) AppView(app: app)
+                  ]))
         ],
       ),
     );

@@ -24,9 +24,9 @@ dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.2
+  get: ^4.1.4
   google_fonts: ^2.0.0
   intl: ^0.17.0
-  provider: ^5.0.0
 dev_dependencies:
   flutter_test:
     sdk: flutter

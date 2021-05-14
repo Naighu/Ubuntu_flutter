@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import '../components/terminal_block.dart';
 
-class TerminalController extends ChangeNotifier {
+class TerminalController extends GetxController {
   final List<TerminalBlock> _blocks = [TerminalBlock(header: "/naighu")];
 
   final Size windowSize;
@@ -11,11 +12,11 @@ class TerminalController extends ChangeNotifier {
 
   void add(TerminalBlock block) {
     _blocks.add(block);
-    notifyListeners();
+    update();
   }
 
   void removeAll() {
     _blocks.clear();
-    notifyListeners();
+    update();
   }
 }

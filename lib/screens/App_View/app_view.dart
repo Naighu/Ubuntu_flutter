@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
+import 'package:ubuntu/controllers/app_controller.dart';
 
 import '../../constants.dart';
 import '../../models/app.dart';
@@ -15,12 +18,14 @@ class AppView extends StatefulWidget {
 
 class _AppViewState extends State<AppView> {
   Offset startDragOffset;
+  final AppController _appController = Get.find<AppController>();
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    print("AppView rebuilding");
     final Size size = MediaQuery.of(context).size;
     return Positioned(
-        left: widget.app.offset.dx,
+        left: menuWidth + widget.app.offset.dx,
         top: widget.app.offset.dy,
         child: Container(
           constraints: BoxConstraints(
@@ -34,7 +39,10 @@ class _AppViewState extends State<AppView> {
                   _dragUpdate(details, size);
                 },
                 child: titleBar(context, widget.app, theme)),
-            widget.app.child
+            SizedBox(
+                height: widget.app.height - topAppBarHeight,
+                width: widget.app.width,
+                child: widget.app.child)
           ]),
         ));
   }
@@ -42,14 +50,10 @@ class _AppViewState extends State<AppView> {
   void _dragUpdate(DragUpdateDetails details, Size size) {
     final newOffset =
         widget.app.offset + (details.globalPosition - startDragOffset);
-
     // boundary conditions to drag
     if (newOffset.dx + widget.app.width * 0.5 < size.width &&
         newOffset.dy + topAppBarHeight < size.height &&
-        newOffset.dy > topAppBarHeight)
-      this.setState(() {
-        widget.app.offset = newOffset;
-      });
+        newOffset.dy > 0) _appController.changeOffset(widget.app, newOffset);
 
     startDragOffset = details.globalPosition;
   }
