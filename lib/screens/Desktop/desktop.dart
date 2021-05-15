@@ -4,6 +4,7 @@ import 'package:ubuntu/controllers/file_controller.dart';
 import 'package:ubuntu/models/app.dart';
 import 'package:get/get.dart';
 import 'package:ubuntu/models/file.dart';
+import 'package:ubuntu/screens/Desktop/components/file_stram.dart';
 import 'package:ubuntu/screens/Desktop/components/file_ui.dart';
 
 import '../../constants.dart';
@@ -39,7 +40,7 @@ class Desktop extends StatelessWidget {
               height: size.height,
               child: MenuBar(size: size)),
           StreamBuilder<List<MyFile>>(
-              stream: FileController.listFolders("/naighu"),
+              stream: FileStream().listFolders("/naighu"),
               builder: (_, snapshot) {
                 print("Files changed");
                 return GetBuilder<FileController>(

@@ -14,8 +14,15 @@ class CookieManager {
     document.cookie = "$key=$value; max-age=2592000; path=/;";
   }
 
+  void removeCookie(String key) {
+    String _key = getCookie(key);
+    print("[CookieManager] $_key");
+    if (_key.isNotEmpty) document.cookie = "$key=delete;max-age=1;path=/;";
+  }
+
   String getCookie(String key) {
     List<String> listValues = getAllCookie();
+    print(listValues);
     String matchVal = "";
     for (int i = 0; i < listValues.length; i++) {
       List<String> map = listValues[i].split("=");
@@ -32,7 +39,6 @@ class CookieManager {
 
   List<String> getAllCookie() {
     String cookies = document.cookie;
-
     return cookies.isNotEmpty ? cookies.split(";") : [];
   }
 }

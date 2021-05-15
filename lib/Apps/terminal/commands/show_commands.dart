@@ -4,5 +4,7 @@ Map<String, DecodeCommand> commands = {
   "ls": Ls(),
   "cd": Cd(),
   "pwd": Pwd(),
-  "mkdir": Mkdir()
+  "mkdir": Mkdir(),
+  "rmdir": Rmdir(),
+  "mv": Mv()
 };

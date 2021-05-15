@@ -18,9 +18,35 @@ class Shell {
       throw "Not Implemented";
   }
 
-  void createDir(String path) {
+  void create(String path, {value = "null"}) {
     CookieManager manager = CookieManager.init();
-    manager.addToCookie(path, "Directory");
+    manager.addToCookie("${_crtPath(path)}", value);
+  }
+
+  String _crtPath(String path) {
+    List<String> split = path.split("/");
+    String newPath = split.removeAt(0);
+
+    for (String p in split) {
+      print(p);
+      if (!p.startsWith("d-"))
+        newPath += "/d-$p";
+      else
+        newPath += "/$p";
+    }
+    return newPath;
+  }
+
+  void removeDir(String path) {
+    print("[Removing Dir]");
+    CookieManager manager = CookieManager.init();
+    print(path);
+    manager.removeCookie("${_crtPath(path)}");
+  }
+
+  String getContents(String path) {
+    CookieManager manager = CookieManager.init();
+    return manager.getCookie("${_crtPath(path)}");
   }
 
   List _listItemsOnWeb() {

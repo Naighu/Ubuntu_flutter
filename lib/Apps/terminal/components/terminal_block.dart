@@ -61,10 +61,12 @@ class _TerminalBlockState extends State<TerminalBlock> {
   void _onSubmitted(TerminalController controller, String val) {
     showOutput = val.isEmpty ? false : true;
     String header = controller.path;
+
     if (showOutput) {
-      if (commands.containsKey(val.split(" ")[0])) {
-        String message =
-            commands[val.split(" ")[0]].executeCommand(context, val);
+      List<String> commandsplit = val.split(" ");
+      if (commands.containsKey(commandsplit[0])) {
+        String message = commands[val.split(" ")[0]]
+            .executeCommand(context, commandsplit.skip(1).join(" "));
         output = message.split(":").last;
         header = message.split(":")[0];
       } else {
