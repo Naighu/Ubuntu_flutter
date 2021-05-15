@@ -1,9 +1,11 @@
 import 'dart:io';
 
-import 'dart:ui';
+import "package:flutter/material.dart";
 
 class MyFile {
-  Image icon;
-  FileSystemEntity file;
-  String fileName;
+  final Image icon;
+  final FileSystemEntity file;
+  final String fileName;
+  Offset offset;
+  MyFile({this.icon, this.file, this.fileName, this.offset = Offset.zero});
 }

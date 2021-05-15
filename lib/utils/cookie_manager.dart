@@ -32,7 +32,7 @@ class CookieManager {
 
   List<String> getAllCookie() {
     String cookies = document.cookie;
-    print(cookies);
+
     return cookies.isNotEmpty ? cookies.split(";") : [];
   }
 }

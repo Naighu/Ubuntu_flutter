@@ -18,6 +18,11 @@ class Shell {
       throw "Not Implemented";
   }
 
+  void createDir(String path) {
+    CookieManager manager = CookieManager.init();
+    manager.addToCookie(path, "Directory");
+  }
+
   List _listItemsOnWeb() {
     CookieManager manager = CookieManager.init();
     List<String> cookies = manager.getAllCookie();
@@ -36,7 +41,7 @@ class Shell {
               ".~-")) // if it starts with ~ then it is a file. "." prefix indicates that it is a hidden file
         items.add(File("${map[0].replaceAll("d-", "").replaceAll("~-", "")}"));
     }
-    print("items are $items");
+
     return items;
   }
 }

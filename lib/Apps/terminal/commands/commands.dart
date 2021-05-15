@@ -1,44 +1,55 @@
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
+import 'package:get/get.dart';
 import 'package:ubuntu/Apps/terminal/commands/shell.dart';
 import 'package:ubuntu/Apps/terminal/controllers/terminal_controller.dart';
+import 'package:ubuntu/controllers/file_controller.dart';
 
 abstract class DecodeCommand {
-  dynamic executeCommand(TerminalController controller, String command);
+  dynamic executeCommand(BuildContext context, String command);
 }
 
 class Ls implements DecodeCommand {
   @override
-  dynamic executeCommand(TerminalController controller, String command) {
-    Shell shell = Shell.init();
-    List items = shell.listDir();
-    return "${controller.path}:${ls(controller.path, items)}";
+  dynamic executeCommand(BuildContext context, String command) {
+    final controller = Get.find<TerminalController>();
+    List items = ls(controller.path);
+    String _items = "";
+    for (var item in items) {
+      _items += item.path.split("/").last;
+      _items += "  ";
+    }
+    return "${controller.path}:$_items";
   }
 
-  ls(String path, List items) {
-    String _items = "";
+  List ls(String path) {
+    Shell shell = Shell.init();
+    List items = shell.listDir();
+    List _items = [];
     for (var item in items) {
       List split = item.path.split("/");
       split.removeLast();
       if (split.join("/").trim() == path.trim()) {
-        _items += item.path.split("/").last;
-        _items += "  ";
+        _items.add(item);
       }
     }
-    return "$_items";
+    return _items;
   }
 }
 
 class Pwd implements DecodeCommand {
   @override
-  dynamic executeCommand(TerminalController controller, String command) {
+  dynamic executeCommand(BuildContext context, String command) {
+    final controller = Get.find<TerminalController>();
     return "${controller.path}:${controller.path}";
   }
 }
 
 class Cd implements DecodeCommand {
   @override
-  dynamic executeCommand(TerminalController controller, String command) {
+  dynamic executeCommand(BuildContext context, String command) {
+    final controller = Get.find<TerminalController>();
     Shell shell = Shell.init();
     List items = shell.listDir();
     String folder = command.split(" ").last;
@@ -67,5 +78,29 @@ class Cd implements DecodeCommand {
     }
     if (newPath == null) return currentPath;
     return newPath;
+  }
+}
+
+class Mkdir implements DecodeCommand {
+  @override
+  dynamic executeCommand(BuildContext context, String command) {
+    final controller = Get.find<TerminalController>();
+    String fileName = command.split(" ").last;
+    final fileController = Get.find<FileController>();
+    List items = Ls().ls(controller.path);
+    bool dirAlreadyExist = false;
+    for (var item in items) {
+      if (item is Directory && item.path.split("/").last == fileName) {
+        dirAlreadyExist = true;
+        break;
+      }
+    }
+    if (!dirAlreadyExist) {
+      Shell shell = Shell.init();
+      shell.createDir(controller.path + "/d-$fileName");
+      // fileController.listFolders(controller.path);
+      return ":";
+    } else
+      return "${controller.path}:File Already exist";
   }
 }

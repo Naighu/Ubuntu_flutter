@@ -64,7 +64,7 @@ class _TerminalBlockState extends State<TerminalBlock> {
     if (showOutput) {
       if (commands.containsKey(val.split(" ")[0])) {
         String message =
-            commands[val.split(" ")[0]].executeCommand(controller, val);
+            commands[val.split(" ")[0]].executeCommand(context, val);
         output = message.split(":").last;
         header = message.split(":")[0];
       } else {
