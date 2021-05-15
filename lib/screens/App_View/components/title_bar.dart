@@ -39,7 +39,7 @@ PreferredSizeWidget titleBar(BuildContext context, App app, ThemeData theme) {
         child: InkWell(
             onTap: () {
               debugPrint("close");
-              controller.removeApp(app);
+              controller.appStack.remove(app);
             },
             child: Icon(Icons.close, size: 16, color: theme.iconTheme.color)),
       )

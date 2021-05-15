@@ -15,7 +15,7 @@ class MenuBar extends StatefulWidget {
 
 class _MenuBarState extends State<MenuBar> {
   List<App> _apps;
-  // final AppController appController = Get.find<AppController>();
+  final AppController appController = Get.find<AppController>();
   @override
   void initState() {
     super.initState();
@@ -32,7 +32,7 @@ class _MenuBarState extends State<MenuBar> {
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
               colors: [Color(0xFF461013), Color(0xFF1A011A)])),
-      child: GetBuilder<AppController>(builder: (appController) {
+      child: Obx(() {
         return Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -94,10 +94,10 @@ class _MenuBarState extends State<MenuBar> {
     );
   }
 
-  void _onPressed(appController, App app) {
+  void _onPressed(AppController appController, App app) {
     if (!appController.appStack.contains(app)) {
       setState(() {
-        appController.addApp(app);
+        appController.appStack.add(app);
       });
     } else if (!app.showOnScreen)
       setState(() {

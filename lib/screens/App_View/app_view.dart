@@ -18,36 +18,41 @@ class AppView extends StatefulWidget {
 
 class _AppViewState extends State<AppView> {
   Offset startDragOffset;
-  final AppController _appController = Get.find<AppController>();
+  // final AppController _appController = Get.find<AppController>();
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     print("AppView rebuilding");
     final Size size = MediaQuery.of(context).size;
-    return Positioned(
-        left: menuWidth + widget.app.offset.dx,
-        top: widget.app.offset.dy,
-        child: Container(
-          constraints: BoxConstraints(
-              maxHeight: widget.app.height, maxWidth: widget.app.width),
-          child: Column(children: [
-            GestureDetector(
-                onPanStart: (DragStartDetails details) {
-                  startDragOffset = details.globalPosition;
-                },
-                onPanUpdate: (DragUpdateDetails details) {
-                  _dragUpdate(details, size);
-                },
-                child: titleBar(context, widget.app, theme)),
-            SizedBox(
-                height: widget.app.height - topAppBarHeight,
-                width: widget.app.width,
-                child: widget.app.child)
-          ]),
-        ));
+    return GetBuilder<AppController>(builder: (controller) {
+      if (!widget.app.showOnScreen)
+        return Container();
+      else
+        return Positioned(
+            left: menuWidth + widget.app.offset.dx,
+            top: widget.app.offset.dy,
+            child: Container(
+              constraints: BoxConstraints(
+                  maxHeight: widget.app.height, maxWidth: widget.app.width),
+              child: Column(children: [
+                GestureDetector(
+                    onPanStart: (DragStartDetails details) {
+                      startDragOffset = details.globalPosition;
+                    },
+                    onPanUpdate: (DragUpdateDetails details) {
+                      _dragUpdate(details, controller, size);
+                    },
+                    child: titleBar(context, widget.app, theme)),
+                SizedBox(
+                    height: widget.app.height - topAppBarHeight,
+                    width: widget.app.width,
+                    child: widget.app.child)
+              ]),
+            ));
+    });
   }
 
-  void _dragUpdate(DragUpdateDetails details, Size size) {
+  void _dragUpdate(DragUpdateDetails details, _appController, Size size) {
     final newOffset =
         widget.app.offset + (details.globalPosition - startDragOffset);
     // boundary conditions to drag

@@ -11,7 +11,7 @@ import 'components/menubar.dart';
 class Desktop extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    Get.put(AppController());
+    final controller = Get.put(AppController());
     final theme = Theme.of(context);
     final size = MediaQuery.of(context).size;
     return Scaffold(
@@ -34,11 +34,9 @@ class Desktop extends StatelessWidget {
               width: menuWidth,
               height: size.height,
               child: MenuBar(size: size)),
-          GetBuilder<AppController>(
-              builder: (controller) => Stack(children: [
-                    for (App app in controller.appStack)
-                      if (app.showOnScreen) AppView(app: app)
-                  ]))
+          Obx(() => Stack(children: [
+                for (App app in controller.appStack) AppView(app: app)
+              ]))
         ],
       ),
     );

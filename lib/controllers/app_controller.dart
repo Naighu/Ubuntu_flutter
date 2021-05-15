@@ -4,18 +4,18 @@ import 'package:get/get.dart';
 import '../models/app.dart';
 
 class AppController extends GetxController {
-  final List<App> _appStack = [];
+  final RxList appStack = [].obs;
 
-  List<App> get appStack => _appStack;
-  void addApp(App app) {
-    _appStack.add(app);
-    update();
-  }
+  //List<App> get appStack => _appStack;
+  // void addApp(App app) {
+  //   _appStack.add(app);
+  //   update();
+  // }
 
-  void removeApp(App app) {
-    _appStack.remove(app);
-    update();
-  }
+  // void removeApp(App app) {
+  //   _appStack.remove(app);
+  //   update();
+  // }
 
   void hide(App app) {
     app.showOnScreen = false;
