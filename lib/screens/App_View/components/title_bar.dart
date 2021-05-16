@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:ubuntu/Apps/terminal/controllers/menu_controller.dart';
 import 'package:ubuntu/controllers/app_controller.dart';
 
 import '../../../models/app.dart';
 import '../../../constants.dart';
 
-PreferredSizeWidget titleBar(BuildContext context, App app, ThemeData theme) {
+PreferredSizeWidget titleBar(BuildContext context, App app, ThemeData theme,
+    {Function() onMaximized, Function() onClose}) {
   AppController controller = Get.find<AppController>();
   return AppBar(
     backgroundColor: Color(0xFF161616),
@@ -26,8 +28,15 @@ PreferredSizeWidget titleBar(BuildContext context, App app, ThemeData theme) {
           onTap: () {
             if (app.isMaximized)
               controller.minimize(app, MediaQuery.of(context).size);
-            else
-              controller.maximize(app, MediaQuery.of(context).size);
+            else {
+              final menu = Get.find<MenuController>();
+              menu.menubarWidth.value = 0;
+              controller.maximize(
+                app,
+                MediaQuery.of(context).size,
+              );
+            }
+            onMaximized();
           },
           child:
               Icon(Icons.crop_square, size: 16, color: theme.iconTheme.color)),
@@ -39,7 +48,7 @@ PreferredSizeWidget titleBar(BuildContext context, App app, ThemeData theme) {
         child: InkWell(
             onTap: () {
               debugPrint("close");
-              controller.appStack.remove(app);
+              onClose();
             },
             child: Icon(Icons.close, size: 16, color: theme.iconTheme.color)),
       )

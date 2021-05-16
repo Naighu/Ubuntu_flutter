@@ -28,7 +28,8 @@ class CookieManager {
     for (int i = 0; i < listValues.length; i++) {
       List<String> map = listValues[i].split("=");
       String _key = map[0].trim();
-      String _val = map[1].trim();
+      map.removeAt(0);
+      String _val = map.join("=").trim();
       if (key.trim() == _key) {
         matchVal = _val;
         break;

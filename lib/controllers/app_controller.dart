@@ -23,7 +23,7 @@ class AppController extends GetxController {
 
   void maximize(App app, Size totalSize) {
     app.height = totalSize.height - topAppBarHeight;
-    app.width = totalSize.width - menuWidth;
+    app.width = totalSize.width;
     app.offset = Offset(0, 0);
     app.isMaximized = true;
 

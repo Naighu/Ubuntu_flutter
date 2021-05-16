@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:ubuntu/Apps/gedit/gedit.dart';
 import 'package:ubuntu/Apps/webview/webview.dart';
 
 import '../Apps/terminal/terminal.dart';

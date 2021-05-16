@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:ubuntu/Apps/terminal/controllers/menu_controller.dart';
 
 import 'package:ubuntu/controllers/app_controller.dart';
 
@@ -18,7 +19,9 @@ class AppView extends StatefulWidget {
 
 class _AppViewState extends State<AppView> {
   Offset startDragOffset;
-  // final AppController _appController = Get.find<AppController>();
+  bool isClosed = false;
+  bool isMaximized = false;
+  final MenuController _menuController = Get.find<MenuController>();
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -29,26 +32,45 @@ class _AppViewState extends State<AppView> {
         return Container();
       else
         return Positioned(
-            left: menuWidth + widget.app.offset.dx,
-            top: widget.app.offset.dy,
-            child: Container(
-              constraints: BoxConstraints(
-                  maxHeight: widget.app.height, maxWidth: widget.app.width),
-              child: Column(children: [
-                GestureDetector(
-                    onPanStart: (DragStartDetails details) {
-                      startDragOffset = details.globalPosition;
-                    },
-                    onPanUpdate: (DragUpdateDetails details) {
-                      _dragUpdate(details, controller, size);
-                    },
-                    child: titleBar(context, widget.app, theme)),
-                SizedBox(
-                    height: widget.app.height - topAppBarHeight,
-                    width: widget.app.width,
-                    child: widget.app.child)
-              ]),
-            ));
+          left: widget.app.offset.dx,
+          top: widget.app.offset.dy,
+          child: AnimatedOpacity(
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.bounceOut,
+              opacity: isClosed ? 0 : 1,
+              onEnd: () {
+                controller.appStack.remove(widget.app);
+                widget.app.offset = Offset.zero;
+                widget.app.width = 600;
+                widget.app.height = 600;
+              },
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 300),
+                constraints: BoxConstraints(
+                    maxHeight: widget.app.height, maxWidth: widget.app.width),
+                child: Column(children: [
+                  GestureDetector(
+                      onPanStart: (DragStartDetails details) {
+                        startDragOffset = details.globalPosition;
+                      },
+                      onPanUpdate: (DragUpdateDetails details) {
+                        _dragUpdate(details, controller, size);
+                      },
+                      child: titleBar(context, widget.app, theme, onClose: () {
+                        Get.find<MenuController>().menubarWidth.value =
+                            menuWidth;
+                        setState(() {
+                          isClosed = true;
+                        });
+                      }, onMaximized: () {})),
+                  AnimatedContainer(
+                      duration: const Duration(milliseconds: 300),
+                      height: widget.app.height - topAppBarHeight,
+                      width: widget.app.width,
+                      child: widget.app.child)
+                ]),
+              )),
+        );
     });
   }
 
@@ -56,10 +78,17 @@ class _AppViewState extends State<AppView> {
     final newOffset =
         widget.app.offset + (details.globalPosition - startDragOffset);
     // boundary conditions to drag
-    if (newOffset.dx + widget.app.width * 0.5 < size.width &&
-        newOffset.dy + topAppBarHeight < size.height &&
-        newOffset.dy > 0) _appController.changeOffset(widget.app, newOffset);
+    if (newOffset.dx + widget.app.width < size.width &&
+        newOffset.dy + widget.app.height < size.height &&
+        newOffset.dy > 0 &&
+        newOffset.dx > 0) _appController.changeOffset(widget.app, newOffset);
 
+    if (newOffset.dx > 0 && newOffset.dx < 10) {
+      print("menubar hide");
+
+      _menuController.menubarWidth.value = 0;
+    } else if (newOffset.dx > 30)
+      _menuController.menubarWidth.value = menuWidth;
     startDragOffset = details.globalPosition;
   }
 }

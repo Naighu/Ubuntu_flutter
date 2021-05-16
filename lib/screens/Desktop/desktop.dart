@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ubuntu/Apps/terminal/controllers/menu_controller.dart';
 import 'package:ubuntu/controllers/app_controller.dart';
 import 'package:ubuntu/controllers/file_controller.dart';
 import 'package:ubuntu/models/app.dart';
@@ -13,10 +14,10 @@ import 'components/appbar.dart';
 import 'components/menubar.dart';
 
 class Desktop extends StatelessWidget {
+  final controller = Get.put(AppController());
+  final menuController = Get.put(MenuController());
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(AppController());
-
     final theme = Theme.of(context);
     final size = MediaQuery.of(context).size;
     return Scaffold(
@@ -34,11 +35,14 @@ class Desktop extends StatelessWidget {
               fit: BoxFit.cover,
             )),
           ),
-          Positioned(
-              left: 0,
-              width: menuWidth,
-              height: size.height,
-              child: MenuBar(size: size)),
+          GetX<MenuController>(
+            builder: (menuController) => AnimatedPositioned(
+                duration: const Duration(milliseconds: 300),
+                left: 0,
+                width: menuController.menubarWidth.value,
+                height: size.height,
+                child: MenuBar(size: size)),
+          ),
           StreamBuilder<List<MyFile>>(
               stream: FileStream().listFolders("/naighu", size),
               builder: (_, snapshot) {
@@ -57,9 +61,14 @@ class Desktop extends StatelessWidget {
                       );
                     });
               }),
-          Obx(() => Stack(children: [
-                for (App app in controller.appStack) AppView(app: app)
-              ]))
+          Obx(() => AnimatedContainer(
+                duration: const Duration(milliseconds: 300),
+                padding:
+                    EdgeInsets.only(left: menuController.menubarWidth.value),
+                child: Stack(children: [
+                  for (App app in controller.appStack) AppView(app: app)
+                ]),
+              ))
         ],
       ),
     );

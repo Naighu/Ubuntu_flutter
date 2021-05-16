@@ -79,7 +79,9 @@ class _MenuBarState extends State<MenuBar> {
               ),
             Spacer(),
             Padding(
-              padding: const EdgeInsets.only(bottom: defaultPadding * 4),
+              padding: const EdgeInsets.only(
+                bottom: defaultPadding * 4,
+              ),
               child: Tooltip(
                 message: "Show Applications",
                 margin: EdgeInsets.only(left: menuWidth),

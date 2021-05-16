@@ -10,7 +10,7 @@ class TerminalController extends GetxController {
   ];
   final List<String> headers = [""];
   final List<String> outputs = [""];
-  String listKey = "key";
+  int cleared = 0; // inorder to work clear command.. used as key for listView
   final Size windowSize;
   TerminalController(this.windowSize);
   String path = "/naighu";
@@ -34,7 +34,7 @@ class TerminalController extends GetxController {
     outputs.clear();
     headers.add("");
     outputs.add("");
-    listKey = "chnged";
+    cleared++;
     update();
   }
 }
