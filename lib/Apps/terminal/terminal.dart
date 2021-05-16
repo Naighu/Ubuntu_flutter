@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:ubuntu/Apps/terminal/components/terminal_block.dart';
 import 'controllers/terminal_controller.dart';
 
 class Terminal extends StatelessWidget {
@@ -8,14 +9,14 @@ class Terminal extends StatelessWidget {
     return GetBuilder<TerminalController>(
         init: TerminalController(Size(600, 600)),
         builder: (controller) {
-          Get.put(controller);
           return Container(
               color: Theme.of(context).primaryColor,
-              child: ListView.builder(
-                  itemCount: controller.blocks.length,
-                  itemBuilder: (context, index) {
-                    return controller.blocks[index];
-                  }));
+              child: ListView(
+                key: Key(controller.listKey),
+                children: [
+                  for (TerminalBlock block in controller.blocks) block
+                ],
+              ));
         });
   }
 }

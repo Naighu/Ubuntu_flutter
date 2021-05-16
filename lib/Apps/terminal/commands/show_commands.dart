@@ -6,5 +6,8 @@ Map<String, DecodeCommand> commands = {
   "pwd": Pwd(),
   "mkdir": Mkdir(),
   "rmdir": Rmdir(),
-  "mv": Mv()
+  "clear": Clear(),
+  "touch": Touch(),
+  "cat": Cat(),
+  "rm": Rm()
 };

@@ -1,10 +1,14 @@
+import 'dart:io';
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:ubuntu/Apps/terminal/commands/commands.dart';
+import 'package:ubuntu/constants.dart';
 import 'package:ubuntu/models/file.dart';
 
 class FileStream {
   List<MyFile> _myFiles = [];
-  Stream<List<MyFile>> listFolders(String dir) async* {
+  Stream<List<MyFile>> listFolders(String dir, Size size) async* {
     final list = Ls();
 
     while (true) {
@@ -12,9 +16,22 @@ class FileStream {
       List items = list.ls(dir);
       for (var item in items) {
         files.add(MyFile(
-            icon: Image.asset("assets/system/folder.png"),
+            icon: item is Directory
+                ? Image.asset("assets/system/folder.png")
+                : Image.asset(
+                    "assets/app_icons/gedit.png",
+                    height: 50,
+                    width: 50,
+                  ),
             file: item,
-            fileName: item.path.split("/").last));
+            fileName: item.path.split("/").last,
+            offset: Offset(
+                Random()
+                    .nextInt((size.width - menuWidth - 100).toInt())
+                    .toDouble(),
+                Random()
+                    .nextInt((size.height - topAppBarHeight - 100).toInt())
+                    .toDouble())));
       }
       if (files.isEmpty) {
         _myFiles.clear();
@@ -40,7 +57,6 @@ class FileStream {
     int index = _myFiles.nameChange(files);
 
     if (index != -1) {
-      print(index);
       _myFiles.removeAt(index);
       _myFiles.add(files[index]);
       return true;
@@ -54,7 +70,6 @@ class FileStream {
   }
 
   void deleteFile(List files) {
-    print("File delted");
     List present = [];
 
     for (int i = 0; i < _myFiles.length; i++) {

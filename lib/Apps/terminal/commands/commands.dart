@@ -4,24 +4,23 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:ubuntu/Apps/terminal/commands/shell.dart';
 import 'package:ubuntu/Apps/terminal/controllers/terminal_controller.dart';
-import 'package:ubuntu/controllers/file_controller.dart';
 
 abstract class DecodeCommand {
-  dynamic executeCommand(BuildContext context, String command);
+  dynamic executeCommand(BuildContext context, int id, String command);
 }
 
 class Ls implements DecodeCommand {
   @override
-  dynamic executeCommand(BuildContext context, String command) {
+  dynamic executeCommand(BuildContext context, int id, String command) {
     final controller = Get.find<TerminalController>();
-    print("controller PAth : ${controller.path}");
+
     List items = ls(controller.path);
     String _items = "";
     for (var item in items) {
       _items += item.path.split("/").last;
       _items += "  ";
     }
-    return "${controller.path}:$_items";
+    return _items;
   }
 
   List ls(String path) {
@@ -41,53 +40,54 @@ class Ls implements DecodeCommand {
 
 class Pwd implements DecodeCommand {
   @override
-  dynamic executeCommand(BuildContext context, String command) {
+  dynamic executeCommand(BuildContext context, int id, String command) {
     final controller = Get.find<TerminalController>();
-    return "${controller.path}:${controller.path}";
+    return controller.path;
+  }
+}
+
+class Clear implements DecodeCommand {
+  @override
+  dynamic executeCommand(BuildContext context, int id, String command) {
+    final controller = Get.find<TerminalController>();
+    controller.removeAll();
+    return "";
   }
 }
 
 class Cd implements DecodeCommand {
   @override
-  dynamic executeCommand(BuildContext context, String folder) {
+  dynamic executeCommand(BuildContext context, int id, String folder) {
     final controller = Get.find<TerminalController>();
     Shell shell = Shell.init();
     List items = shell.listDir();
     folder = folder.startsWith("/") ? folder : "/$folder";
     String newPath = cd(items, controller.path, folder);
     if (newPath != controller.path) {
-      print("equal");
       controller.path = newPath;
-      newPath = newPath + ":" + " ";
-      print(newPath);
-    } else {
-      newPath = "${controller.path}: ";
+      controller.headers.add(newPath);
     }
-    return newPath;
+    return "";
   }
 
   String cd(List items, String currentPath, String folder) {
     String newPath;
     for (var item in items) {
       if (item is Directory) {
-        if (item.path.trim() == currentPath + folder) {
+        if (item.path.trim() == (currentPath + folder).trim()) {
           newPath = item.path;
           break;
         }
       }
     }
     if (newPath == null) return currentPath;
-    // List split = newPath.split("/");
-    // String last = split.last;
-    // split.removeLast();
-    // return "${split.join("/")}/d-$last";
     return newPath;
   }
 }
 
 class Mkdir implements DecodeCommand {
   @override
-  dynamic executeCommand(BuildContext context, String fileName) {
+  dynamic executeCommand(BuildContext context, int id, String fileName) {
     final controller = Get.find<TerminalController>();
     List items = Ls().ls(controller.path);
     String error = "";
@@ -97,7 +97,10 @@ class Mkdir implements DecodeCommand {
     else {
       for (var item in items) {
         List split = item.path.split("/");
-        if (item is Directory && split.join().trim() == fileName) {
+        split.removeLast();
+
+        if (item is Directory &&
+            item.path.trim() == split.join("/") + "/$fileName") {
           error = "Directory Already exist";
           break;
         }
@@ -106,92 +109,126 @@ class Mkdir implements DecodeCommand {
     if (error.isEmpty) {
       Shell shell = Shell.init();
       shell.create(controller.path + "/$fileName");
-      // fileController.listFolders(controller.path);
-      return "${controller.path}:";
+      return "";
     } else
-      return "${controller.path}:$error";
+      return error;
   }
 }
 
 class Rmdir implements DecodeCommand {
   @override
-  dynamic executeCommand(BuildContext context, String fileName) {
+  dynamic executeCommand(BuildContext context, int id, String fileName) {
     final controller = Get.find<TerminalController>();
-    List items = Ls().ls(controller.path);
-    String error = "Not found";
+    Ls ls = Ls();
+    List items = ls.ls(controller.path);
+
+    String error = "File Not Found \n\nNavigate to the Working Directory";
     for (var item in items) {
-      if (item is Directory && item.path.split("/").last == fileName) {
+      if (item is Directory &&
+          item.path.split("/").last.trim() == fileName.trim()) {
         error = "";
         break;
       }
     }
+    items = ls.ls(controller.path + "/$fileName");
+    if (items.isNotEmpty) error = "Directory is not empty";
     if (error.isEmpty) {
       Shell shell = Shell.init();
-      shell.removeDir(controller.path + "/$fileName");
-      return ":";
-    } else
-      return "${controller.path}:$error";
+      shell.remove(controller.path + "/$fileName");
+      return "";
+    }
+    return error;
   }
 }
 
-class Mv implements DecodeCommand {
+class Touch implements DecodeCommand {
   @override
-  dynamic executeCommand(BuildContext context, String command) {
+  dynamic executeCommand(BuildContext context, int id, String fileName) {
     final controller = Get.find<TerminalController>();
+    List items = Ls().ls(controller.path);
     String error = "";
-    try {
-      String src = command.split(" ")[0];
-      String destination = command.split(" ")[1];
-      List srcSplit = src.split("/");
-      List dstSplit = destination.split("/");
 
-      String path;
-      if (srcSplit.length != 1) {
-        srcSplit.removeLast();
-        path = srcSplit.join("/");
-      } else
-        path = controller.path;
+    if (fileName.isEmpty)
+      error = "Specify a name";
+    else {
+      for (var item in items) {
+        List split = item.path.split("/");
+        split.removeLast();
 
-      Ls ls = Ls();
-      List items = ls.ls(path);
-      dstSplit.removeLast();
-      dstSplit.removeLast();
-      bool dst = dstSplit.isEmpty;
-      if (dstSplit.isNotEmpty) {
-        List destDir = ls.ls(dstSplit.join("/"));
-        print(destDir);
-        dstSplit = destination.split("/");
-        dstSplit.removeLast();
-        print(dstSplit.join("/"));
-        if (_checkForSrcFile(destDir, dstSplit.join("/")))
-          dst = true;
-        else
-          dst = false;
+        if (item is File &&
+            item.path.trim() == (split.join("/") + "/$fileName").trim()) {
+          error = "File Already exist";
+          break;
+        }
       }
-      if (dst && _checkForSrcFile(items, src)) {
-        Shell shell = Shell.init();
-        String contents = shell.getContents(src);
-        shell.removeDir(src);
-        shell.create(destination, value: contents);
-      } else
-        error = "File or dir not found";
-    } catch (e) {
-      error =
-          "Specify the path\n 1. '.' is not currently supported. \n2.Use the full Path ";
+    }
+    if (error.isEmpty) {
+      Shell shell = Shell.init();
+      shell.create(controller.path + "/$fileName", option: "file");
+      return "";
+    } else
+      return error;
+  }
+}
+
+class Cat implements DecodeCommand {
+  @override
+  dynamic executeCommand(BuildContext context, int id, String fileName) {
+    final controller = Get.find<TerminalController>();
+    List items = Ls().ls(controller.path);
+    String error = "";
+
+    if (fileName.isEmpty)
+      error = "Specify a name";
+    else {
+      bool isExist = false;
+      for (var item in items) {
+        List split = item.path.split("/");
+        split.removeLast();
+
+        if (item is File &&
+            item.path.trim() == (split.join("/") + "/$fileName").trim()) {
+          isExist = true;
+          break;
+        }
+      }
+      if (isExist)
+        return cat(controller.path + "/$fileName");
+      else
+        error = "No such file";
     }
 
-    return "${controller.path}:$error";
+    return error;
   }
 
-  bool _checkForSrcFile(List items, String path) {
-    bool exist = false;
+  String cat(String path) {
+    Shell shell = Shell.init();
+    String contents = shell.getContents(path);
+    return contents;
+  }
+}
+
+class Rm implements DecodeCommand {
+  @override
+  dynamic executeCommand(BuildContext context, int id, String fileName) {
+    final controller = Get.find<TerminalController>();
+    Ls ls = Ls();
+    List items = ls.ls(controller.path);
+
+    String error = "File Not Found \n\nNavigate to the Working Directory";
     for (var item in items) {
-      if (item.path.trim() == path.trim()) {
-        print("true");
-        exist = true;
+      if (item is File && item.path.split("/").last.trim() == fileName.trim()) {
+        error = "";
         break;
       }
     }
-    return exist;
+    items = ls.ls(controller.path + "/$fileName");
+    if (items.isNotEmpty) error = "Directory is not empty";
+    if (error.isEmpty) {
+      Shell shell = Shell.init();
+      shell.remove(controller.path + "/$fileName", option: "file");
+      return "";
+    }
+    return error;
   }
 }

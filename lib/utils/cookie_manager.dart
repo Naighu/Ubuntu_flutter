@@ -11,30 +11,31 @@ class CookieManager {
 
   void addToCookie(String key, String value) {
     // 2592000 sec = 30 days.
-    document.cookie = "$key=$value; max-age=2592000; path=/;";
+    document.cookie =
+        "$key=${value.replaceAll("\n", "~")}; max-age=2592000; path=/;";
   }
 
   void removeCookie(String key) {
     String _key = getCookie(key);
-    print("[CookieManager] $_key");
+
     if (_key.isNotEmpty) document.cookie = "$key=delete;max-age=1;path=/;";
   }
 
   String getCookie(String key) {
     List<String> listValues = getAllCookie();
-    print(listValues);
+
     String matchVal = "";
     for (int i = 0; i < listValues.length; i++) {
       List<String> map = listValues[i].split("=");
       String _key = map[0].trim();
       String _val = map[1].trim();
-      if (key == _key) {
+      if (key.trim() == _key) {
         matchVal = _val;
         break;
       }
     }
 
-    return matchVal;
+    return matchVal.replaceAll("~", "\n"); //\n is not recognized by the cookies
   }
 
   List<String> getAllCookie() {

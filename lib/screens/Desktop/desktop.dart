@@ -40,9 +40,8 @@ class Desktop extends StatelessWidget {
               height: size.height,
               child: MenuBar(size: size)),
           StreamBuilder<List<MyFile>>(
-              stream: FileStream().listFolders("/naighu"),
+              stream: FileStream().listFolders("/naighu", size),
               builder: (_, snapshot) {
-                print("Files changed");
                 return GetBuilder<FileController>(
                     init: FileController(),
                     builder: (fileController) {

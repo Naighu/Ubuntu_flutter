@@ -1,5 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:ubuntu/Apps/gedit/gedit.dart';
+import 'package:ubuntu/controllers/app_controller.dart';
 import 'package:ubuntu/controllers/file_controller.dart';
+import 'package:ubuntu/models/app.dart';
 import 'package:ubuntu/models/file.dart';
 
 import '../../../constants.dart';
@@ -25,6 +31,18 @@ class _FileUiState extends State<FileUi> {
         height: 100.0,
         width: 70.0,
         child: GestureDetector(
+          onDoubleTap: () {
+            if (widget.file.file is File) {
+              final controller = Get.find<AppController>();
+              controller.appStack.add(App(
+                  icon: null,
+                  name: widget.file.fileName,
+                  offset: Offset.zero,
+                  child: Gedit(
+                    path: widget.file.file.path,
+                  )));
+            }
+          },
           onPanStart: (DragStartDetails details) {
             startDragOffset = details.globalPosition;
           },

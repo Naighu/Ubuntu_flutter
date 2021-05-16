@@ -18,35 +18,43 @@ class Shell {
       throw "Not Implemented";
   }
 
-  void create(String path, {value = "null"}) {
+  void create(String path, {option = "dir", value = "null"}) {
     CookieManager manager = CookieManager.init();
-    manager.addToCookie("${_crtPath(path)}", value);
+    manager.addToCookie("${_crtPath(path, option: option)}", value);
   }
 
-  String _crtPath(String path) {
+  void updateFile(String path, String content) {
+    remove(path, option: "file");
+    create(path, option: "file", value: content);
+  }
+
+  String _crtPath(String path, {option = "dir"}) {
     List<String> split = path.split("/");
     String newPath = split.removeAt(0);
+    String file;
+    if (option != "dir") file = split.removeLast();
 
     for (String p in split) {
-      print(p);
       if (!p.startsWith("d-"))
         newPath += "/d-$p";
       else
         newPath += "/$p";
     }
+    if (file != null) newPath += "/~-$file";
+
     return newPath;
   }
 
-  void removeDir(String path) {
-    print("[Removing Dir]");
+  void remove(String path, {option = "dir"}) {
+    print("[Removing File]");
     CookieManager manager = CookieManager.init();
     print(path);
-    manager.removeCookie("${_crtPath(path)}");
+    manager.removeCookie("${_crtPath(path, option: option)}");
   }
 
   String getContents(String path) {
     CookieManager manager = CookieManager.init();
-    return manager.getCookie("${_crtPath(path)}");
+    return manager.getCookie("${_crtPath(path, option: "file")}");
   }
 
   List _listItemsOnWeb() {

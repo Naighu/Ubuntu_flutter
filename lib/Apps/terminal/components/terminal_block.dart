@@ -6,25 +6,26 @@ import 'package:ubuntu/constants.dart';
 import '../controllers/terminal_controller.dart';
 
 class TerminalBlock extends StatefulWidget {
-  final String header;
+  final int id;
 
-  const TerminalBlock({Key key, this.header = ""}) : super(key: key);
+  TerminalBlock({Key key, this.id}) : super(key: key);
+
   @override
   _TerminalBlockState createState() => _TerminalBlockState();
 }
 
 class _TerminalBlockState extends State<TerminalBlock> {
-  String output = "";
-  bool showOutput = false;
   final controller = Get.find<TerminalController>();
+  bool readMode = false;
+
   @override
   Widget build(BuildContext context) {
-    debugPrint("TerminalBlocks rebuilded $showOutput");
+    print("REadmode $readMode");
     return IntrinsicHeight(
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Row(
           children: [
-            Text("naighu@ubuntu:-\$${widget.header}",
+            Text("naighu@ubuntu:-\$${controller.headers[widget.id]}",
                 style: Theme.of(context).textTheme.bodyText2),
             Expanded(
               child: ConstrainedBox(
@@ -36,11 +37,13 @@ class _TerminalBlockState extends State<TerminalBlock> {
                   child: TextField(
                       decoration: null,
                       autofocus: true,
+                      readOnly: readMode,
                       cursorWidth: 7.0,
                       cursorHeight: 15.0,
                       cursorColor: Colors.white,
                       style: Theme.of(context).textTheme.bodyText1,
                       onSubmitted: (val) {
+                        readMode = true;
                         _onSubmitted(controller, val);
                       }),
                 ),
@@ -48,9 +51,9 @@ class _TerminalBlockState extends State<TerminalBlock> {
             )
           ],
         ),
-        showOutput
+        controller.outputs[widget.id].isNotEmpty
             ? Text(
-                output,
+                controller.outputs[widget.id],
                 style: Theme.of(context).textTheme.bodyText1,
               )
             : Offstage()
@@ -59,23 +62,19 @@ class _TerminalBlockState extends State<TerminalBlock> {
   }
 
   void _onSubmitted(TerminalController controller, String val) {
-    showOutput = val.isEmpty ? false : true;
-    String header = controller.path;
-
-    if (showOutput) {
+    if (val.isNotEmpty) {
       List<String> commandsplit = val.split(" ");
+      String output;
       if (commands.containsKey(commandsplit[0])) {
-        String message = commands[val.split(" ")[0]]
-            .executeCommand(context, commandsplit.skip(1).join(" "));
-        output = message.split(":").last;
-        header = message.split(":")[0];
+        output = commands[val.split(" ")[0]]
+            .executeCommand(context, widget.id, commandsplit.skip(1).join(" "));
       } else {
         output = "No such command";
       }
-      setState(() {});
+      if (controller.blocks.isNotEmpty) controller.outputs[widget.id] = output;
     }
-    controller.add(TerminalBlock(
-      header: header,
-    ));
+
+    controller.add(widget.id);
+    setState(() {});
   }
 }
