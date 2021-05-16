@@ -12,7 +12,8 @@ class Terminal extends StatelessWidget {
           return Container(
               color: Theme.of(context).primaryColor,
               child: ListView(
-                key: Key(controller.listKey),
+                key: Key(controller.cleared
+                    .toString()), //inorder to repaint the listview
                 children: [
                   for (TerminalBlock block in controller.blocks) block
                 ],
