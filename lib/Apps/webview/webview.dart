@@ -4,6 +4,8 @@ import 'dart:html';
 import 'package:flutter/material.dart';
 import 'dart:ui' as ui;
 
+import 'package:ubuntu/models/app.dart';
+
 class WebviewFrame extends StatelessWidget {
   final String url;
   final String id;
@@ -12,13 +14,14 @@ class WebviewFrame extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("rebuilding");
+    print("rebuilding WEbview");
     ui.platformViewRegistry.registerViewFactory(
         id,
         (int viewId) => IFrameElement()
           ..src = url
           ..style.border = 'none'
           ..onLoad);
+
     return Stack(
       children: [
         Container(
@@ -26,7 +29,7 @@ class WebviewFrame extends StatelessWidget {
           alignment: Alignment.center,
           child: CircularProgressIndicator(),
         ),
-        HtmlElementView(viewType: id)
+        HtmlElementView(key: Key(id), viewType: id),
       ],
     );
   }

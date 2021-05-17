@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ubuntu/controllers/app_controller.dart';
 import 'package:get/get.dart';
+import 'package:ubuntu/controllers/desktop_controller.dart';
 
 import '../../../models/app.dart';
 import '../../../constants.dart';
@@ -101,9 +102,12 @@ class _MenuBarState extends State<MenuBar> {
       setState(() {
         appController.appStack.add(app);
       });
-    } else if (!app.showOnScreen)
+    } else if (!app.showOnScreen) {
+      // Get.find<DesktopController>().menubarWidth.value =
+      //     app.isMaximized ? 0 : menuWidth;
       setState(() {
         appController.show(app);
       });
+    }
   }
 }

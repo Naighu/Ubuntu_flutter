@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:ubuntu/Apps/gedit/gedit.dart';
 import 'package:ubuntu/controllers/app_controller.dart';
@@ -22,15 +23,26 @@ class FileUi extends StatefulWidget {
 
 class _FileUiState extends State<FileUi> {
   Offset startDragOffset;
+  Color _hoverColor = Colors.transparent;
   @override
   Widget build(BuildContext context) {
     return Positioned(
       left: menuWidth + widget.file.offset.dx,
       top: widget.file.offset.dy,
-      child: SizedBox(
-        height: 100.0,
-        width: 70.0,
-        child: GestureDetector(
+      child: Container(
+        color: _hoverColor,
+        height: 80.0,
+        width: 80.0,
+        child: InkWell(
+          mouseCursor: MouseCursor.uncontrolled,
+          onHover: (hover) {
+            setState(() {
+              if (hover)
+                _hoverColor = Colors.red;
+              else
+                _hoverColor = Colors.transparent;
+            });
+          },
           onDoubleTap: () {
             if (widget.file.file is File) {
               final controller = Get.find<AppController>();
@@ -43,20 +55,23 @@ class _FileUiState extends State<FileUi> {
                   )));
             }
           },
-          onPanStart: (DragStartDetails details) {
-            startDragOffset = details.globalPosition;
-          },
-          onPanUpdate: (DragUpdateDetails details) {
-            _dragUpdate(details, MediaQuery.of(context).size);
-          },
-          child: Column(
-            children: [
-              widget.file.icon,
-              Text(
-                widget.file.fileName,
-                style: Theme.of(context).textTheme.bodyText1,
-              )
-            ],
+          child: GestureDetector(
+            onPanStart: (DragStartDetails details) {
+              startDragOffset = details.globalPosition;
+            },
+            onPanUpdate: (DragUpdateDetails details) {
+              _dragUpdate(details, MediaQuery.of(context).size);
+            },
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                widget.file.icon,
+                Text(
+                  widget.file.fileName,
+                  style: Theme.of(context).textTheme.bodyText1,
+                )
+              ],
+            ),
           ),
         ),
       ),

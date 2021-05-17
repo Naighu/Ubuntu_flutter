@@ -5,7 +5,7 @@ import '../Apps/terminal/terminal.dart';
 
 class App {
   final String name, icon;
-  double height = 600.0, width = 600.0;
+  Size size = Size(600.0, 600.0);
   bool showOnScreen = true, isMaximized = false, isOpened = false;
   Offset offset;
   Widget child;

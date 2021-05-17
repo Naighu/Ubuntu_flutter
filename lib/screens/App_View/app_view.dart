@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:ubuntu/Apps/terminal/controllers/menu_controller.dart';
+import 'package:ubuntu/controllers/desktop_controller.dart';
 
 import 'package:ubuntu/controllers/app_controller.dart';
 
@@ -11,84 +11,143 @@ import 'components/title_bar.dart';
 class AppView extends StatefulWidget {
   final App app;
 
-  const AppView({Key key, this.app}) : super(key: key);
+  const AppView({Key key, @required this.app}) : super(key: key);
 
   @override
   _AppViewState createState() => _AppViewState();
 }
 
-class _AppViewState extends State<AppView> {
+class _AppViewState extends State<AppView> with SingleTickerProviderStateMixin {
   Offset startDragOffset;
   bool isClosed = false;
-  bool isMaximized = false;
-  final MenuController _menuController = Get.find<MenuController>();
+  AnimationController _controller;
+  Animation<Offset> _offsetAnimation;
+  Animation<Size> _sizeAnimation;
+  App app;
+  final DesktopController _menuController = Get.find<DesktopController>();
+  final AppController _appController = Get.find<AppController>();
+
+  @override
+  void initState() {
+    super.initState();
+    print("Calling again");
+    app = widget.app;
+    _appController.prevOffset = app.offset;
+    _appController.prevSize = app.size;
+    _controller = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 300));
+    _offsetAnimation =
+        Tween<Offset>(begin: _appController.prevOffset).animate(_controller);
+    _sizeAnimation =
+        Tween<Size>(begin: _appController.prevSize).animate(_controller);
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    print("AppView rebuilding");
+
     final Size size = MediaQuery.of(context).size;
     return GetBuilder<AppController>(builder: (controller) {
-      if (!widget.app.showOnScreen)
+      Future(() {
+        _conditionToShowMenubar();
+      });
+      if (!app.showOnScreen)
         return Container();
       else
-        return Positioned(
-          left: widget.app.offset.dx,
-          top: widget.app.offset.dy,
-          child: AnimatedOpacity(
-              duration: const Duration(milliseconds: 300),
-              curve: Curves.bounceOut,
-              opacity: isClosed ? 0 : 1,
-              onEnd: () {
-                controller.appStack.remove(widget.app);
-                widget.app.offset = Offset.zero;
-                widget.app.width = 600;
-                widget.app.height = 600;
-              },
-              child: AnimatedContainer(
-                duration: const Duration(milliseconds: 300),
-                constraints: BoxConstraints(
-                    maxHeight: widget.app.height, maxWidth: widget.app.width),
+        return AnimatedBuilder(
+            animation: _controller,
+            builder: (context, _) {
+              return Positioned(
+                left: _controller.status == AnimationStatus.dismissed ||
+                        _controller.status == AnimationStatus.completed
+                    ? app.offset.dx
+                    : _offsetAnimation.value.dx,
+                top: _controller.status == AnimationStatus.dismissed ||
+                        _controller.status == AnimationStatus.completed
+                    ? app.offset.dy
+                    : _offsetAnimation.value.dy,
                 child: Column(children: [
                   GestureDetector(
-                      onPanStart: (DragStartDetails details) {
-                        startDragOffset = details.globalPosition;
-                      },
+                      onPanStart: _onPanStart,
                       onPanUpdate: (DragUpdateDetails details) {
-                        _dragUpdate(details, controller, size);
+                        _dragUpdate(details, size);
                       },
-                      child: titleBar(context, widget.app, theme, onClose: () {
-                        Get.find<MenuController>().menubarWidth.value =
-                            menuWidth;
-                        setState(() {
-                          isClosed = true;
-                        });
-                      }, onMaximized: () {})),
-                  AnimatedContainer(
-                      duration: const Duration(milliseconds: 300),
-                      height: widget.app.height - topAppBarHeight,
-                      width: widget.app.width,
-                      child: widget.app.child)
+                      child: SizedBox(
+                        height: topAppBarHeight,
+                        width: _sizeAnimation.value.width,
+                        child: titleBar(context, app, theme,
+                            onClose: _onClose,
+                            onScreenSizeChanged: _onScreenSizeChanged),
+                      )),
+                  Container(
+                      height: _sizeAnimation.value.height - topAppBarHeight,
+                      width: _sizeAnimation.value.width,
+                      child: app.child)
                 ]),
-              )),
-        );
+              );
+            });
     });
   }
 
-  void _dragUpdate(DragUpdateDetails details, _appController, Size size) {
-    final newOffset =
-        widget.app.offset + (details.globalPosition - startDragOffset);
+  void _dragUpdate(DragUpdateDetails details, Size size) {
+    final newOffset = app.offset + (details.globalPosition - startDragOffset);
+
     // boundary conditions to drag
-    if (newOffset.dx + widget.app.width < size.width &&
-        newOffset.dy + widget.app.height < size.height &&
+    if (newOffset.dx + app.size.width < size.width &&
+        newOffset.dy + app.size.height < size.height &&
         newOffset.dy > 0 &&
-        newOffset.dx > 0) _appController.changeOffset(widget.app, newOffset);
+        newOffset.dx > 0) {
+      setState(() {
+        app.offset = newOffset;
+      });
+    }
+    startDragOffset = details.globalPosition;
+  }
 
-    if (newOffset.dx > 0 && newOffset.dx < 10) {
-      print("menubar hide");
-
-      _menuController.menubarWidth.value = 0;
-    } else if (newOffset.dx > 30)
+  void _conditionToShowMenubar() {
+    //condition to show menubar
+    if (!app.showOnScreen ||
+        (app.offset.dx > menuWidth + 30 &&
+            _menuController.menubarWidth.value == 0))
       _menuController.menubarWidth.value = menuWidth;
+    //condition to hide menubar
+    else if (app.offset.dx < menuWidth + 10 &&
+        _menuController.menubarWidth.value == menuWidth)
+      _menuController.menubarWidth.value = 0;
+  }
+
+  void _onScreenSizeChanged(bool isMaximized) {
+    if (isMaximized)
+      _controller.reverse();
+    else {
+      _controller.reset();
+      _offsetAnimation =
+          Tween<Offset>(begin: _appController.prevOffset, end: app.offset)
+              .animate(_controller);
+      _sizeAnimation =
+          Tween<Size>(begin: _appController.prevSize, end: app.size)
+              .animate(_controller);
+
+      _controller.forward();
+    }
+  }
+
+  void _onClose() {
+    _menuController.menubarWidth.value = menuWidth;
+    _appController.closeApp(app);
+  }
+
+  void _onPanStart(DragStartDetails details) {
+    if (_appController.appStack.last != app) {
+      _appController.appStack.remove(app);
+      _appController.appStack.add(app);
+    }
     startDragOffset = details.globalPosition;
   }
 }

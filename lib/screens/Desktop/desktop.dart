@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ubuntu/Apps/terminal/controllers/menu_controller.dart';
+import 'package:ubuntu/controllers/desktop_controller.dart';
 import 'package:ubuntu/controllers/app_controller.dart';
 import 'package:ubuntu/controllers/file_controller.dart';
 import 'package:ubuntu/models/app.dart';
@@ -8,14 +8,13 @@ import 'package:ubuntu/models/file.dart';
 import 'package:ubuntu/screens/Desktop/components/file_stram.dart';
 import 'package:ubuntu/screens/Desktop/components/file_ui.dart';
 
-import '../../constants.dart';
 import '../../screens/App_View/app_view.dart';
 import 'components/appbar.dart';
 import 'components/menubar.dart';
 
 class Desktop extends StatelessWidget {
   final controller = Get.put(AppController());
-  final menuController = Get.put(MenuController());
+  final menuController = Get.put(DesktopController());
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -35,7 +34,7 @@ class Desktop extends StatelessWidget {
               fit: BoxFit.cover,
             )),
           ),
-          GetX<MenuController>(
+          GetX<DesktopController>(
             builder: (menuController) => AnimatedPositioned(
                 duration: const Duration(milliseconds: 300),
                 left: 0,
@@ -61,14 +60,12 @@ class Desktop extends StatelessWidget {
                       );
                     });
               }),
-          Obx(() => AnimatedContainer(
-                duration: const Duration(milliseconds: 300),
-                padding:
-                    EdgeInsets.only(left: menuController.menubarWidth.value),
-                child: Stack(children: [
-                  for (App app in controller.appStack) AppView(app: app)
-                ]),
-              ))
+          Obx(() {
+            return Stack(children: [
+              for (App app in controller.appStack)
+                AppView(key: Key(app.name), app: app)
+            ]);
+          })
         ],
       ),
     );

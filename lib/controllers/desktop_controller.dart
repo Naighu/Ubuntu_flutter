@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ubuntu/constants.dart';
 
-class MenuController extends GetxController {
+class DesktopController extends GetxController {
   final menubarWidth = menuWidth.obs;
+  final menubarStack = menuWidth.obs;
 }

@@ -5,7 +5,9 @@ import '../models/app.dart';
 
 class AppController extends GetxController {
   final RxList appStack = [].obs;
-
+  int key = 0;
+  Size prevSize;
+  Offset prevOffset;
   void hide(App app) {
     app.showOnScreen = false;
     update();
@@ -16,23 +18,27 @@ class AppController extends GetxController {
     update();
   }
 
-  void changeOffset(App app, Offset offset) {
-    app.offset = offset;
-    update();
-  }
-
   void maximize(App app, Size totalSize) {
-    app.height = totalSize.height - topAppBarHeight;
-    app.width = totalSize.width;
+    prevSize = app.size;
+    app.size = Size(totalSize.width, totalSize.height - topAppBarHeight);
+    prevOffset = app.offset;
     app.offset = Offset(0, 0);
+
     app.isMaximized = true;
 
     update();
   }
 
-  void minimize(App app, Size totalSize) {
-    app.width = 600;
-    app.height = 600;
+  void closeApp(App app) {
+    minimize(app);
+    appStack.remove(app);
+    print("REmoved : ${app.name}");
+    for (App a in appStack) print("Available : ${a.name}");
+  }
+
+  void minimize(App app) {
+    app.size = prevSize;
+    app.offset = prevOffset;
     app.isMaximized = false;
     update();
   }
