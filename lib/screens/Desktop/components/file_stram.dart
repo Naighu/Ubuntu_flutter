@@ -3,17 +3,18 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:ubuntu/Apps/terminal/commands/commands.dart';
-import 'package:ubuntu/constants.dart';
 import 'package:ubuntu/models/file.dart';
 
 class FileStream {
   List<MyFile> _myFiles = [];
-  Stream<List<MyFile>> listFolders(String dir, Size size) async* {
+  Stream<List<MyFile>> listFolders(
+      BuildContext context, String dir, Size size) async* {
     final list = Ls();
-
+    //This is will continously check ,whether any folder or files created or removed.
     while (true) {
       List<MyFile> files = [];
       List items = list.ls(dir);
+
       for (var item in items) {
         files.add(MyFile(
             icon: item is Directory
@@ -23,21 +24,20 @@ class FileStream {
                     height: 50,
                     width: 50,
                   ),
+            context: context,
             file: item,
             fileName: item.path.split("/").last,
-            offset: Offset(
-                Random()
-                    .nextInt((size.width - menuWidth - 100).toInt())
-                    .toDouble(),
-                Random()
-                    .nextInt((size.height - topAppBarHeight - 100).toInt())
-                    .toDouble())));
+            offset: Offset(Random().nextInt(90).toDouble(),
+                Random().nextInt(90).toDouble())));
       }
       if (files.isEmpty) {
         _myFiles.clear();
+        print("deleted");
         yield _myFiles;
       } else if (_myFiles.length > files.length) {
+        print("deleted");
         deleteFile(files);
+        print("deleted");
         yield _myFiles;
       } else if (_myFiles.length < files.length) {
         addFile(files);
@@ -47,7 +47,7 @@ class FileStream {
         yield _myFiles;
       }
 
-      await Future.delayed(Duration(seconds: 1));
+      await Future.delayed(Duration(milliseconds: 500));
     }
   }
 

@@ -4,8 +4,6 @@ import 'dart:html';
 import 'package:flutter/material.dart';
 import 'dart:ui' as ui;
 
-import 'package:ubuntu/models/app.dart';
-
 class WebviewFrame extends StatelessWidget {
   final String url;
   final String id;

@@ -4,7 +4,7 @@ import 'package:ubuntu/models/file.dart';
 
 class FileController extends GetxController {
   void changeOffset(MyFile file, Offset offset) {
-    file.offset = offset;
+    file.setOffset = offset;
     update();
   }
 }

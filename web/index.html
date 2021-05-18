@@ -33,7 +33,16 @@
     <!-- This script installs service_worker.js to provide PWA functionality to
        application. For more information, see:
        https://developers.google.com/web/fundamentals/primers/service-workers -->
-
+    <script>
+      window.addEventListener(
+        "contextmenu",
+        function (e) {
+          // do something here...
+          e.preventDefault();
+        },
+        false
+      );
+    </script>
     <script>
       if ("serviceWorker" in navigator) {
         window.addEventListener("flutter-first-frame", function () {

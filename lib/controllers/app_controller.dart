@@ -8,21 +8,28 @@ class AppController extends GetxController {
   int key = 0;
   Size prevSize;
   Offset prevOffset;
+
   void hide(App app) {
-    app.showOnScreen = false;
+    app.hide = true;
+
     update();
   }
 
-  void show(App app) {
-    app.showOnScreen = true;
+  void show(String packageName) {
+    App app;
+    for (App a in appStack)
+      if (a.packageName == packageName) {
+        app = a;
+        break;
+      }
+    app.hide = false;
     update();
   }
 
   void maximize(App app, Size totalSize) {
-    prevSize = app.size;
-    app.size = Size(totalSize.width, totalSize.height - topAppBarHeight);
+    app.setSize = Size(totalSize.width, totalSize.height - topAppBarHeight);
     prevOffset = app.offset;
-    app.offset = Offset(0, 0);
+    app.setOffset = Offset(0, 0);
 
     app.isMaximized = true;
 
@@ -37,8 +44,8 @@ class AppController extends GetxController {
   }
 
   void minimize(App app) {
-    app.size = prevSize;
-    app.offset = prevOffset;
+    app.setSize = prevSize;
+    app.setOffset = prevOffset;
     app.isMaximized = false;
     update();
   }

@@ -89,7 +89,12 @@ class Mkdir implements DecodeCommand {
   @override
   dynamic executeCommand(BuildContext context, int id, String fileName) {
     final controller = Get.find<TerminalController>();
-    List items = Ls().ls(controller.path);
+
+    return mkdir(controller.path, fileName);
+  }
+
+  String mkdir(String path, String fileName) {
+    List items = Ls().ls(path);
     String error = "";
 
     if (fileName.isEmpty)
@@ -108,7 +113,7 @@ class Mkdir implements DecodeCommand {
     }
     if (error.isEmpty) {
       Shell shell = Shell.init();
-      shell.create(controller.path + "/$fileName");
+      shell.create(path + "/$fileName");
       return "";
     } else
       return error;
@@ -119,8 +124,13 @@ class Rmdir implements DecodeCommand {
   @override
   dynamic executeCommand(BuildContext context, int id, String fileName) {
     final controller = Get.find<TerminalController>();
+    return rmdir(controller.path, fileName);
+  }
+
+  rmdir(String path, String fileName) {
+    print("Rm ing");
     Ls ls = Ls();
-    List items = ls.ls(controller.path);
+    List items = ls.ls(path);
 
     String error = "File Not Found \n\nNavigate to the Working Directory";
     for (var item in items) {
@@ -130,13 +140,15 @@ class Rmdir implements DecodeCommand {
         break;
       }
     }
-    items = ls.ls(controller.path + "/$fileName");
+    items = ls.ls(path + "/$fileName");
     if (items.isNotEmpty) error = "Directory is not empty";
     if (error.isEmpty) {
       Shell shell = Shell.init();
-      shell.remove(controller.path + "/$fileName");
+      shell.remove(path + "/$fileName");
+      print("renoved");
       return "";
     }
+
     return error;
   }
 }
@@ -212,8 +224,12 @@ class Rm implements DecodeCommand {
   @override
   dynamic executeCommand(BuildContext context, int id, String fileName) {
     final controller = Get.find<TerminalController>();
+    return rm(controller.path, fileName);
+  }
+
+  rm(String path, String fileName) {
     Ls ls = Ls();
-    List items = ls.ls(controller.path);
+    List items = ls.ls(path);
 
     String error = "File Not Found \n\nNavigate to the Working Directory";
     for (var item in items) {
@@ -222,11 +238,11 @@ class Rm implements DecodeCommand {
         break;
       }
     }
-    items = ls.ls(controller.path + "/$fileName");
+    items = ls.ls(path + "/$fileName");
     if (items.isNotEmpty) error = "Directory is not empty";
     if (error.isEmpty) {
       Shell shell = Shell.init();
-      shell.remove(controller.path + "/$fileName", option: "file");
+      shell.remove(path + "/$fileName", option: "file");
       return "";
     }
     return error;
