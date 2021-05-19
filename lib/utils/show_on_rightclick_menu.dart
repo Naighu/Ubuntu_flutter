@@ -13,7 +13,7 @@ class MouseRightClick {
     MenuOptions.openTerminal: 3,
     MenuOptions.settings: 4,
     MenuOptions.delete: 5,
-    MenuOptions.open: 5,
+    MenuOptions.open: 6,
   };
   static Map<MenuOptions, String> menuName = {
     MenuOptions.newFolder: "New Folder",
@@ -53,6 +53,7 @@ class MouseRightClick {
           onPressed(MenuOptions.newFile);
           break;
         case 3:
+          print("Open in terminal");
           onPressed(MenuOptions.openTerminal);
           break;
         case 4:

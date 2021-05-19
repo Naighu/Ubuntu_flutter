@@ -126,6 +126,16 @@ class _FileUiState extends State<FileUi> {
             print("folder removed");
             Rmdir().rmdir("/naighu", widget.file.fileName);
           }
+        } else if (option == MenuOptions.open && widget.file.file is File) {
+          final controller = Get.find<AppController>();
+          controller.appStack.add(App(
+              icon: "assets/app_icons/gedit.png",
+              name: widget.file.fileName,
+              context: context,
+              packageName: "gedit",
+              child: Gedit(
+                path: widget.file.file.path,
+              )));
         }
       });
     }

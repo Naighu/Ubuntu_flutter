@@ -157,7 +157,11 @@ class Touch implements DecodeCommand {
   @override
   dynamic executeCommand(BuildContext context, int id, String fileName) {
     final controller = Get.find<TerminalController>();
-    List items = Ls().ls(controller.path);
+    return touch(controller.path, fileName);
+  }
+
+  touch(String path, String fileName) {
+    List items = Ls().ls(path);
     String error = "";
 
     if (fileName.isEmpty)
@@ -176,7 +180,7 @@ class Touch implements DecodeCommand {
     }
     if (error.isEmpty) {
       Shell shell = Shell.init();
-      shell.create(controller.path + "/$fileName", option: "file");
+      shell.create(path + "/$fileName", option: "file");
       return "";
     } else
       return error;

@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:ubuntu/Apps/terminal/commands/commands.dart';
+import 'package:ubuntu/Apps/terminal/terminal.dart';
 import 'package:ubuntu/constants.dart';
 import 'package:ubuntu/controllers/desktop_controller.dart';
 import 'package:ubuntu/controllers/app_controller.dart';
@@ -90,7 +91,13 @@ class Desktop extends StatelessWidget {
         MenuOptions.openTerminal,
         MenuOptions.settings,
       ]).showOnRightClickMenu(context, onPressed: (option) {
-        if (option == MenuOptions.newFolder) Mkdir().mkdir("/naighu", "Nihal");
+        if (option == MenuOptions.newFolder)
+          Mkdir().mkdir("/naighu", "Nihal");
+        else if (option == MenuOptions.newFile)
+          Touch().touch("/naighu", "file.txt");
+        else if (option == MenuOptions.openTerminal) {
+          controller.appStack.add(getApps(context)[3]);
+        }
       });
     }
   }
