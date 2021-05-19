@@ -1,4 +1,6 @@
-import 'package:ubuntu/Apps/terminal/commands/commands.dart';
+
+
+import 'commands.dart';
 
 Map<String, DecodeCommand> commands = {
   "ls": Ls(),

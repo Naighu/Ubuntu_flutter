@@ -30,7 +30,7 @@ class FileStream {
             offset: Offset(Random().nextInt(90).toDouble(),
                 Random().nextInt(90).toDouble())));
       }
-      if (files.isEmpty) {
+      if (files.isEmpty && _myFiles.isNotEmpty) {
         _myFiles.clear();
         print("deleted");
         yield _myFiles;
