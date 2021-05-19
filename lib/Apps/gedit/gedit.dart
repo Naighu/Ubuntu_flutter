@@ -58,6 +58,8 @@ class _GeditState extends State<Gedit> {
               autofocus: true,
               decoration: null,
               maxLines: null,
+              style:
+                  Theme.of(context).textTheme.subtitle2.copyWith(fontSize: 16),
               keyboardType: TextInputType.multiline,
               controller: controller,
             ),

@@ -21,14 +21,22 @@ class Desktop extends StatelessWidget {
   final controller = Get.put(AppController());
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
+    OverlayEntry entry;
     final size = MediaQuery.of(context).size;
     return Scaffold(
-      appBar: desktopAppBar(theme),
+      appBar: desktopAppBar(context, (e) {
+        if (entry == null || !entry.mounted) {
+          entry = e;
+          Overlay.of(context).insert(e);
+        } else
+          entry?.remove();
+      }),
       body: Listener(
         onPointerDown: (event) {
           _onPointerDown(context, event);
+        },
+        onPointerUp: (event) {
+          if (entry != null && entry.mounted) entry?.remove();
         },
         child: Stack(
           children: [
@@ -48,23 +56,19 @@ class Desktop extends StatelessWidget {
                 width: menuWidth,
                 height: size.height,
                 child: MenuBar()),
-            StreamBuilder<List<MyFile>>(
-                stream: FileStream().listFolders(context, "/naighu", size),
-                builder: (_, snapshot) {
-                  return GetBuilder<FileController>(
-                      init: FileController(),
-                      builder: (fileController) {
-                        List items = snapshot.hasData ? snapshot.data : [];
-                        return Stack(
-                          children: [
-                            for (MyFile file in items)
-                              FileUi(
-                                file: file,
-                                controller: fileController,
-                              )
-                          ],
-                        );
-                      });
+            GetBuilder<FileController>(
+                init: FileController(context),
+                builder: (controller) {
+                  return Stack(
+                    children: [
+                      for (MyFile file in controller.files)
+                        FileUi(
+                          key: Key(file.file.path),
+                          file: file,
+                          controller: controller,
+                        ),
+                    ],
+                  );
                 }),
             Obx(() {
               return Stack(children: [
@@ -91,9 +95,9 @@ class Desktop extends StatelessWidget {
         MenuOptions.settings,
       ]).showOnRightClickMenu(context, onPressed: (option) {
         if (option == MenuOptions.newFolder)
-          Mkdir().mkdir("/naighu", "Nihal");
+          Mkdir().mkdir(Get.find<FileController>(), rootDir, "Nihal");
         else if (option == MenuOptions.newFile)
-          Touch().touch("/naighu", "file.txt");
+          Touch().touch(Get.find<FileController>(), rootDir, "file.txt");
         else if (option == MenuOptions.openTerminal) {
           controller.appStack.add(getApps(context)[3]);
         }

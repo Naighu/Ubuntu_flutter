@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 const defaultPadding = 12.0, menuWidth = 60.0, topAppBarHeight = 35.0;
-
+const rootDir = "/naighu";
 final themeData = ThemeData(
     fontFamily: GoogleFonts.ubuntuMono().fontFamily,
     primaryColor: Color.fromRGBO(56, 4, 40, 1),
+    backgroundColor: Color(0xFF222222),
     tooltipTheme: TooltipThemeData(
       padding: const EdgeInsets.all(4.0),
       decoration: BoxDecoration(
@@ -22,6 +23,7 @@ final themeData = ThemeData(
     ),
     textTheme: TextTheme(
         headline4: TextStyle(fontSize: 14, color: Colors.white),
+        subtitle1: TextStyle(fontSize: 15, color: Colors.white70),
         bodyText2: TextStyle(
             fontSize: 14,
             color: Colors.lightGreen,

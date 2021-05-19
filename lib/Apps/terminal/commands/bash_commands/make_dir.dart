@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:ubuntu/controllers/file_controller.dart';
 
 import 'command_packages.dart';
 
@@ -6,11 +7,11 @@ class Mkdir implements DecodeCommand {
   @override
   dynamic executeCommand(BuildContext context, int id, String fileName) {
     final controller = Get.find<TerminalController>();
-
-    return mkdir(controller.path, fileName);
+    final fileController = Get.find<FileController>();
+    return mkdir(fileController, controller.path, fileName);
   }
 
-  String mkdir(String path, String fileName) {
+  String mkdir(FileController fileController, String path, String fileName) {
     List items = Ls().ls(path);
     String error = "";
 
@@ -31,6 +32,8 @@ class Mkdir implements DecodeCommand {
     if (error.isEmpty) {
       Shell shell = Shell.init();
       shell.create(path + "/$fileName");
+      Directory newDir = Directory(path + "/$fileName");
+      fileController.add(newDir);
       return "";
     } else
       return error;
@@ -41,10 +44,11 @@ class Rmdir implements DecodeCommand {
   @override
   dynamic executeCommand(BuildContext context, int id, String fileName) {
     final controller = Get.find<TerminalController>();
-    return rmdir(controller.path, fileName);
+    final fileController = Get.find<FileController>();
+    return rmdir(fileController, controller.path, fileName);
   }
 
-  rmdir(String path, String fileName) {
+  rmdir(FileController fileController, String path, String fileName) {
     print("Rm ing");
     Ls ls = Ls();
     List items = ls.ls(path);
@@ -63,6 +67,7 @@ class Rmdir implements DecodeCommand {
       Shell shell = Shell.init();
       shell.remove(path + "/$fileName");
       print("renoved");
+      fileController.delete(null);
       return "";
     }
 

@@ -18,7 +18,9 @@ class CookieManager {
   void removeCookie(String key) {
     String _key = getCookie(key);
 
-    if (_key.isNotEmpty) document.cookie = "$key=delete;max-age=1;path=/;";
+    if (_key.isNotEmpty)
+      document.cookie =
+          "$key=delete;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/;";
   }
 
   String getCookie(String key) {

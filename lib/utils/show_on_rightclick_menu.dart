@@ -30,17 +30,13 @@ class MouseRightClick {
       {Function(MenuOptions option) onPressed}) async {
     if (!isActive) {
       isActive = true;
-      final style = Theme.of(context)
-          .textTheme
-          .headline4
-          .copyWith(color: Colors.white60, fontWeight: FontWeight.normal);
       final menuItem = await showMenu(
           context: context,
-          color: Color(0xFF222222),
+          color: Theme.of(context).backgroundColor,
           items: [
             for (MenuOptions option in options)
               PopupMenuItem(
-                  child: Text(menuName[option], style: style),
+                  child: Text(menuName[option], style: Theme.of(context).textTheme.subtitle1),
                   value: menuValue[option]),
           ],
           position: RelativeRect.fromSize(rect, size));

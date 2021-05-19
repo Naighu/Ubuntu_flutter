@@ -121,10 +121,10 @@ class _FileUiState extends State<FileUi> {
           ]).showOnRightClickMenu(context, onPressed: (option) {
         if (option == MenuOptions.delete) {
           if (widget.file.file is File)
-            Rm().rm("/naighu", widget.file.fileName);
+            Rm().rm(widget.controller, rootDir, widget.file.fileName);
           else {
             print("folder removed");
-            Rmdir().rmdir("/naighu", widget.file.fileName);
+            Rmdir().rmdir(widget.controller, rootDir, widget.file.fileName);
           }
         } else if (option == MenuOptions.open && widget.file.file is File) {
           final controller = Get.find<AppController>();
