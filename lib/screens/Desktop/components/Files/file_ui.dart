@@ -5,13 +5,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:ubuntu/Apps/gedit/gedit.dart';
+import 'package:ubuntu/System_Apps/File_Explorer/file_explorer.dart';
 import 'package:ubuntu/controllers/app_controller.dart';
 import 'package:ubuntu/controllers/file_controller.dart';
 import 'package:ubuntu/models/app.dart';
 import 'package:ubuntu/models/file.dart';
 import 'package:ubuntu/utils/show_on_rightclick_menu.dart';
 import 'package:ubuntu/Apps/terminal/commands/commands.dart';
-import '../../../constants.dart';
+
+import '../../../../constants.dart';
 
 class FileUi extends StatefulWidget {
   final MyFile file;
@@ -52,8 +54,8 @@ class _FileUiState extends State<FileUi> {
             },
             child: GestureDetector(
               onDoubleTap: () {
-                if (widget.file.file is File) {
-                  final controller = Get.find<AppController>();
+                final controller = Get.find<AppController>();
+                if (widget.file.file is File)
                   controller.appStack.add(App(
                       icon: "assets/app_icons/gedit.png",
                       name: widget.file.fileName,
@@ -62,7 +64,15 @@ class _FileUiState extends State<FileUi> {
                       child: Gedit(
                         path: widget.file.file.path,
                       )));
-                }
+                else
+                  controller.appStack.add(App(
+                      icon: "assets/app_icons/gedit.png",
+                      name: widget.file.fileName,
+                      context: context,
+                      packageName: "gedit",
+                      child: FileExplorer(
+                        dir: rootDir + "/${widget.file.fileName}",
+                      )));
               },
               onPanStart: (DragStartDetails details) {
                 startDragOffset = details.globalPosition;

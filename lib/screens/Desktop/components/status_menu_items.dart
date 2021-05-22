@@ -6,11 +6,12 @@ import '../../../constants.dart';
 class StatusMenuItems extends StatefulWidget {
   final String title, image;
   final bool textDim, trailingIcon;
-
+  final VoidCallback onPressed;
   const StatusMenuItems(
       {Key key,
       this.title,
       this.image,
+      this.onPressed,
       this.textDim = false,
       this.trailingIcon = false})
       : super(key: key);
@@ -35,7 +36,7 @@ class _StatusMenuItemsState extends State<StatusMenuItems> {
               _hoverColor = Colors.transparent;
           });
         },
-        onTap: () {},
+        onTap: widget.onPressed,
         child: Padding(
           padding: const EdgeInsets.only(right: defaultPadding),
           child: Row(

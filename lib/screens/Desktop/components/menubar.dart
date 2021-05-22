@@ -19,11 +19,7 @@ class MenuBar extends StatelessWidget {
               duration: const Duration(milliseconds: 300),
               margin: EdgeInsets.only(
                   right: menuWidth - menuController.menubarWidth.value),
-              decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [Color(0xFF461013), Color(0xFF1A011A)])),
+              color: Colors.black.withOpacity(0.6),
               child: AnimatedOpacity(
                   duration: const Duration(milliseconds: 300),
                   opacity:

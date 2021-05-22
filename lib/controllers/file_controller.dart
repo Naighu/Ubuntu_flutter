@@ -5,38 +5,27 @@ import 'package:get/get.dart';
 import 'package:ubuntu/Apps/terminal/commands/bash_commands/command_packages.dart';
 import 'package:ubuntu/models/file.dart';
 
-import '../constants.dart';
-
 class FileController extends GetxController {
   final BuildContext context;
-  FileController(this.context) {
-    _getFiles();
-  }
+  FileController(this.context) {}
   void changeOffset(MyFile file, Offset offset) {
     file.setOffset = offset;
     update();
   }
 
-  List<MyFile> _files = [];
-  List<MyFile> get files => _files;
-  void _getFiles() {
-    List items = Ls().ls(rootDir);
-
+  List<MyFile> getFiles(String dir) {
+    List<MyFile> files = [];
+    final items = Ls().ls(dir);
     for (var item in items) {
-      _files.add(_file(item));
+      files.add(_file(item));
     }
+    return files;
   }
 
-  void add(FileSystemEntity item) {
-    _files.add(_file(item));
-    update();
-  }
-
-  void delete(FileSystemEntity item) {
-    _files.clear();
-    _getFiles();
-    print(_files.length);
-    update();
+  void updateUi(String path) {
+    var split = path.split("/");
+    split.removeLast();
+    update([split.join("/")]);
   }
 
   MyFile _file(FileSystemEntity item) => MyFile(

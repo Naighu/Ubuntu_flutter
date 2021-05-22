@@ -11,8 +11,6 @@ class TerminalController extends GetxController {
   final List<String> headers = [""];
   final List<String> outputs = [""];
   int cleared = 0; // inorder to work clear command.. used as key for listView
-  final Size windowSize;
-  TerminalController(this.windowSize);
   String path = "/naighu";
   List<TerminalBlock> get blocks => _blocks;
 

@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:ubuntu/constants.dart';
 
 import 'command_packages.dart';
 
@@ -7,7 +8,13 @@ class Ls implements DecodeCommand {
   dynamic executeCommand(BuildContext context, int id, String command) {
     final controller = Get.find<TerminalController>();
 
-    List items = ls(controller.path);
+    String path;
+    if (command.startsWith("/") || command.isEmpty)
+      path = controller.path + command;
+    else
+      path = controller.path + "/" + command;
+
+    List items = ls(path);
     String _items = "";
     for (var item in items) {
       _items += item.path.split("/").last;

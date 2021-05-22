@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ubuntu/Apps/terminal/commands/show_commands.dart';
-import 'package:ubuntu/constants.dart';
 
 import '../controllers/terminal_controller.dart';
 
@@ -30,8 +29,8 @@ class _TerminalBlockState extends State<TerminalBlock> {
             Expanded(
               child: ConstrainedBox(
                 constraints: BoxConstraints(
-                    maxHeight: 20.0,
-                    maxWidth: controller.windowSize.width - menuWidth),
+                  maxHeight: 20.0,
+                ),
                 child: Padding(
                   padding: const EdgeInsets.only(top: 2.0, left: 6.0),
                   child: TextField(

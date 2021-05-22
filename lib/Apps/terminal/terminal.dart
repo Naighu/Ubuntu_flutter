@@ -7,7 +7,7 @@ class Terminal extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<TerminalController>(
-        init: TerminalController(Size(600, 600)),
+        init: TerminalController(),
         builder: (controller) {
           return Container(
               color: Theme.of(context).primaryColor,

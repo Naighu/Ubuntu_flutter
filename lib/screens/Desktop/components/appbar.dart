@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:ubuntu/screens/Desktop/components/status_menu.dart';
+import 'package:ubuntu/utils/real_time_date.dart';
 
 import '../../../constants.dart';
 
@@ -17,10 +18,17 @@ desktopAppBar(BuildContext context, Function(OverlayEntry entry) onPressed) {
       ),
     ),
     centerTitle: true,
-    title: Text(
-      DateFormat('E MMM d H : m a').format(DateTime.now()),
-      style: Theme.of(context).textTheme.headline4,
-    ),
+    title: StreamBuilder<DateTime>(
+        stream: dateStream(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData)
+            return Text(
+              DateFormat('E MMM d H : mm a').format(DateTime.now()),
+              style: Theme.of(context).textTheme.headline4,
+            );
+          else
+            return Offstage();
+        }),
     actions: [
       InkWell(
         onTap: () {
@@ -43,10 +51,14 @@ desktopAppBar(BuildContext context, Function(OverlayEntry entry) onPressed) {
 }
 
 onTap(context) {
-  // var value = await js.context.callMethod('getBattery');
-  // print("$value");
-  final entry = OverlayEntry(builder: (context) {
-    return Positioned(right: 20, top: topAppBarHeight + 5, child: StatusMenu());
+  OverlayEntry entry;
+  entry = OverlayEntry(builder: (context) {
+    return Positioned(
+        right: 20,
+        top: topAppBarHeight + 5,
+        child: StatusMenu(
+          entry: entry,
+        ));
   });
   return entry;
 }

@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
+import 'package:ubuntu/controllers/desktop_controller.dart';
 import 'package:ubuntu/screens/Desktop/components/status_menu_items.dart';
+import 'package:ubuntu/screens/Lock_Screen/lock_screen.dart';
 
 import '../../../constants.dart';
 
 class StatusMenu extends StatefulWidget {
+  final OverlayEntry entry;
+
+  const StatusMenu({Key key, @required this.entry}) : super(key: key);
   @override
   _StatusMenuState createState() => _StatusMenuState();
 }
@@ -85,7 +91,10 @@ class _StatusMenuState extends State<StatusMenu> {
             StatusMenuItems(
                 title: "Lock Screen",
                 image: "assets/status/changes-prevent-symbolic.svg",
-                trailingIcon: true),
+                trailingIcon: true,
+                onPressed: () {
+                  Navigator.of(context).push(_createRoute());
+                }),
             StatusMenuItems(
                 title: "Power Off",
                 image: "assets/status/system-shutdown-symbolic.svg",
@@ -117,4 +126,24 @@ class _StatusMenuState extends State<StatusMenu> {
           ],
         ),
       );
+
+  Route _createRoute() {
+    widget.entry.remove();
+    return PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) => LockScreen(
+        wallpaper: Get.find<DesktopController>().desktopWallpaper.value,
+      ),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        var begin = Offset(0.0, -1.0);
+        var end = Offset.zero;
+        var tween = Tween(begin: begin, end: end);
+        var offsetAnimation = animation.drive(tween);
+
+        return SlideTransition(
+          position: offsetAnimation,
+          child: child,
+        );
+      },
+    );
+  }
 }

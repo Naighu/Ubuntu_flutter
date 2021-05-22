@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ubuntu/Apps/webview/webview.dart';
+import 'package:ubuntu/System_Apps/Settings/settings_page.dart';
 
 import '../Apps/terminal/terminal.dart';
 
@@ -98,9 +99,9 @@ List<App> getApps(BuildContext context) => [
         packageName: "spottify",
       ),
       App(
-        name: "Settings",
-        icon: "assets/app_icons/gnome-control-center.png",
-        context: context,
-        packageName: "settings",
-      )
+          name: "Settings",
+          icon: "assets/app_icons/gnome-control-center.png",
+          context: context,
+          packageName: "settings",
+          child: SettingsPage())
     ];

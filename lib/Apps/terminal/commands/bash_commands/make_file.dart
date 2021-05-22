@@ -34,8 +34,7 @@ class Touch implements DecodeCommand {
     if (error.isEmpty) {
       Shell shell = Shell.init();
       shell.create(path + "/$fileName", option: "file");
-      File newFile = File(path + "/$fileName");
-      fileController.add(newFile);
+      fileController.updateUi(path + "/$fileName");
       return "";
     } else
       return error;
@@ -44,29 +43,47 @@ class Touch implements DecodeCommand {
 
 class Rm implements DecodeCommand {
   @override
-  dynamic executeCommand(BuildContext context, int id, String fileName) {
+  dynamic executeCommand(BuildContext context, int id, String command) {
     final controller = Get.find<TerminalController>();
     final fileController = Get.find<FileController>();
-    return rm(fileController, controller.path, fileName);
+    String path, fileName;
+    //compiling the path
+    if (command.startsWith("/") || command.split("/").length >= 2) {
+      var a = command.split("/");
+      a.removeLast();
+      path = controller.path + "/" + a.join("/").replaceFirst("/", "");
+      fileName = command.split("/").last;
+    } else if (command.isNotEmpty) {
+      var a = command.split("/");
+      a.removeLast();
+      path = controller.path + "/" + a.join("/");
+      fileName = command;
+    } else
+      fileName = "";
+    return rm(fileController, path, fileName);
   }
 
   rm(FileController fileController, String path, String fileName) {
     Ls ls = Ls();
     List items = ls.ls(path);
-
-    String error = "File Not Found \n\nNavigate to the Working Directory";
-    for (var item in items) {
-      if (item is File && item.path.split("/").last.trim() == fileName.trim()) {
-        error = "";
-        break;
+    String error = "";
+    if (fileName.isEmpty)
+      error = "Specify a name";
+    else {
+      for (var item in items) {
+        List split = item.path.split("/");
+        split.removeLast();
+        if (item is Directory &&
+            item.path.trim() == split.join("/") + "/$fileName") {
+          break;
+        }
       }
     }
-    items = ls.ls(path + "/$fileName");
-    if (items.isNotEmpty) error = "Directory is not empty";
+
     if (error.isEmpty) {
       Shell shell = Shell.init();
       shell.remove(path + "/$fileName", option: "file");
-      fileController.delete(null);
+      fileController.updateUi(path + "/$fileName");
       return "";
     }
     return error;
