@@ -8,6 +8,8 @@ import 'package:ubuntu/controllers/file_controller.dart';
 import 'package:ubuntu/models/app.dart';
 import 'package:ubuntu/models/file.dart';
 
+import '../../constants.dart';
+
 class FileExplorer extends StatefulWidget {
   final String dir;
 
@@ -26,39 +28,59 @@ class _FileExplorerState extends State<FileExplorer> {
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<FileController>(
-        assignId: true,
-        id: dir,
-        init: FileController(context),
-        builder: (controller) {
-          return Container(
-            color: Theme.of(context).backgroundColor,
-            padding:
-                const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
-            child: Wrap(
-              runSpacing: 20.0,
-              spacing: 30.0,
-              children: [
-                for (MyFile file in controller.getFiles(dir))
-                  GestureDetector(
-                    onDoubleTap: () {
-                      _onDoubleTap(file);
-                    },
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        file.icon,
-                        Text(
-                          file.fileName,
-                          style: Theme.of(context).textTheme.bodyText1,
-                        )
-                      ],
+    return Scaffold(
+      backgroundColor: Theme.of(context).backgroundColor,
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).backgroundColor,
+        toolbarHeight: 30.0 + defaultPadding,
+        elevation: 0,
+        leadingWidth: 30.0 + defaultPadding,
+        centerTitle: true,
+        title: Text(dir, style: Theme.of(context).textTheme.subtitle1),
+        leading: Padding(
+          padding:
+              const EdgeInsets.only(left: defaultPadding, top: defaultPadding),
+          child: ElevatedButton(
+              style: ButtonStyle(
+                  backgroundColor:
+                      MaterialStateProperty.all(Theme.of(context).accentColor)),
+              onPressed: _onBackPressed,
+              child: Icon(Icons.arrow_back_ios)),
+        ),
+      ),
+      body: GetBuilder<FileController>(
+          assignId: true,
+          id: dir,
+          autoRemove: false,
+          builder: (controller) {
+            return Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
+              child: Wrap(
+                runSpacing: 20.0,
+                spacing: 30.0,
+                children: [
+                  for (MyFile file in controller.getFiles(dir))
+                    GestureDetector(
+                      onDoubleTap: () {
+                        _onDoubleTap(file);
+                      },
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          file.icon,
+                          Text(
+                            file.fileName,
+                            style: Theme.of(context).textTheme.bodyText1,
+                          )
+                        ],
+                      ),
                     ),
-                  ),
-              ],
-            ),
-          );
-        });
+                ],
+              ),
+            );
+          }),
+    );
   }
 
   void _onDoubleTap(MyFile file) {
@@ -76,5 +98,15 @@ class _FileExplorerState extends State<FileExplorer> {
       setState(() {
         dir = file.file.path;
       });
+  }
+
+  void _onBackPressed() {
+    final split = dir.split("/");
+    if (split.length > 2) {
+      setState(() {
+        split.removeLast();
+        dir = split.join("/");
+      });
+    }
   }
 }

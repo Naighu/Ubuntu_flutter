@@ -1,38 +1,62 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:ubuntu/Apps/terminal/components/terminal_block.dart';
+import 'package:ubuntu/Apps/terminal/components/header.dart';
+import 'package:ubuntu/Apps/terminal/components/output_block.dart';
+
+import '../../../constants.dart';
 
 class TerminalController extends GetxController {
-  final List<TerminalBlock> _blocks = [
-    TerminalBlock(
-      id: 0,
-    )
-  ];
-  final List<String> headers = [""];
-  final List<String> outputs = [""];
+  RxList blocks = [].obs;
+  List<TerminalOutput> _outputs;
+  List<TerminalOutput> get outputs => _outputs;
+  String path;
   int cleared = 0; // inorder to work clear command.. used as key for listView
-  String path = "/naighu";
-  List<TerminalBlock> get blocks => _blocks;
-
-  void add(int id) {
-    _blocks.add(TerminalBlock(
-      id: _blocks.length,
+  TerminalController() {
+    blocks.add(Header(
+      id: 0,
     ));
-    print("Bolck added");
-    if (headers.length - 1 == id) headers.add(headers[id]);
-    outputs.add("");
+    _outputs = [];
+    path = rootDir;
+  }
 
-    print("Updaying");
-    update();
+  void addOutputString(int id, String text,
+      {bool end = true, String header = ""}) {
+    TerminalOutput terminalOutput;
+
+    if (id > _outputs.length - 1) {
+      blocks.add(OutputBlock(
+        id: id,
+      ));
+      terminalOutput = TerminalOutput(id)..outputs.add(text);
+      _outputs.add(terminalOutput);
+    } else {
+      terminalOutput = _outputs[id];
+
+      terminalOutput.outputs.add(text);
+      _outputs[id] = terminalOutput;
+    }
+
+    if (end)
+      blocks.add(Header(
+        id: id + 1,
+        header: header,
+      ));
+    update([id]);
   }
 
   void removeAll() {
-    _blocks.clear();
-    headers.clear();
-    outputs.clear();
-    headers.add("");
-    outputs.add("");
-    cleared++;
-    update();
+    cleared += 1;
+    blocks.clear();
+    _outputs.clear();
+    blocks.add(Header(
+      id: 0,
+    ));
+  }
+}
+
+class TerminalOutput {
+  final int id;
+  List<String> outputs;
+  TerminalOutput(this.id) {
+    outputs = [];
   }
 }

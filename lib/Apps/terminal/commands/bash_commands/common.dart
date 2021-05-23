@@ -8,7 +8,7 @@ class Pwd implements DecodeCommand {
   @override
   dynamic executeCommand(BuildContext context, int id, String command) {
     final controller = Get.find<TerminalController>();
-    return controller.path;
+    controller.addOutputString(id, controller.path);
   }
 }
 

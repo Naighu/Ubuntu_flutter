@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:ubuntu/Apps/webview/webview.dart';
+import 'package:ubuntu/System_Apps/File_Explorer/file_explorer.dart';
 import 'package:ubuntu/System_Apps/Settings/settings_page.dart';
+import 'package:ubuntu/constants.dart';
 
 import '../Apps/terminal/terminal.dart';
 
@@ -65,11 +67,11 @@ List<App> getApps(BuildContext context) => [
         packageName: "chrome",
       ),
       App(
-        name: "File Explorer",
-        icon: "assets/system/folder.png",
-        context: context,
-        packageName: "explorer",
-      ),
+          name: "File Explorer",
+          icon: "assets/system/folder.png",
+          context: context,
+          packageName: "explorer",
+          child: FileExplorer(dir: rootDir)),
       App(
         name: "Vs code",
         icon: "assets/app_icons/vscode.png",

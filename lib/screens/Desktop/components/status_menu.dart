@@ -130,6 +130,8 @@ class _StatusMenuState extends State<StatusMenu> {
   Route _createRoute() {
     widget.entry.remove();
     return PageRouteBuilder(
+      transitionDuration: const Duration(milliseconds: 500),
+      reverseTransitionDuration: const Duration(milliseconds: 500),
       pageBuilder: (context, animation, secondaryAnimation) => LockScreen(
         wallpaper: Get.find<DesktopController>().desktopWallpaper.value,
       ),

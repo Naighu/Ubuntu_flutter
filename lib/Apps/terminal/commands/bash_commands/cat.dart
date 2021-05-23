@@ -13,22 +13,20 @@ class Cat implements DecodeCommand {
     //compiling the path
     if (command.startsWith("/") || command.split("/").length >= 2) {
       var a = command.split("/");
-      a.removeLast();
+      fileName = a.removeLast();
       path = controller.path + "/" + a.join("/").replaceFirst("/", "");
-      fileName = command.split("/").last;
     } else if (command.isNotEmpty) {
       var a = command.split("/");
-      a.removeLast();
-      path = controller.path + "/" + a.join("/");
-      fileName = command;
+      fileName = a.removeLast();
+      path = controller.path + a.join("/");
     } else
       fileName = "";
 
     List items = Ls().ls(path);
-    String error = "";
+    String output = "";
 
     if (fileName.isEmpty)
-      error = "Specify a name";
+      output = "Specify a name";
     else {
       bool isExist = false;
       for (var item in items) {
@@ -43,12 +41,12 @@ class Cat implements DecodeCommand {
         }
       }
       if (isExist)
-        return cat(path + "/$fileName"); //get the content of the file.
+        output = cat(path + "/$fileName"); //get the content of the file.
       else
-        error = "No such file";
+        output = "No such file";
     }
 
-    return error;
+    controller.addOutputString(id, output);
   }
 
   String cat(String path) {

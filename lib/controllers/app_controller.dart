@@ -39,8 +39,6 @@ class AppController extends GetxController {
   void closeApp(App app) {
     minimize(app);
     appStack.remove(app);
-    print("REmoved : ${app.name}");
-    for (App a in appStack) print("Available : ${a.name}");
   }
 
   void minimize(App app) {

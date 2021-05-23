@@ -8,7 +8,7 @@ import 'package:ubuntu/models/app.dart';
 import 'package:get/get.dart';
 import 'package:ubuntu/models/file.dart';
 
-import 'components/Files/file_ui.dart';
+import 'Files/file_ui.dart';
 import 'components/appbar.dart';
 import 'components/menubar.dart';
 import 'components/right_button_menu.dart';

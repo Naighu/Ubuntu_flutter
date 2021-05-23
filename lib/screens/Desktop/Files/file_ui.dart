@@ -13,7 +13,7 @@ import 'package:ubuntu/models/file.dart';
 import 'package:ubuntu/utils/show_on_rightclick_menu.dart';
 import 'package:ubuntu/Apps/terminal/commands/commands.dart';
 
-import '../../../../constants.dart';
+import '../../../constants.dart';
 
 class FileUi extends StatefulWidget {
   final MyFile file;
@@ -66,10 +66,10 @@ class _FileUiState extends State<FileUi> {
                       )));
                 else
                   controller.appStack.add(App(
-                      icon: "assets/app_icons/gedit.png",
-                      name: widget.file.fileName,
+                      icon: "assets/app_icons/folder.png",
+                      name: "File Explorer",
                       context: context,
-                      packageName: "gedit",
+                      packageName: "explorer",
                       child: FileExplorer(
                         dir: rootDir + "/${widget.file.fileName}",
                       )));

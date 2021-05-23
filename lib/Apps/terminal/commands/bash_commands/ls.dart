@@ -20,7 +20,7 @@ class Ls implements DecodeCommand {
       _items += item.path.split("/").last;
       _items += "  ";
     }
-    return _items;
+    controller.addOutputString(id, _items);
   }
 
   List ls(String path) {

@@ -12,9 +12,12 @@ class Cd implements DecodeCommand {
     String newPath = cd(items, controller.path, folder);
     if (newPath != controller.path) {
       controller.path = newPath;
-      controller.headers.add(newPath);
+      controller.addOutputString(
+        id,
+        "",
+      );
+      //  controller.headers.add(newPath);
     }
-    return "";
   }
 
   String cd(List items, String currentPath, String folder) {

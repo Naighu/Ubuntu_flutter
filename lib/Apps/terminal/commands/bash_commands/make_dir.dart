@@ -8,7 +8,8 @@ class Mkdir implements DecodeCommand {
   dynamic executeCommand(BuildContext context, int id, String fileName) {
     final controller = Get.find<TerminalController>();
     final fileController = Get.find<FileController>();
-    return mkdir(fileController, controller.path, fileName);
+    String message = mkdir(fileController, controller.path, fileName);
+    controller.addOutputString(id, message);
   }
 
   String mkdir(FileController fileController, String path, String fileName) {
@@ -42,29 +43,32 @@ class Mkdir implements DecodeCommand {
 class Rmdir implements DecodeCommand {
   @override
   dynamic executeCommand(BuildContext context, int id, String command) {
+    print("[Executing RMDIR]");
     final controller = Get.find<TerminalController>();
     final fileController = Get.find<FileController>();
-    String path, fileName;
+    String path, fileName, message;
     //compiling the path
-    if (command.startsWith("/") || command.split("/").length >= 2) {
-      var a = command.split("/");
-      a.removeLast();
-      path = controller.path + "/" + a.join("/").replaceFirst("/", "");
-      fileName = command.split("/").last;
-    } else if (command.isNotEmpty) {
-      var a = command.split("/");
-      a.removeLast();
-      path = controller.path + "/" + a.join("/");
-      fileName = command;
+    if (command.isNotEmpty) {
+      if (command.startsWith("/") || command.split("/").length >= 2) {
+        var a = command.split("/");
+        fileName = a.removeLast();
+        path = controller.path + "/" + a.join("/").replaceFirst("/", "");
+      } else {
+        var a = command.split("/");
+        fileName = a.removeLast();
+        path = controller.path + a.join("/");
+      }
+      message = rmdir(fileController, path, fileName);
     } else
-      fileName = "";
-    return rmdir(fileController, path, fileName);
+      message = "Specify a Directory name";
+    print("message : $message");
+    controller.addOutputString(id, message);
   }
 
   rmdir(FileController fileController, String path, String fileName) {
     Ls ls = Ls();
     List items = ls.ls(path);
-    String error = "";
+    String error = "Directory Not Found";
 
     if (fileName.isEmpty)
       error = "Specify a name";
@@ -73,7 +77,8 @@ class Rmdir implements DecodeCommand {
         List split = item.path.split("/");
         split.removeLast();
         if (item is Directory &&
-            item.path.trim() == split.join("/") + "/$fileName") {
+            item.path.trim() == (split.join("/") + "/$fileName").trim()) {
+          error = "";
           break;
         }
       }
@@ -84,6 +89,7 @@ class Rmdir implements DecodeCommand {
           "/$fileName"); //checking if the selected folder is empty or not
       if (dirs.isEmpty) {
         Shell shell = Shell.init();
+        print(path + "$fileName");
         shell.remove(path + "/$fileName");
         fileController.updateUi(path + "/$fileName");
         return "";

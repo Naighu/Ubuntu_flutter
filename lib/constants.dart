@@ -7,6 +7,7 @@ final themeData = ThemeData(
     fontFamily: GoogleFonts.ubuntuMono().fontFamily,
     primaryColor: Color.fromRGBO(56, 4, 40, 1),
     backgroundColor: Color(0xFF222222),
+    accentColor: Color(0xFF161616),
     tooltipTheme: TooltipThemeData(
       padding: const EdgeInsets.all(4.0),
       decoration: BoxDecoration(
