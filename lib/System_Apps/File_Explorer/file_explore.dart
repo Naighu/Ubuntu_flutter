@@ -14,6 +14,7 @@ class FileExplorer extends StatefulWidget {
   final String dir;
 
   const FileExplorer({Key key, @required this.dir}) : super(key: key);
+
   @override
   _FileExplorerState createState() => _FileExplorerState();
 }
@@ -49,9 +50,8 @@ class _FileExplorerState extends State<FileExplorer> {
         ),
       ),
       body: GetBuilder<FileController>(
-          assignId: true,
-          id: dir,
           autoRemove: false,
+          id: "explorer",
           builder: (controller) {
             return Padding(
               padding:
@@ -60,10 +60,10 @@ class _FileExplorerState extends State<FileExplorer> {
                 runSpacing: 20.0,
                 spacing: 30.0,
                 children: [
-                  for (MyFile file in controller.getFiles(dir))
+                  for (MyFile file in controller.getFiles(context, dir))
                     GestureDetector(
                       onDoubleTap: () {
-                        _onDoubleTap(file);
+                        _onDoubleTap(context, file);
                       },
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -83,7 +83,7 @@ class _FileExplorerState extends State<FileExplorer> {
     );
   }
 
-  void _onDoubleTap(MyFile file) {
+  void _onDoubleTap(context, MyFile file) {
     final controller = Get.find<AppController>();
     if (file.file is File)
       controller.appStack.add(App(
@@ -102,6 +102,7 @@ class _FileExplorerState extends State<FileExplorer> {
 
   void _onBackPressed() {
     final split = dir.split("/");
+    print("Greater than ${split.length}");
     if (split.length > 2) {
       setState(() {
         split.removeLast();

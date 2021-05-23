@@ -48,6 +48,11 @@ void evaluate(context, MenuOptions option, AppController controller) {
     if (!controller.appStack.checkPackageName(
         terminalApp.packageName)) //if terminal is already opened or not
       controller.appStack.add(terminalApp);
+  } else if (option == MenuOptions.settings) {
+    App settingsApp = getApps(context)[5];
+    if (!controller.appStack.checkPackageName(
+        settingsApp.packageName)) //if terminal is already opened or not
+      controller.appStack.add(settingsApp);
   }
 }
 

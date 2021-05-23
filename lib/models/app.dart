@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ubuntu/Apps/webview/webview.dart';
-import 'package:ubuntu/System_Apps/File_Explorer/file_explorer.dart';
+import 'package:ubuntu/System_Apps/File_Explorer/file_explore.dart';
 import 'package:ubuntu/System_Apps/Settings/settings_page.dart';
 import 'package:ubuntu/constants.dart';
 

@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:ubuntu/Apps/gedit/gedit.dart';
-import 'package:ubuntu/System_Apps/File_Explorer/file_explorer.dart';
+import 'package:ubuntu/System_Apps/File_Explorer/file_explore.dart';
 import 'package:ubuntu/controllers/app_controller.dart';
 import 'package:ubuntu/controllers/file_controller.dart';
 import 'package:ubuntu/models/app.dart';
@@ -114,7 +114,6 @@ class _FileUiState extends State<FileUi> {
   }
 
   Future<void> _onPointerDown(context, PointerDownEvent event) async {
-    print("File ui Right");
     // Check if right mouse button clicked
     if (event.kind == PointerDeviceKind.mouse &&
         event.buttons == kSecondaryMouseButton) {

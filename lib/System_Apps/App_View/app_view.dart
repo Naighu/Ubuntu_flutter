@@ -51,9 +51,8 @@ class _AppViewState extends State<AppView> with SingleTickerProviderStateMixin {
     final theme = Theme.of(context);
     final Size size = MediaQuery.of(context).size;
     return GetBuilder<AppController>(builder: (controller) {
-      print("Rebuilding ${app.hide}");
       Future(() {
-        _conditionToShowMenubar();
+        _conditionToShowMenubar(); //check whether if the menubar should hide or not.
       });
       if (app.hide)
         return Container();
@@ -104,8 +103,6 @@ class _AppViewState extends State<AppView> with SingleTickerProviderStateMixin {
 
   void _dragUpdate(DragUpdateDetails details, Size size) {
     Offset newOffset = app.offset + (details.globalPosition - startDragOffset);
-    // newOffset = Offset(
-    //     100 * (newOffset.dx / size.width), 100 * (newOffset.dy / size.height));
     Size appSize = app.size;
     // boundary conditions to drag
     if (newOffset.dx + appSize.width < size.width &&

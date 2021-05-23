@@ -58,11 +58,11 @@ class Desktop extends StatelessWidget {
             GetBuilder<FileController>(
                 assignId: true,
                 id: rootDir,
-                init: FileController(context),
+                init: FileController(),
                 builder: (controller) {
                   return Stack(
                     children: [
-                      for (MyFile file in controller.getFiles(rootDir))
+                      for (MyFile file in controller.getFiles(context, rootDir))
                         FileUi(
                           key: Key(file.file.path),
                           file: file,

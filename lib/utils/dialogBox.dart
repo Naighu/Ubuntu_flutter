@@ -1,12 +1,10 @@
 import 'package:flutter/rendering.dart';
 import 'package:ubuntu/Apps/terminal/commands/bash_commands/command_packages.dart';
 
-import '../constants.dart';
-
 enum BodyType { textField }
 
 class DialogBox {
-  OverlayEntry entry;
+  static OverlayEntry entry;
   String _text;
   final String title, cancelBtnName, okBtnName;
   final BodyType bodyType;
@@ -22,6 +20,7 @@ class DialogBox {
       this.onCancel});
 
   void show(context) {
+    entry?.remove();
     entry = _createOverlayEntry(context);
     Overlay.of(context).insert(entry);
   }

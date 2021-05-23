@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:ubuntu/controllers/desktop_controller.dart';
 import 'package:ubuntu/screens/Desktop/components/status_menu_items.dart';
 import 'package:ubuntu/screens/Lock_Screen/lock_screen.dart';
+import 'package:ubuntu/utils/dialogBox.dart';
 
 import '../../../constants.dart';
 
@@ -128,7 +129,8 @@ class _StatusMenuState extends State<StatusMenu> {
       );
 
   Route _createRoute() {
-    widget.entry.remove();
+    widget.entry?.remove();
+    DialogBox.entry?.remove();
     return PageRouteBuilder(
       transitionDuration: const Duration(milliseconds: 500),
       reverseTransitionDuration: const Duration(milliseconds: 500),
