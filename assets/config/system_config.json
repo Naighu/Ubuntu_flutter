@@ -1,0 +1,16 @@
+{
+    "file-icons":{
+        "php" : "assets/system/php.png",
+        "js" :  "assets/system/js.png",
+        "zip" :  "assets/system/zip.png"
+    },
+    "dir-icon": "assets/system/folder.png",
+    "menubar-apps":[
+        "chrome",
+        "explorer",
+        "vscode",
+        "terminal",
+        "spottify",
+        "settings"
+    ]
+}

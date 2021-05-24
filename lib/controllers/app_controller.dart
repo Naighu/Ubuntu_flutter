@@ -9,6 +9,10 @@ class AppController extends GetxController {
   Size prevSize;
   Offset prevOffset;
 
+  void addByIgnoringDuplicates(App app) {
+    if (!appStack.checkPackageName(app.packageName)) appStack.add(app);
+  }
+
   void hide(App app) {
     app.hide = true;
 
@@ -16,13 +20,10 @@ class AppController extends GetxController {
   }
 
   void show(String packageName) {
-    App app;
-    for (App a in appStack)
-      if (a.packageName == packageName) {
-        app = a;
-        break;
+    for (App app in appStack)
+      if (app.packageName == packageName) {
+        app.hide = false;
       }
-    app.hide = false;
     update();
   }
 
@@ -46,5 +47,12 @@ class AppController extends GetxController {
     app.setOffset = prevOffset;
     app.isMaximized = false;
     update();
+  }
+}
+
+extension on RxList {
+  bool checkPackageName(String packageName) {
+    for (App a in this) if (a.packageName == packageName) return true;
+    return false;
   }
 }

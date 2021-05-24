@@ -8,7 +8,7 @@ import 'package:ubuntu/models/app.dart';
 import 'package:get/get.dart';
 import 'package:ubuntu/models/file.dart';
 
-import 'Files/file_ui.dart';
+import 'components/file_ui.dart';
 import 'components/appbar.dart';
 import 'components/menubar.dart';
 import 'components/right_button_menu.dart';
@@ -62,7 +62,7 @@ class Desktop extends StatelessWidget {
                 builder: (controller) {
                   return Stack(
                     children: [
-                      for (MyFile file in controller.getFiles(context, rootDir))
+                      for (MyFile file in controller.getFiles(rootDir))
                         FileUi(
                           key: Key(file.file.path),
                           file: file,

@@ -44,21 +44,11 @@ void evaluate(context, MenuOptions option, AppController controller) {
           Touch().touch(Get.find<FileController>(), rootDir, "$name");
         }).show(context);
   else if (option == MenuOptions.openTerminal) {
-    App terminalApp = getApps(context)[3];
-    if (!controller.appStack.checkPackageName(
-        terminalApp.packageName)) //if terminal is already opened or not
-      controller.appStack.add(terminalApp);
+    App terminalApp = getApps()[3];
+    controller.addByIgnoringDuplicates(terminalApp);
   } else if (option == MenuOptions.settings) {
-    App settingsApp = getApps(context)[5];
-    if (!controller.appStack.checkPackageName(
-        settingsApp.packageName)) //if terminal is already opened or not
-      controller.appStack.add(settingsApp);
-  }
-}
+    App settingsApp = getApps()[5];
 
-extension on RxList {
-  bool checkPackageName(String packageName) {
-    for (App a in this) if (a.packageName == packageName) return true;
-    return false;
+    controller.addByIgnoringDuplicates(settingsApp);
   }
 }

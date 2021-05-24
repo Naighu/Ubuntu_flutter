@@ -6,7 +6,7 @@ import 'package:ubuntu/Apps/terminal/commands/bash_commands/command_packages.dar
 import 'package:ubuntu/models/file.dart';
 
 class FileController extends GetxController {
-  RxList fileExplorStack;
+  RxList fileExplorStack; //used by the file explorer app
   FileController() {
     fileExplorStack = [].obs;
   }
@@ -15,11 +15,11 @@ class FileController extends GetxController {
     update();
   }
 
-  List<MyFile> getFiles(BuildContext context, String dir) {
+  List<MyFile> getFiles(String dir) {
     List<MyFile> files = [];
     final items = Ls().ls(dir);
     for (var item in items) {
-      files.add(_file(context, item));
+      files.add(_file(item));
     }
 
     return files;
@@ -34,15 +34,7 @@ class FileController extends GetxController {
     ]); //"explorer" is added inorder to get the update to the file Explorer app.
   }
 
-  MyFile _file(BuildContext context, FileSystemEntity item) => MyFile(
-      icon: item is Directory
-          ? Image.asset("assets/system/folder.png")
-          : Image.asset(
-              "assets/app_icons/gedit.png",
-              height: 50,
-              width: 50,
-            ),
-      context: context,
+  MyFile _file(FileSystemEntity item) => MyFile(
       file: item,
       fileName: item.path.split("/").last,
       offset: Offset(

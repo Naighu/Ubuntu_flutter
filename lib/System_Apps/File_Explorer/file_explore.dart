@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ubuntu/Apps/gedit/gedit.dart';
+import 'package:ubuntu/System_Apps/File_Explorer/file_icon.dart';
 import 'package:ubuntu/controllers/app_controller.dart';
 import 'package:ubuntu/controllers/file_controller.dart';
 import 'package:ubuntu/models/app.dart';
@@ -60,22 +61,12 @@ class _FileExplorerState extends State<FileExplorer> {
                 runSpacing: 20.0,
                 spacing: 30.0,
                 children: [
-                  for (MyFile file in controller.getFiles(context, dir))
-                    GestureDetector(
-                      onDoubleTap: () {
-                        _onDoubleTap(context, file);
-                      },
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          file.icon,
-                          Text(
-                            file.fileName,
-                            style: Theme.of(context).textTheme.bodyText1,
-                          )
-                        ],
-                      ),
-                    ),
+                  for (MyFile file in controller.getFiles(dir))
+                    FileIcon(
+                      file: file,
+                      onOpened: _onOpened,
+                      openDirInNewWindow: false,
+                    )
                 ],
               ),
             );
@@ -83,18 +74,8 @@ class _FileExplorerState extends State<FileExplorer> {
     );
   }
 
-  void _onDoubleTap(context, MyFile file) {
-    final controller = Get.find<AppController>();
-    if (file.file is File)
-      controller.appStack.add(App(
-          icon: "assets/app_icons/gedit.png",
-          name: file.fileName,
-          context: context,
-          packageName: "gedit",
-          child: Gedit(
-            path: file.file.path,
-          )));
-    else
+  void _onOpened(MyFile file) {
+    if (file.file is Directory)
       setState(() {
         dir = file.file.path;
       });

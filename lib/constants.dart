@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 const defaultPadding = 12.0, menuWidth = 60.0, topAppBarHeight = 35.0;
-const rootDir = "/naighu";
+const rootDir = "/naighu", configFile = 'assets/config/system_config.json';
 final themeData = ThemeData(
     fontFamily: GoogleFonts.ubuntuMono().fontFamily,
     primaryColor: Color.fromRGBO(56, 4, 40, 1),
