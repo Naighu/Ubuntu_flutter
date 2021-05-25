@@ -5,6 +5,13 @@
         "zip" :  "assets/system/zip.png"
     },
     "dir-icon": "assets/system/folder.png",
+    "file-open-app":{
+        "zip" : "gedit",
+        "php" : "gedit",
+        "js":"gedit",
+        "*": "gedit"
+        
+    },
     "menubar-apps":[
         "chrome",
         "explorer",

@@ -50,6 +50,7 @@ class _AppViewState extends State<AppView> with SingleTickerProviderStateMixin {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final Size size = MediaQuery.of(context).size;
+    print(app.child);
     return GetBuilder<AppController>(builder: (controller) {
       Future(() {
         _conditionToShowMenubar(); //check whether if the menubar should hide or not.

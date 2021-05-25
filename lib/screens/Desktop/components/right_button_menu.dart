@@ -44,11 +44,11 @@ void evaluate(context, MenuOptions option, AppController controller) {
           Touch().touch(Get.find<FileController>(), rootDir, "$name");
         }).show(context);
   else if (option == MenuOptions.openTerminal) {
-    App terminalApp = getApps()[3];
-    controller.addByIgnoringDuplicates(terminalApp);
+    App terminalApp = controller.getAppByPackageName("terminal");
+    controller.addApp(terminalApp, addByIgnoringDuplicates: true);
   } else if (option == MenuOptions.settings) {
-    App settingsApp = getApps()[5];
+    App settingsApp = controller.getAppByPackageName("settings");
 
-    controller.addByIgnoringDuplicates(settingsApp);
+    controller.addApp(settingsApp, addByIgnoringDuplicates: true);
   }
 }

@@ -20,7 +20,7 @@ class DialogBox {
       this.onCancel});
 
   void show(context) {
-    entry?.remove();
+    if (entry != null && entry.mounted) entry?.remove();
     entry = _createOverlayEntry(context);
     Overlay.of(context).insert(entry);
   }

@@ -71,7 +71,7 @@ class Desktop extends StatelessWidget {
                     ],
                   );
                 }),
-            Obx(() {
+            GetBuilder<AppController>(builder: (_) {
               return Stack(children: [
                 for (App app in controller.appStack)
                   AppView(key: Key(app.name), app: app)

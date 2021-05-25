@@ -3,10 +3,12 @@ import 'package:flutter/services.dart';
 import 'package:ubuntu/Apps/terminal/commands/commands.dart';
 
 import 'package:ubuntu/Apps/terminal/commands/shell.dart';
+import 'package:ubuntu/models/app.dart';
 
 class Gedit extends StatefulWidget {
-  final String path;
-  const Gedit({Key key, this.path}) : super(key: key);
+  final App app;
+  final Map params;
+  const Gedit({Key key, this.app, this.params}) : super(key: key);
 
   @override
   _GeditState createState() => _GeditState();
@@ -19,7 +21,8 @@ class _GeditState extends State<Gedit> {
   void initState() {
     super.initState();
     String text = "";
-    if (widget.path != null) text = Cat().cat(widget.path);
+    if (widget.params.containsKey("path"))
+      text = Cat().cat(widget.params["path"]);
     controller = TextEditingController(text: text);
   }
 
@@ -32,6 +35,7 @@ class _GeditState extends State<Gedit> {
 
   @override
   Widget build(BuildContext context) {
+    print("[GEDIT] STARTING");
     return Container(
         color: Colors.white,
         padding: const EdgeInsets.all(10.0),
@@ -47,7 +51,7 @@ class _GeditState extends State<Gedit> {
                   onPressed: () {
                     Shell shell = Shell.init();
                     print(controller.text);
-                    shell.updateFile(widget.path, controller.text);
+                    shell.updateFile(widget.params["path"], controller.text);
                   },
                   child: Text(
                     "Save",

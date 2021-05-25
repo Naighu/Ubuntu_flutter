@@ -4,19 +4,48 @@ import 'package:get/get.dart';
 import '../models/app.dart';
 
 class AppController extends GetxController {
-  final RxList appStack = [].obs;
+  final List _appStack = [];
+  List get appStack => _appStack;
   int key = 0;
   Size prevSize;
   Offset prevOffset;
 
-  void addByIgnoringDuplicates(App app) {
-    if (!appStack.checkPackageName(app.packageName)) appStack.add(app);
+  void addApp(App app, {Map params, bool addByIgnoringDuplicates = false}) {
+    if (addByIgnoringDuplicates) {
+      if (!appStack.checkPackageName(app.packageName)) {
+        app.child = openApp(app, params: params);
+        _appStack.add(app);
+      }
+    } else {
+      app.child = openApp(app, params: params);
+      _appStack.add(app);
+    }
+    update();
+  }
+
+  void removeApp(App app, {bool removeAllDuplicates = false}) {
+    for (int i = 0; i < _appStack.length; i++)
+      if (app.packageName == _appStack[i].packageName) {
+        _appStack.removeAt(i);
+        if (!removeAllDuplicates) break;
+      }
+    update();
   }
 
   void hide(App app) {
     app.hide = true;
 
     update();
+  }
+
+  App getAppByPackageName(String packageName) {
+    App a;
+    for (App app in getApps())
+      if (app.packageName == packageName) {
+        a = app;
+        break;
+      }
+    return a;
   }
 
   void show(String packageName) {
@@ -39,7 +68,7 @@ class AppController extends GetxController {
 
   void closeApp(App app) {
     minimize(app);
-    appStack.remove(app);
+    removeApp(app);
   }
 
   void minimize(App app) {
@@ -50,7 +79,7 @@ class AppController extends GetxController {
   }
 }
 
-extension on RxList {
+extension on List {
   bool checkPackageName(String packageName) {
     for (App a in this) if (a.packageName == packageName) return true;
     return false;

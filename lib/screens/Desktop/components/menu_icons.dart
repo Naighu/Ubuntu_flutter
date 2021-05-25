@@ -20,40 +20,39 @@ class _MenuIconState extends State<MenuIcon> {
   @override
   Widget build(BuildContext context) {
     return Tooltip(
-      message: widget.app.name,
-      margin: EdgeInsets.only(left: menuWidth),
-      verticalOffset: -10.0,
-      child: Container(
-        color: appController.appStack.check(widget.app)
-            ? Colors.white.withOpacity(0.3)
-            : Colors.transparent,
-        child: Stack(
-          children: [
-            // selected app icon dot
-            if (appController.appStack.check(widget.app))
-              Container(
-                  height: 4.0,
-                  width: 4.0,
-                  margin: const EdgeInsets.only(top: 25.0, left: 5.0),
-                  decoration:
-                      BoxDecoration(color: Colors.red, shape: BoxShape.circle)),
+        message: widget.app.name,
+        margin: EdgeInsets.only(left: menuWidth),
+        verticalOffset: -10.0,
+        child: Container(
+          color: appController.appStack.check(widget.app)
+              ? Colors.white.withOpacity(0.3)
+              : Colors.transparent,
+          child: Stack(
+            children: [
+              // selected app icon dot
+              if (appController.appStack.check(widget.app))
+                Container(
+                    height: 4.0,
+                    width: 4.0,
+                    margin: const EdgeInsets.only(top: 25.0, left: 5.0),
+                    decoration: BoxDecoration(
+                        color: Colors.red, shape: BoxShape.circle)),
 
-            TextButton(
-              onPressed: () {
-                _onPressed(appController, widget.app);
-              },
-              child: SizedBox(
-                height: 50.0,
-                width: 30.0,
-                child: Image.asset(
-                  widget.app.icon,
+              TextButton(
+                onPressed: () {
+                  _onPressed(appController, widget.app);
+                },
+                child: SizedBox(
+                  height: 50.0,
+                  width: 30.0,
+                  child: Image.asset(
+                    widget.app.icon,
+                  ),
                 ),
               ),
-            ),
-          ],
-        ),
-      ),
-    );
+            ],
+          ),
+        ));
   }
 
   void _onPressed(AppController appController, App app) {
@@ -61,19 +60,40 @@ class _MenuIconState extends State<MenuIcon> {
 
     if (!appController.appStack.check(app)) {
       print("Pressed on if");
-      appController.appStack.add(app);
+      appController.addApp(app, params: getParams(app));
     } else {
       print("Pressed on else");
 
       appController.show(app.packageName);
     }
   }
+
+  Map getParams(App app) {
+    Map params = {};
+    switch (app.packageName) {
+      case "spottify":
+        params["url"] =
+            "https://open.spotify.com/embed/playlist/37i9dQZEVXbLZ52XmnySJg";
+        break;
+      case "vscode":
+        params["url"] =
+            "https://github1s.com/vivek9patel/vivek9patel.github.io/blob/HEAD/src/components/ubuntu.js";
+        break;
+      case "chrome":
+        params["url"] = "https://www.google.com/webhp?igu=1";
+        break;
+      case "explorer":
+        params["dir"] = rootDir;
+        break;
+    }
+    return params;
+  }
 }
 
-extension on RxList {
+extension on List {
   bool check(App app) {
     // ignore: invalid_use_of_protected_member
-    for (App a in this.value) if (a.packageName == app.packageName) return true;
+    for (App a in this) if (a.packageName == app.packageName) return true;
 
     return false;
   }

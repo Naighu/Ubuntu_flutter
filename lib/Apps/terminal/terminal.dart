@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:ubuntu/models/app.dart';
 import 'controllers/terminal_controller.dart';
 
 class Terminal extends StatelessWidget {
+  final App app;
+  final Map params;
+
+  const Terminal({Key key, this.app, this.params}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return GetX<TerminalController>(

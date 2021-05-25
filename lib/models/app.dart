@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:ubuntu/Apps/gedit/gedit.dart';
 import 'package:ubuntu/Apps/webview/webview.dart';
 import 'package:ubuntu/System_Apps/File_Explorer/file_explore.dart';
 import 'package:ubuntu/System_Apps/Settings/settings_page.dart';
@@ -19,7 +20,6 @@ class App {
     @required this.name,
     @required this.icon,
     @required this.packageName,
-    this.child,
   }) {
     _size = Size(60, 70);
     _offset = Offset(_size.width - 60, _size.height - 70);
@@ -58,45 +58,81 @@ List<App> getApps() => [
       App(
         name: "Google Chrome",
         icon: "assets/app_icons/chrome.png",
-        child: WebviewFrame(
-          url: "https://www.google.com/webhp?igu=1",
-          id: "Google chrome",
-        ),
+        // child: WebviewFrame(
+        //   url: "https://www.google.com/webhp?igu=1",
+        //   id: "Google chrome",
+        // ),
         packageName: "chrome",
       ),
       App(
-          name: "File Explorer",
-          icon: "assets/system/folder.png",
-          packageName: "explorer",
-          child: FileExplorer(dir: rootDir)),
+        name: "File Explorer",
+        icon: "assets/system/folder.png",
+        packageName: "explorer",
+      ),
       App(
         name: "Vs code",
         icon: "assets/app_icons/vscode.png",
-        child: WebviewFrame(
-          url:
-              "https://github1s.com/vivek9patel/vivek9patel.github.io/blob/HEAD/src/components/ubuntu.js",
-          id: "vscode",
-        ),
+        // child: WebviewFrame(
+        //   url:
+        //       "https://github1s.com/vivek9patel/vivek9patel.github.io/blob/HEAD/src/components/ubuntu.js",
+        //   id: "vscode",
+        // ),
         packageName: "vscode",
       ),
       App(
         name: "Terminal",
         icon: "assets/app_icons/bash.png",
-        child: Terminal(),
         packageName: "terminal",
       ),
       App(
         name: "Spotify",
         icon: "assets/app_icons/spotify.png",
-        child: WebviewFrame(
-          url: "https://open.spotify.com/embed/playlist/37i9dQZEVXbLZ52XmnySJg",
-          id: "spottify",
-        ),
+        // child: WebviewFrame(
+        //   url: "https://open.spotify.com/embed/playlist/37i9dQZEVXbLZ52XmnySJg",
+        //   id: "spottify",
+        // ),
         packageName: "spottify",
       ),
       App(
-          name: "Settings",
-          icon: "assets/app_icons/gnome-control-center.png",
-          packageName: "settings",
-          child: SettingsPage()),
+        name: "Settings",
+        icon: "assets/app_icons/gnome-control-center.png",
+        packageName: "settings",
+      ),
+      App(
+        name: "Gedit",
+        icon: "assets/app_icons/gedit.png",
+        packageName: "gedit",
+      ),
     ];
+
+Widget openApp(App app, {Map params}) {
+  print(params);
+  Widget wid;
+  switch (app.packageName) {
+    case "settings":
+      wid = SettingsPage();
+      break;
+    case "spottify":
+      wid = WebviewFrame(app: app, params: params);
+      break;
+    case "vscode":
+      wid = WebviewFrame(app: app, params: params);
+      break;
+    case "chrome":
+      wid = WebviewFrame(app: app, params: params);
+      break;
+    case "explorer":
+      wid = FileExplorer(app: app, params: params);
+      break;
+    case "terminal":
+      wid = Terminal(app: app, params: params);
+      break;
+    case "gedit":
+      wid = Gedit(
+        app: app,
+        params: params,
+      );
+      break;
+  }
+  return wid;
+}

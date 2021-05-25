@@ -1,14 +1,10 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:ubuntu/Apps/gedit/gedit.dart';
 import 'package:ubuntu/Apps/terminal/commands/commands.dart';
-import 'package:ubuntu/System_Apps/File_Explorer/file_explore.dart';
 import 'package:ubuntu/controllers/app_controller.dart';
 import 'package:ubuntu/controllers/file_controller.dart';
 import 'package:ubuntu/models/app.dart';
@@ -41,12 +37,17 @@ class _FileIconState extends State<FileIcon> {
     super.initState();
     _fileIcons = {};
     _hoverColor = Colors.transparent;
-    SystemFiles.loadJsonData().then((value) {
-      setState(() {
-        _systemFiles = value;
-        _fileIcons = _systemFiles.getFileIcons();
+    if (SystemFiles.jsonData == null) {
+      SystemFiles.loadJsonData().then((value) {
+        setState(() {
+          _systemFiles = value;
+          _fileIcons = _systemFiles.getFileIcons();
+        });
       });
-    });
+    } else {
+      _systemFiles = SystemFiles.getObject();
+      _fileIcons = _systemFiles.getFileIcons();
+    }
   }
 
   @override
@@ -74,22 +75,16 @@ class _FileIconState extends State<FileIcon> {
             mouseCursor: MouseCursor.defer,
             onDoubleTap: () {
               final controller = Get.find<AppController>();
-              if (widget.file.file is File)
-                controller.appStack.add(App(
-                    icon: "assets/app_icons/gedit.png",
-                    name: widget.file.fileName,
-                    packageName: "gedit",
-                    child: Gedit(
-                      path: widget.file.file.path,
-                    )));
-              else if (widget.openDirInNewWindow)
-                controller.appStack.add(App(
-                    icon: "assets/app_icons/folder.png",
-                    name: "File Explorer",
-                    packageName: "explorer",
-                    child: FileExplorer(
-                      dir: rootDir + "/${widget.file.fileName}",
-                    )));
+              if (widget.file.file is File) {
+                App app = controller.getAppByPackageName(_systemFiles
+                    .getAppPackageNameToOpenFile(widget.file.fileName));
+                print(app != null);
+                controller.addApp(app, params: {"path": widget.file.file.path});
+              } else if (widget.openDirInNewWindow) {
+                App app = controller.getAppByPackageName("explorer");
+                controller.addApp(app,
+                    params: {"dir": rootDir + "/${widget.file.fileName}"});
+              }
               if (widget.onOpened != null) widget.onOpened(widget.file);
             },
             child: Column(
@@ -150,13 +145,8 @@ class _FileIconState extends State<FileIcon> {
           }
         } else if (option == MenuOptions.open && widget.file.file is File) {
           final controller = Get.find<AppController>();
-          controller.appStack.add(App(
-              icon: "assets/app_icons/gedit.png",
-              name: widget.file.fileName,
-              packageName: "gedit",
-              child: Gedit(
-                path: widget.file.file.path,
-              )));
+          App app = controller.getAppByPackageName("gedit");
+          controller.addApp(app, params: {"path": widget.file.file.path});
         }
       });
     }

@@ -1,7 +1,4 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:ubuntu/controllers/app_controller.dart';
 import 'package:get/get.dart';
 import 'package:ubuntu/controllers/desktop_controller.dart';
@@ -18,22 +15,27 @@ class MenuBar extends StatefulWidget {
 
 class _MenuBarState extends State<MenuBar> {
   final AppController appController = Get.find<AppController>();
-  List<App> _apps;
   List menubarAppsPackageNames;
+  List apps;
   @override
   void initState() {
     super.initState();
     menubarAppsPackageNames = [];
-    _apps = getApps();
-    SystemFiles.loadJsonData().then((value) {
-      setState(() {
-        menubarAppsPackageNames = value.getMenuBarApps();
+    apps = getApps();
+    if (SystemFiles.jsonData == null) {
+      SystemFiles.loadJsonData().then((value) {
+        setState(() {
+          menubarAppsPackageNames = value.getMenuBarApps();
+        });
       });
-    });
+    } else {
+      menubarAppsPackageNames = SystemFiles.getObject().getMenuBarApps();
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    print("rebuilding menubar");
     return GetX<DesktopController>(
         builder: (menuController) => AnimatedContainer(
               duration: const Duration(milliseconds: 300),
@@ -44,40 +46,43 @@ class _MenuBarState extends State<MenuBar> {
                   duration: const Duration(milliseconds: 300),
                   opacity:
                       menuController.menubarWidth.value == menuWidth ? 1 : 0,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      //default menu icons
-                      for (App app in _apps)
-                        if (menubarAppsPackageNames.contains(app.packageName))
-                          MenuIcon(app: app),
-                      //currently opened apps other than the menuapps
-                      for (App app in appController.appStack)
-                        if (!menubarAppsPackageNames.contains(app.packageName))
-                          MenuIcon(app: app),
+                  child: GetBuilder<AppController>(builder: (_) {
+                    return Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        //default menu icons
+                        for (App app in apps)
+                          if (menubarAppsPackageNames.contains(app.packageName))
+                            MenuIcon(app: app),
+                        //currently opened apps other than the menuapps
+                        for (App app in appController.appStack)
+                          if (!menubarAppsPackageNames
+                              .contains(app.packageName))
+                            MenuIcon(app: app),
 
-                      Spacer(),
+                        Spacer(),
 
-                      Tooltip(
-                        message: "Show Applications",
-                        margin: EdgeInsets.only(left: menuWidth),
-                        verticalOffset: -10.0,
-                        child: IconButton(
-                            padding: const EdgeInsets.only(
-                              bottom: defaultPadding * 4,
-                            ),
-                            onPressed: () {
-                              print("Pressed");
-                            },
-                            icon: Icon(Icons.apps, size: 28)),
-                      ),
-                    ],
-                  )),
+                        Tooltip(
+                          message: "Show Applications",
+                          margin: EdgeInsets.only(left: menuWidth),
+                          verticalOffset: -10.0,
+                          child: IconButton(
+                              padding: const EdgeInsets.only(
+                                bottom: defaultPadding * 4,
+                              ),
+                              onPressed: () {
+                                print("Pressed");
+                              },
+                              icon: Icon(Icons.apps, size: 28)),
+                        ),
+                      ],
+                    );
+                  })),
             ));
   }
 }
 
-extension on RxList {
+extension on List {
   bool checkPackageName(String packageName) {
     for (App a in this) if (a.packageName == packageName) return true;
     return false;

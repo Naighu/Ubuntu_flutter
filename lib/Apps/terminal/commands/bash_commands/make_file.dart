@@ -75,7 +75,8 @@ class Rm implements DecodeCommand {
       for (var item in items) {
         List split = item.path.split("/");
         split.removeLast();
-        if (item is Directory &&
+
+        if (item is File &&
             item.path.trim() == (split.join("/") + "/$fileName").trim()) {
           error = "";
           break;

@@ -12,12 +12,23 @@ class SystemFiles {
     return SystemFiles._();
   }
 
+  static getObject() {
+    return SystemFiles._();
+  }
+
   List getMenuBarApps() {
     return jsonData["menubar-apps"];
   }
 
   Map getFileIcons() {
     return jsonData["file-icons"];
+  }
+
+  String getAppPackageNameToOpenFile(String fileName) {
+    String ext = fileName.split(".").last;
+    Map data = jsonData["file-open-app"];
+    if (data.containsKey(ext)) return data[ext];
+    return data["*"];
   }
 
   String getDirIcon() {

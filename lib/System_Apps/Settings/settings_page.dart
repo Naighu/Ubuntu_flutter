@@ -2,8 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ubuntu/constants.dart';
 import 'package:ubuntu/controllers/desktop_controller.dart';
+import 'package:ubuntu/models/app.dart';
 
 class SettingsPage extends StatefulWidget {
+  final App app;
+  final Map params;
+
+  const SettingsPage({Key key, this.app, this.params}) : super(key: key);
   @override
   _SettingsPageState createState() => _SettingsPageState();
 }
