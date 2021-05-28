@@ -6,19 +6,19 @@ import 'ls.dart';
 
 class Cat implements DecodeCommand {
   @override
-  dynamic executeCommand(BuildContext context, int id, String command) {
+  dynamic executeCommand(BuildContext context, int? id, String command) {
     final controller = Get.find<TerminalController>();
-    String path, fileName;
+    String? path, fileName;
 
     //compiling the path
     if (command.startsWith("/") || command.split("/").length >= 2) {
       var a = command.split("/");
       fileName = a.removeLast();
-      path = controller.path + "/" + a.join("/").replaceFirst("/", "");
+      path = controller.path! + "/" + a.join("/").replaceFirst("/", "");
     } else if (command.isNotEmpty) {
       var a = command.split("/");
       fileName = a.removeLast();
-      path = controller.path + a.join("/");
+      path = controller.path! + a.join("/");
     } else
       fileName = "";
 
@@ -41,16 +41,16 @@ class Cat implements DecodeCommand {
         }
       }
       if (isExist)
-        output = cat(path + "/$fileName"); //get the content of the file.
+        output = cat(path! + "/$fileName"); //get the content of the file.
       else
         output = "No such file";
     }
 
-    controller.addOutputString(id, output);
+    controller.addOutputString(id!, output);
   }
 
   String cat(String path) {
-    Shell shell = Shell.init();
+    Shell shell = Shell.init()!;
     String contents = shell.getContents(path);
     return contents;
   }

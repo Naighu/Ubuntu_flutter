@@ -7,14 +7,14 @@ import 'ls.dart';
 
 class Touch implements DecodeCommand {
   @override
-  executeCommand(BuildContext context, int id, String fileName) {
+  executeCommand(BuildContext context, int? id, String fileName) {
     final controller = Get.find<TerminalController>();
     final fileController = Get.find<FileController>();
     String message = touch(fileController, controller.path, fileName);
-    controller.addOutputString(id, message);
+    controller.addOutputString(id!, message);
   }
 
-  touch(FileController fileController, String path, String fileName) {
+  touch(FileController fileController, String? path, String fileName) {
     List items = Ls().ls(path);
     String error = "";
 
@@ -33,8 +33,8 @@ class Touch implements DecodeCommand {
       }
     }
     if (error.isEmpty) {
-      Shell shell = Shell.init();
-      shell.create(path + "/$fileName", option: "file");
+      Shell shell = Shell.init()!;
+      shell.create(path! + "/$fileName", option: "file");
       fileController.updateUi(path + "/$fileName");
       return "";
     } else
@@ -44,7 +44,7 @@ class Touch implements DecodeCommand {
 
 class Rm implements DecodeCommand {
   @override
-  dynamic executeCommand(BuildContext context, int id, String command) {
+  dynamic executeCommand(BuildContext context, int? id, String command) {
     final controller = Get.find<TerminalController>();
     final fileController = Get.find<FileController>();
     String path, fileName, message;
@@ -53,16 +53,16 @@ class Rm implements DecodeCommand {
       if (command.startsWith("/") || command.split("/").length >= 2) {
         var a = command.split("/");
         fileName = a.removeLast();
-        path = controller.path + "/" + a.join("/").replaceFirst("/", "");
+        path = controller.path! + "/" + a.join("/").replaceFirst("/", "");
       } else {
         var a = command.split("/");
         fileName = a.removeLast();
-        path = controller.path + a.join("/");
+        path = controller.path! + a.join("/");
       }
       message = rm(fileController, path, fileName);
     } else
       message = "Specify a File name";
-    controller.addOutputString(id, message);
+    controller.addOutputString(id!, message);
   }
 
   rm(FileController fileController, String path, String fileName) {
@@ -85,7 +85,7 @@ class Rm implements DecodeCommand {
     }
 
     if (error.isEmpty) {
-      Shell shell = Shell.init();
+      Shell shell = Shell.init()!;
       shell.remove(path + "/$fileName", option: "file");
       fileController.updateUi(path + "/$fileName");
       return "";

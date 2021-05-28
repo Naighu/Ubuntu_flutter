@@ -2,20 +2,19 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:ubuntu/Apps/gedit/gedit.dart';
-import 'package:ubuntu/System_Apps/File_Explorer/file_icon.dart';
-import 'package:ubuntu/controllers/app_controller.dart';
-import 'package:ubuntu/controllers/file_controller.dart';
-import 'package:ubuntu/models/app.dart';
-import 'package:ubuntu/models/file.dart';
+
+import '../../System_Apps/File_Explorer/file_icon.dart';
+import '../../controllers/file_controller.dart';
+import '../../models/app.dart';
+import '../../models/file.dart';
 
 import '../../constants.dart';
 
 class FileExplorer extends StatefulWidget {
   final App app;
-  final Map params;
+  final Map? params;
 
-  const FileExplorer({Key key, @required this.app, this.params})
+  const FileExplorer({Key? key, required this.app, this.params})
       : super(key: key);
 
   @override
@@ -23,11 +22,11 @@ class FileExplorer extends StatefulWidget {
 }
 
 class _FileExplorerState extends State<FileExplorer> {
-  String dir;
+  String? dir;
   @override
   void initState() {
     super.initState();
-    dir = widget.params["dir"];
+    dir = widget.params!["dir"];
   }
 
   @override
@@ -40,7 +39,7 @@ class _FileExplorerState extends State<FileExplorer> {
         elevation: 0,
         leadingWidth: 30.0 + defaultPadding,
         centerTitle: true,
-        title: Text(dir, style: Theme.of(context).textTheme.subtitle1),
+        title: Text(dir!, style: Theme.of(context).textTheme.subtitle1),
         leading: Padding(
           padding:
               const EdgeInsets.only(left: defaultPadding, top: defaultPadding),
@@ -79,12 +78,12 @@ class _FileExplorerState extends State<FileExplorer> {
   void _onOpened(MyFile file) {
     if (file.file is Directory)
       setState(() {
-        dir = file.file.path;
+        dir = file.file!.path;
       });
   }
 
   void _onBackPressed() {
-    final split = dir.split("/");
+    final split = dir!.split("/");
     print("Greater than ${split.length}");
     if (split.length > 2) {
       setState(() {

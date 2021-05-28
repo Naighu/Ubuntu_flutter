@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ubuntu/constants.dart';
+import 'constants.dart';
 
 import 'screens/Desktop/desktop.dart';
 

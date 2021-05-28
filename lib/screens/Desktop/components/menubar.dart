@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:ubuntu/controllers/app_controller.dart';
 import 'package:get/get.dart';
-import 'package:ubuntu/controllers/desktop_controller.dart';
-import 'package:ubuntu/screens/Desktop/components/menu_icons.dart';
-import 'package:ubuntu/utils/system_files.dart';
 
+import '../../../controllers/app_controller.dart';
+import '../../../controllers/system_controller.dart';
+import 'menu_icons.dart';
+import '../../../utils/system_files.dart';
 import '../../../models/app.dart';
 import '../../../constants.dart';
 
@@ -15,8 +15,8 @@ class MenuBar extends StatefulWidget {
 
 class _MenuBarState extends State<MenuBar> {
   final AppController appController = Get.find<AppController>();
-  List menubarAppsPackageNames;
-  List apps;
+  List? menubarAppsPackageNames;
+  late List<App> apps;
   @override
   void initState() {
     super.initState();
@@ -36,7 +36,7 @@ class _MenuBarState extends State<MenuBar> {
   @override
   Widget build(BuildContext context) {
     print("rebuilding menubar");
-    return GetX<DesktopController>(
+    return GetX<SystemController>(
         builder: (menuController) => AnimatedContainer(
               duration: const Duration(milliseconds: 300),
               margin: EdgeInsets.only(
@@ -52,11 +52,12 @@ class _MenuBarState extends State<MenuBar> {
                       children: [
                         //default menu icons
                         for (App app in apps)
-                          if (menubarAppsPackageNames.contains(app.packageName))
+                          if (menubarAppsPackageNames!
+                              .contains(app.packageName))
                             MenuIcon(app: app),
                         //currently opened apps other than the menuapps
                         for (App app in appController.appStack)
-                          if (!menubarAppsPackageNames
+                          if (!menubarAppsPackageNames!
                               .contains(app.packageName))
                             MenuIcon(app: app),
 

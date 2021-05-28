@@ -4,11 +4,11 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../../../constants.dart';
 
 class StatusMenuItems extends StatefulWidget {
-  final String title, image;
+  final String? title, image;
   final bool textDim, trailingIcon;
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
   const StatusMenuItems(
-      {Key key,
+      {Key? key,
       this.title,
       this.image,
       this.onPressed,
@@ -41,14 +41,14 @@ class _StatusMenuItemsState extends State<StatusMenuItems> {
           padding: const EdgeInsets.only(right: defaultPadding),
           child: Row(
             children: [
-              SvgPicture.asset(widget.image),
+              SvgPicture.asset(widget.image!),
               const SizedBox(width: defaultPadding),
               Text(
-                widget.title,
+                widget.title!,
                 style: widget.textDim
                     ? Theme.of(context)
                         .textTheme
-                        .subtitle1
+                        .subtitle1!
                         .copyWith(color: Colors.white54)
                     : Theme.of(context).textTheme.subtitle1,
               ),

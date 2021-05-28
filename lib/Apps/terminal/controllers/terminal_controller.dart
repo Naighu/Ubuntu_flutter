@@ -1,14 +1,14 @@
 import 'package:get/get.dart';
-import 'package:ubuntu/Apps/terminal/components/header.dart';
-import 'package:ubuntu/Apps/terminal/components/output_block.dart';
+import '../../../Apps/terminal/components/header.dart';
+import '../../../Apps/terminal/components/output_block.dart';
 
 import '../../../constants.dart';
 
 class TerminalController extends GetxController {
   RxList blocks = [].obs;
-  List<TerminalOutput> _outputs;
-  List<TerminalOutput> get outputs => _outputs;
-  String path;
+  List<TerminalOutput>? _outputs;
+  List<TerminalOutput>? get outputs => _outputs;
+  String? path;
   int cleared = 0; // inorder to work clear command.. used as key for listView
   TerminalController() {
     blocks.add(Header(
@@ -18,21 +18,21 @@ class TerminalController extends GetxController {
     path = rootDir;
   }
 
-  void addOutputString(int id, String text,
+  void addOutputString(int id, String? text,
       {bool end = true, String header = ""}) {
     TerminalOutput terminalOutput;
 
-    if (id > _outputs.length - 1) {
+    if (id > _outputs!.length - 1) {
       blocks.add(OutputBlock(
         id: id,
       ));
       terminalOutput = TerminalOutput(id)..outputs.add(text);
-      _outputs.add(terminalOutput);
+      _outputs!.add(terminalOutput);
     } else {
-      terminalOutput = _outputs[id];
+      terminalOutput = _outputs![id];
 
       terminalOutput.outputs.add(text);
-      _outputs[id] = terminalOutput;
+      _outputs![id] = terminalOutput;
     }
 
     if (end)
@@ -46,7 +46,7 @@ class TerminalController extends GetxController {
   void removeAll() {
     cleared += 1;
     blocks.clear();
-    _outputs.clear();
+    _outputs!.clear();
     blocks.add(Header(
       id: 0,
     ));
@@ -55,7 +55,7 @@ class TerminalController extends GetxController {
 
 class TerminalOutput {
   final int id;
-  List<String> outputs;
+  late List<String?> outputs;
   TerminalOutput(this.id) {
     outputs = [];
   }

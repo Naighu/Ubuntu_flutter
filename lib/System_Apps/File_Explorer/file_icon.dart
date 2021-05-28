@@ -4,23 +4,24 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
-import 'package:ubuntu/Apps/terminal/commands/commands.dart';
-import 'package:ubuntu/controllers/app_controller.dart';
-import 'package:ubuntu/controllers/file_controller.dart';
-import 'package:ubuntu/models/app.dart';
-import 'package:ubuntu/models/file.dart';
-import 'package:ubuntu/utils/show_on_rightclick_menu.dart';
-import 'package:ubuntu/utils/system_files.dart';
+
+import '../../Apps/terminal/commands/commands.dart';
+import '../../controllers/app_controller.dart';
+import '../../controllers/file_controller.dart';
+import '../../models/app.dart';
+import '../../models/file.dart';
+import '../../utils/show_on_rightclick_menu.dart';
+import '../../utils/system_files.dart';
 
 import '../../constants.dart';
 
 class FileIcon extends StatefulWidget {
   final MyFile file;
-  final Function(MyFile) onOpened;
+  final Function(MyFile)? onOpened;
   final bool openDirInNewWindow;
   const FileIcon(
-      {Key key,
-      @required this.file,
+      {Key? key,
+      required this.file,
       this.onOpened,
       this.openDirInNewWindow = false})
       : super(key: key);
@@ -29,9 +30,9 @@ class FileIcon extends StatefulWidget {
 }
 
 class _FileIconState extends State<FileIcon> {
-  Color _hoverColor;
-  Map _fileIcons;
-  SystemFiles _systemFiles;
+  Color? _hoverColor;
+  Map? _fileIcons;
+  SystemFiles? _systemFiles;
   @override
   initState() {
     super.initState();
@@ -41,12 +42,12 @@ class _FileIconState extends State<FileIcon> {
       SystemFiles.loadJsonData().then((value) {
         setState(() {
           _systemFiles = value;
-          _fileIcons = _systemFiles.getFileIcons();
+          _fileIcons = _systemFiles!.getFileIcons();
         });
       });
     } else {
       _systemFiles = SystemFiles.getObject();
-      _fileIcons = _systemFiles.getFileIcons();
+      _fileIcons = _systemFiles!.getFileIcons();
     }
   }
 
@@ -76,16 +77,16 @@ class _FileIconState extends State<FileIcon> {
             onDoubleTap: () {
               final controller = Get.find<AppController>();
               if (widget.file.file is File) {
-                App app = controller.getAppByPackageName(_systemFiles
-                    .getAppPackageNameToOpenFile(widget.file.fileName));
+                App? app = controller.getAppByPackageName(_systemFiles!
+                    .getAppPackageNameToOpenFile(widget.file.fileName!));
                 print(app != null);
-                controller.addApp(app, params: {"path": widget.file.file.path});
+                controller.addApp(app, params: {"path": widget.file.file!.path});
               } else if (widget.openDirInNewWindow) {
-                App app = controller.getAppByPackageName("explorer");
+                App? app = controller.getAppByPackageName("explorer");
                 controller.addApp(app,
                     params: {"dir": rootDir + "/${widget.file.fileName}"});
               }
-              if (widget.onOpened != null) widget.onOpened(widget.file);
+              if (widget.onOpened != null) widget.onOpened!(widget.file);
             },
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -93,12 +94,12 @@ class _FileIconState extends State<FileIcon> {
                 if (_systemFiles != null)
                   Image.asset(
                     getIcon(widget.file.fileName,
-                        widget.file.file is File ? true : false),
+                        widget.file.file is File ? true : false)!,
                     height: 50,
                     width: 50,
                   ),
                 Text(
-                  widget.file.fileName,
+                  widget.file.fileName!,
                   style: Theme.of(context).textTheme.bodyText1,
                 )
               ],
@@ -109,15 +110,15 @@ class _FileIconState extends State<FileIcon> {
     );
   }
 
-  String getIcon(String fileName, bool isFile) {
+  String? getIcon(String? fileName, bool isFile) {
     if (isFile) {
-      String extension = fileName.split(".").last;
+      String ext = fileName!.split(".").last;
 
-      if (_fileIcons.containsKey(extension)) return _fileIcons[extension];
+      if (_fileIcons!.containsKey(ext)) return _fileIcons![ext];
 
       return "assets/app_icons/gedit.png";
     }
-    return _systemFiles.getDirIcon();
+    return _systemFiles!.getDirIcon();
   }
 
   Future<void> _onPointerDown(context, PointerDownEvent event) async {
@@ -126,7 +127,7 @@ class _FileIconState extends State<FileIcon> {
     if (event.kind == PointerDeviceKind.mouse &&
         event.buttons == kSecondaryMouseButton) {
       final overlay =
-          Overlay.of(context).context.findRenderObject() as RenderBox;
+          Overlay.of(context)!.context.findRenderObject() as RenderBox;
       await MouseRightClick(
           Rect.fromLTWH(
               widget.file.offset.dx - 80, widget.file.offset.dy + 80, 100, 100),
@@ -138,15 +139,15 @@ class _FileIconState extends State<FileIcon> {
           ]).showOnRightClickMenu(context, onPressed: (option) {
         if (option == MenuOptions.delete) {
           if (widget.file.file is File)
-            Rm().rm(controller, rootDir, widget.file.fileName);
+            Rm().rm(controller, rootDir, widget.file.fileName!);
           else {
             print("folder removed");
-            Rmdir().rmdir(controller, rootDir, widget.file.fileName);
+            Rmdir().rmdir(controller, rootDir, widget.file.fileName!);
           }
         } else if (option == MenuOptions.open && widget.file.file is File) {
           final controller = Get.find<AppController>();
-          App app = controller.getAppByPackageName("gedit");
-          controller.addApp(app, params: {"path": widget.file.file.path});
+          App? app = controller.getAppByPackageName("gedit");
+          controller.addApp(app, params: {"path": widget.file.file!.path});
         }
       });
     }

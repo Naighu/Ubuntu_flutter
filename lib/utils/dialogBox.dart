@@ -1,28 +1,28 @@
 import 'package:flutter/rendering.dart';
-import 'package:ubuntu/Apps/terminal/commands/bash_commands/command_packages.dart';
+import '../Apps/terminal/commands/bash_commands/command_packages.dart';
 
 enum BodyType { textField }
 
 class DialogBox {
-  static OverlayEntry entry;
-  String _text;
-  final String title, cancelBtnName, okBtnName;
+  static OverlayEntry? entry;
+  String? _text;
+  final String? title, cancelBtnName, okBtnName;
   final BodyType bodyType;
   final Function(dynamic) onOk;
-  final Function() onCancel;
+  final Function()? onCancel;
 
   DialogBox(
-      {@required this.title,
+      {required this.title,
       this.cancelBtnName,
       this.okBtnName,
-      @required this.bodyType,
-      @required this.onOk,
+      required this.bodyType,
+      required this.onOk,
       this.onCancel});
 
   void show(context) {
-    if (entry != null && entry.mounted) entry?.remove();
+    if (entry != null && entry!.mounted) entry?.remove();
     entry = _createOverlayEntry(context);
-    Overlay.of(context).insert(entry);
+    Overlay.of(context)!.insert(entry!);
   }
 
   OverlayEntry _createOverlayEntry(context) {
@@ -45,7 +45,7 @@ class DialogBox {
                     children: [
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                        child: Text(title,
+                        child: Text(title!,
                             style: Theme.of(context).textTheme.subtitle1),
                       ),
                       if (BodyType.textField == bodyType)
@@ -79,8 +79,8 @@ class DialogBox {
                                   side: MaterialStateProperty.all(BorderSide(
                                       color: Color(0xFF161616), width: 0.5))),
                               onPressed: () {
-                                entry.remove();
-                                if (onCancel != null) onCancel();
+                                entry!.remove();
+                                if (onCancel != null) onCancel!();
                               },
                               child: Text(
                                 cancelBtnName ?? "Cancel",
@@ -97,7 +97,7 @@ class DialogBox {
                                     side: MaterialStateProperty.all(BorderSide(
                                         color: Color(0xFF161616), width: 0.5))),
                                 onPressed: () {
-                                  entry.remove();
+                                  entry!.remove();
                                   onOk(_text);
                                 },
                                 child: Text(

@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:ubuntu/controllers/desktop_controller.dart';
-import 'package:ubuntu/screens/Desktop/components/status_menu_items.dart';
-import 'package:ubuntu/screens/Lock_Screen/lock_screen.dart';
-import 'package:ubuntu/utils/dialogBox.dart';
+import '../../../controllers/system_controller.dart';
+import '../../../screens/Desktop/components/status_menu_items.dart';
+import '../../../screens/Lock_Screen/lock_screen.dart';
+import '../../../utils/dialogBox.dart';
 
 import '../../../constants.dart';
 
 class StatusMenu extends StatefulWidget {
-  final OverlayEntry entry;
+  final OverlayEntry? entry;
 
-  const StatusMenu({Key key, @required this.entry}) : super(key: key);
+  const StatusMenu({Key? key, required this.entry}) : super(key: key);
   @override
   _StatusMenuState createState() => _StatusMenuState();
 }
@@ -135,7 +135,7 @@ class _StatusMenuState extends State<StatusMenu> {
       transitionDuration: const Duration(milliseconds: 500),
       reverseTransitionDuration: const Duration(milliseconds: 500),
       pageBuilder: (context, animation, secondaryAnimation) => LockScreen(
-        wallpaper: Get.find<DesktopController>().desktopWallpaper.value,
+        wallpaper: Get.find<SystemController>().desktopWallpaper.value,
       ),
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
         var begin = Offset(0.0, -1.0);

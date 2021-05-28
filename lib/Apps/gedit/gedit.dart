@@ -6,30 +6,30 @@ import 'package:ubuntu/Apps/terminal/commands/shell.dart';
 import 'package:ubuntu/models/app.dart';
 
 class Gedit extends StatefulWidget {
-  final App app;
-  final Map params;
-  const Gedit({Key key, this.app, this.params}) : super(key: key);
+  final App? app;
+  final Map? params;
+  const Gedit({Key? key, this.app, this.params}) : super(key: key);
 
   @override
   _GeditState createState() => _GeditState();
 }
 
 class _GeditState extends State<Gedit> {
-  TextEditingController controller;
+  TextEditingController? controller;
   bool a = false;
   @override
   void initState() {
     super.initState();
     String text = "";
-    if (widget.params.containsKey("path"))
-      text = Cat().cat(widget.params["path"]);
+    if (widget.params!.containsKey("path"))
+      text = Cat().cat(widget.params!["path"]);
     controller = TextEditingController(text: text);
   }
 
   @override
   void dispose() {
     print("Disposing");
-    controller.dispose();
+    controller!.dispose();
     super.dispose();
   }
 
@@ -49,9 +49,9 @@ class _GeditState extends State<Gedit> {
                       shadowColor: null,
                       backgroundColor: MaterialStateProperty.all(Colors.white)),
                   onPressed: () {
-                    Shell shell = Shell.init();
-                    print(controller.text);
-                    shell.updateFile(widget.params["path"], controller.text);
+                    Shell shell = Shell.init()!;
+                    print(controller!.text);
+                    shell.updateFile(widget.params!["path"], controller!.text);
                   },
                   child: Text(
                     "Save",
@@ -63,7 +63,7 @@ class _GeditState extends State<Gedit> {
               decoration: null,
               maxLines: null,
               style:
-                  Theme.of(context).textTheme.subtitle2.copyWith(fontSize: 16),
+                  Theme.of(context).textTheme.subtitle2!.copyWith(fontSize: 16),
               keyboardType: TextInputType.multiline,
               controller: controller,
             ),

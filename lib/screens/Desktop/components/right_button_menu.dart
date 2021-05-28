@@ -1,13 +1,13 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:ubuntu/Apps/terminal/commands/bash_commands/make_dir.dart';
-import 'package:ubuntu/Apps/terminal/commands/bash_commands/make_file.dart';
-import 'package:ubuntu/controllers/app_controller.dart';
-import 'package:ubuntu/controllers/file_controller.dart';
-import 'package:ubuntu/models/app.dart';
-import 'package:ubuntu/utils/dialogBox.dart';
-import 'package:ubuntu/utils/show_on_rightclick_menu.dart';
+import '../../../Apps/terminal/commands/bash_commands/make_dir.dart';
+import '../../../Apps/terminal/commands/bash_commands/make_file.dart';
+import '../../../controllers/app_controller.dart';
+import '../../../controllers/file_controller.dart';
+import '../../../models/app.dart';
+import '../../../utils/dialogBox.dart';
+import '../../../utils/show_on_rightclick_menu.dart';
 
 import '../../../constants.dart';
 
@@ -16,7 +16,7 @@ Future<void> onPointerDown(context, PointerDownEvent event) async {
   // Check if right mouse button clicked
   if (event.kind == PointerDeviceKind.mouse &&
       event.buttons == kSecondaryMouseButton) {
-    final overlay = Overlay.of(context).context.findRenderObject() as RenderBox;
+    final overlay = Overlay.of(context)!.context.findRenderObject() as RenderBox;
     await MouseRightClick(event.position & Size(48, 48.0), overlay.size, [
       MenuOptions.newFolder,
       MenuOptions.newFile,
@@ -44,10 +44,10 @@ void evaluate(context, MenuOptions option, AppController controller) {
           Touch().touch(Get.find<FileController>(), rootDir, "$name");
         }).show(context);
   else if (option == MenuOptions.openTerminal) {
-    App terminalApp = controller.getAppByPackageName("terminal");
+    App? terminalApp = controller.getAppByPackageName("terminal");
     controller.addApp(terminalApp, addByIgnoringDuplicates: true);
   } else if (option == MenuOptions.settings) {
-    App settingsApp = controller.getAppByPackageName("settings");
+    App? settingsApp = controller.getAppByPackageName("settings");
 
     controller.addApp(settingsApp, addByIgnoringDuplicates: true);
   }

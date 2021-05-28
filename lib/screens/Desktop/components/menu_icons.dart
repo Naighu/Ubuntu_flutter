@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:ubuntu/controllers/app_controller.dart';
-import 'package:ubuntu/controllers/desktop_controller.dart';
-import 'package:ubuntu/models/app.dart';
+
+import '../../../controllers/app_controller.dart';
+import '../../../models/app.dart';
 
 import '../../../constants.dart';
 
 class MenuIcon extends StatefulWidget {
-  final App app;
+  final App? app;
 
-  const MenuIcon({Key key, this.app}) : super(key: key);
+  const MenuIcon({Key? key, this.app}) : super(key: key);
 
   @override
   _MenuIconState createState() => _MenuIconState();
@@ -20,7 +20,7 @@ class _MenuIconState extends State<MenuIcon> {
   @override
   Widget build(BuildContext context) {
     return Tooltip(
-        message: widget.app.name,
+        message: widget.app!.name,
         margin: EdgeInsets.only(left: menuWidth),
         verticalOffset: -10.0,
         child: Container(
@@ -46,7 +46,7 @@ class _MenuIconState extends State<MenuIcon> {
                   height: 50.0,
                   width: 30.0,
                   child: Image.asset(
-                    widget.app.icon,
+                    widget.app!.icon,
                   ),
                 ),
               ),
@@ -55,16 +55,16 @@ class _MenuIconState extends State<MenuIcon> {
         ));
   }
 
-  void _onPressed(AppController appController, App app) {
+  void _onPressed(AppController appController, App? app) {
     print("Pressed on app");
 
     if (!appController.appStack.check(app)) {
       print("Pressed on if");
-      appController.addApp(app, params: getParams(app));
+      appController.addApp(app, params: getParams(app!));
     } else {
       print("Pressed on else");
 
-      appController.show(app.packageName);
+      appController.show(app!.packageName);
     }
   }
 
@@ -91,9 +91,9 @@ class _MenuIconState extends State<MenuIcon> {
 }
 
 extension on List {
-  bool check(App app) {
+  bool check(App? app) {
     // ignore: invalid_use_of_protected_member
-    for (App a in this) if (a.packageName == app.packageName) return true;
+    for (App? a in this) if (a!.packageName == app!.packageName) return true;
 
     return false;
   }

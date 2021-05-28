@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:ubuntu/Apps/terminal/commands/bash_commands/command_packages.dart';
-import 'package:ubuntu/Apps/terminal/commands/show_commands.dart';
+import '../../../Apps/terminal/commands/bash_commands/command_packages.dart';
+import '../../../Apps/terminal/commands/show_commands.dart';
 
 class Header extends StatefulWidget {
-  final int id;
+  final int? id;
   final String header;
   const Header({this.id, this.header = ""});
 
@@ -59,10 +59,10 @@ class _HeaderState extends State<Header> {
     if (val.isNotEmpty) {
       List<String> commandsplit = val.split(" ");
       if (commands.containsKey(commandsplit[0])) {
-        commands[val.split(" ")[0]]
+        commands[val.split(" ")[0]]!
             .executeCommand(context, widget.id, commandsplit.skip(1).join(" "));
       } else {
-        controller.addOutputString(widget.id, "no such commands");
+        controller.addOutputString(widget.id!, "no such commands");
       }
     }
   }

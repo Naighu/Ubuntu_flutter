@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:ubuntu/constants.dart';
-import 'package:ubuntu/controllers/desktop_controller.dart';
-import 'package:ubuntu/models/app.dart';
+import '../../constants.dart';
+import '../../controllers/system_controller.dart';
+import '../../models/app.dart';
 
 class SettingsPage extends StatefulWidget {
-  final App app;
-  final Map params;
+  final App? app;
+  final Map? params;
 
-  const SettingsPage({Key key, this.app, this.params}) : super(key: key);
+  const SettingsPage({Key? key, this.app, this.params}) : super(key: key);
   @override
   _SettingsPageState createState() => _SettingsPageState();
 }
@@ -24,7 +24,7 @@ class _SettingsPageState extends State<SettingsPage> {
     "wall-7.png",
     "wall-8.jpg"
   ];
-  final DesktopController desktopController = Get.find<DesktopController>();
+  final SystemController systemController = Get.find<SystemController>();
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -44,7 +44,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       decoration: BoxDecoration(
                           image: DecorationImage(
                               image: Image.asset(
-                                "assets/wallpapers/minified/${desktopController.desktopWallpaper.value}",
+                                "assets/wallpapers/minified/${systemController.desktopWallpaper.value}",
                               ).image,
                               fit: BoxFit.cover))),
                   const Divider(
@@ -61,7 +61,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           InkWell(
                             onTap: () {
                               setState(() {
-                                desktopController.desktopWallpaper.value = name;
+                                systemController.desktopWallpaper.value = name;
                               });
                             },
                             child: Container(
@@ -70,7 +70,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                 margin: const EdgeInsets.all(20.0),
                                 decoration: BoxDecoration(
                                     border: Border.all(
-                                        color: desktopController
+                                        color: systemController
                                                     .desktopWallpaper.value ==
                                                 name
                                             ? Colors.orange

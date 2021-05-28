@@ -1,37 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:ubuntu/controllers/desktop_controller.dart';
+import '../../controllers/system_controller.dart';
 
-import 'package:ubuntu/controllers/app_controller.dart';
+import '../../controllers/app_controller.dart';
 
 import '../../constants.dart';
 import '../../models/app.dart';
 import 'components/title_bar.dart';
 
 class AppView extends StatefulWidget {
-  final App app;
+  final App? app;
 
-  const AppView({Key key, @required this.app}) : super(key: key);
+  const AppView({Key? key, required this.app}) : super(key: key);
 
   @override
   _AppViewState createState() => _AppViewState();
 }
 
 class _AppViewState extends State<AppView> with SingleTickerProviderStateMixin {
-  Offset startDragOffset;
+  late Offset startDragOffset;
   bool isClosed = false;
-  AnimationController _controller;
-  Animation<Offset> _offsetAnimation;
-  Animation<Size> _sizeAnimation;
-  App get app => widget.app;
-  final DesktopController _menuController = Get.find<DesktopController>();
+  late AnimationController _controller;
+  late Animation<Offset> _offsetAnimation;
+  late Animation<Size> _sizeAnimation;
+  App? get app => widget.app;
+  final SystemController _menuController = Get.find<SystemController>();
   final AppController _appController = Get.find<AppController>();
 
   @override
   void initState() {
     super.initState();
-    _appController.prevOffset = app.offset;
-    _appController.prevSize = app.size;
+    _appController.prevOffset = app!.offset;
+    _appController.prevSize = app!.size;
     _controller = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 300));
     _offsetAnimation =
@@ -50,12 +50,12 @@ class _AppViewState extends State<AppView> with SingleTickerProviderStateMixin {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final Size size = MediaQuery.of(context).size;
-    print(app.child);
+    print(app!.child);
     return GetBuilder<AppController>(builder: (controller) {
       Future(() {
         _conditionToShowMenubar(); //check whether if the menubar should hide or not.
       });
-      if (app.hide)
+      if (app!.hide)
         return Container();
       else
         return AnimatedBuilder(
@@ -64,23 +64,23 @@ class _AppViewState extends State<AppView> with SingleTickerProviderStateMixin {
               //when the animation starts use the animation value.This is done for making responsive..
               double height = _controller.status == AnimationStatus.dismissed ||
                       _controller.status == AnimationStatus.completed
-                  ? app.size.height
+                  ? app!.size.height
                   : _sizeAnimation.value.height -
                       (100 * (topAppBarHeight / size.height));
               double width = _controller.status == AnimationStatus.dismissed ||
                       _controller.status == AnimationStatus.completed
-                  ? app.size.width
+                  ? app!.size.width
                   : _sizeAnimation.value.width;
               return Positioned(
                 left: _controller.status ==
                             AnimationStatus
                                 .dismissed || // this is for having the animation when the app minimized or maximized ,not when dragging.
                         _controller.status == AnimationStatus.completed
-                    ? app.offset.dx
+                    ? app!.offset.dx
                     : _offsetAnimation.value.dx,
                 top: _controller.status == AnimationStatus.dismissed ||
                         _controller.status == AnimationStatus.completed
-                    ? app.offset.dy
+                    ? app!.offset.dy
                     : _offsetAnimation.value.dy,
                 child: Column(children: [
                   GestureDetector(
@@ -91,11 +91,11 @@ class _AppViewState extends State<AppView> with SingleTickerProviderStateMixin {
                       child: SizedBox(
                         height: topAppBarHeight,
                         width: width,
-                        child: titleBar(context, app, theme,
+                        child: titleBar(context, app!, theme,
                             onClose: _onClose,
                             onScreenSizeChanged: _onScreenSizeChanged),
                       )),
-                  Container(height: height, width: width, child: app.child)
+                  Container(height: height, width: width, child: app!.child)
                 ]),
               );
             });
@@ -103,15 +103,15 @@ class _AppViewState extends State<AppView> with SingleTickerProviderStateMixin {
   }
 
   void _dragUpdate(DragUpdateDetails details, Size size) {
-    Offset newOffset = app.offset + (details.globalPosition - startDragOffset);
-    Size appSize = app.size;
+    Offset newOffset = app!.offset + (details.globalPosition - startDragOffset);
+    Size appSize = app!.size;
     // boundary conditions to drag
     if (newOffset.dx + appSize.width < size.width &&
         newOffset.dy + appSize.height < size.height &&
         newOffset.dy > 0 &&
         newOffset.dx > 0) {
       setState(() {
-        app.setOffset = newOffset;
+        app!.setOffset = newOffset;
       });
     }
     startDragOffset = details.globalPosition;
@@ -119,12 +119,12 @@ class _AppViewState extends State<AppView> with SingleTickerProviderStateMixin {
 
   void _conditionToShowMenubar() {
     //condition to show menubar
-    if (app.hide ||
-        (app.offset.dx > menuWidth + 30 &&
+    if (app!.hide ||
+        (app!.offset.dx > menuWidth + 30 &&
             _menuController.menubarWidth.value == 0))
       _menuController.menubarWidth.value = menuWidth;
     //condition to hide menubar
-    else if (app.offset.dx < menuWidth + 10 &&
+    else if (app!.offset.dx < menuWidth + 10 &&
         _menuController.menubarWidth.value == menuWidth)
       _menuController.menubarWidth.value = 0;
   }
@@ -135,10 +135,10 @@ class _AppViewState extends State<AppView> with SingleTickerProviderStateMixin {
     else {
       _controller.reset();
       _offsetAnimation =
-          Tween<Offset>(begin: _appController.prevOffset, end: app.offset)
+          Tween<Offset>(begin: _appController.prevOffset, end: app!.offset)
               .animate(_controller);
       _sizeAnimation =
-          Tween<Size>(begin: _appController.prevSize, end: app.size)
+          Tween<Size>(begin: _appController.prevSize, end: app!.size)
               .animate(_controller);
 
       _controller.forward();
@@ -147,7 +147,7 @@ class _AppViewState extends State<AppView> with SingleTickerProviderStateMixin {
 
   void _onClose() {
     _menuController.menubarWidth.value = menuWidth;
-    _appController.closeApp(app);
+    _appController.closeApp(app!);
   }
 
   void _onPanStart(DragStartDetails details) {

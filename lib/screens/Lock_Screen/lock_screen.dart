@@ -2,12 +2,12 @@ import 'dart:ui';
 
 import "package:flutter/material.dart";
 import 'package:intl/intl.dart';
-import 'package:ubuntu/utils/real_time_date.dart';
+import '../../utils/real_time_date.dart';
 
 class LockScreen extends StatelessWidget {
   final String wallpaper;
 
-  const LockScreen({Key key, @required this.wallpaper}) : super(key: key);
+  const LockScreen({Key? key, required this.wallpaper}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     const style = TextStyle(
@@ -40,11 +40,11 @@ class LockScreen extends StatelessWidget {
                               children: [
                                 TextSpan(
                                     text: DateFormat('H : mm a\n\n')
-                                        .format(snapshot.data),
+                                        .format(snapshot.data!),
                                     style: style),
                                 TextSpan(
                                     text: DateFormat('E MMM d\n\n\n\n')
-                                        .format(snapshot.data),
+                                        .format(snapshot.data!),
                                     style: style.copyWith(fontSize: 20)),
                                 TextSpan(
                                     text: "Click any key to continue",

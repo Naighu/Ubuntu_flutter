@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:ubuntu/controllers/desktop_controller.dart';
-import 'package:ubuntu/controllers/app_controller.dart';
+import '../../../controllers/system_controller.dart';
+import '../../../controllers/app_controller.dart';
 
 import '../../../models/app.dart';
 import '../../../constants.dart';
 
 PreferredSizeWidget titleBar(BuildContext context, App app, ThemeData theme,
-    {Function(bool) onScreenSizeChanged, Function() onClose}) {
+    {Function(bool)? onScreenSizeChanged, Function()? onClose}) {
   AppController controller = Get.find<AppController>();
-  final menu = Get.find<DesktopController>();
+  final menu = Get.find<SystemController>();
   return AppBar(
     backgroundColor: Color(0xFF161616),
     toolbarHeight: topAppBarHeight - 5.0,
@@ -38,7 +38,7 @@ PreferredSizeWidget titleBar(BuildContext context, App app, ThemeData theme,
                 MediaQuery.of(context).size,
               );
             }
-            onScreenSizeChanged(!app.isMaximized);
+            onScreenSizeChanged!(!app.isMaximized);
           },
           child:
               Icon(Icons.crop_square, size: 16, color: theme.iconTheme.color)),
@@ -50,7 +50,7 @@ PreferredSizeWidget titleBar(BuildContext context, App app, ThemeData theme,
         child: InkWell(
             onTap: () {
               debugPrint("close");
-              onClose();
+              onClose!();
             },
             child: Icon(Icons.close, size: 16, color: theme.iconTheme.color)),
       )

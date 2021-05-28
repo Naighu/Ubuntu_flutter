@@ -5,14 +5,14 @@ import 'command_packages.dart';
 
 class Mkdir implements DecodeCommand {
   @override
-  dynamic executeCommand(BuildContext context, int id, String fileName) {
+  dynamic executeCommand(BuildContext context, int? id, String fileName) {
     final controller = Get.find<TerminalController>();
     final fileController = Get.find<FileController>();
     String message = mkdir(fileController, controller.path, fileName);
-    controller.addOutputString(id, message);
+    controller.addOutputString(id!, message);
   }
 
-  String mkdir(FileController fileController, String path, String fileName) {
+  String mkdir(FileController fileController, String? path, String fileName) {
     List items = Ls().ls(path);
     String error = "";
 
@@ -31,8 +31,8 @@ class Mkdir implements DecodeCommand {
       }
     }
     if (error.isEmpty) {
-      Shell shell = Shell.init();
-      shell.create(path + "/$fileName");
+      Shell shell = Shell.init()!;
+      shell.create(path! + "/$fileName");
       fileController.updateUi(path + "/$fileName");
       return "";
     } else
@@ -42,7 +42,7 @@ class Mkdir implements DecodeCommand {
 
 class Rmdir implements DecodeCommand {
   @override
-  dynamic executeCommand(BuildContext context, int id, String command) {
+  dynamic executeCommand(BuildContext context, int? id, String command) {
     print("[Executing RMDIR]");
     final controller = Get.find<TerminalController>();
     final fileController = Get.find<FileController>();
@@ -52,17 +52,17 @@ class Rmdir implements DecodeCommand {
       if (command.startsWith("/") || command.split("/").length >= 2) {
         var a = command.split("/");
         fileName = a.removeLast();
-        path = controller.path + "/" + a.join("/").replaceFirst("/", "");
+        path = controller.path! + "/" + a.join("/").replaceFirst("/", "");
       } else {
         var a = command.split("/");
         fileName = a.removeLast();
-        path = controller.path + a.join("/");
+        path = controller.path! + a.join("/");
       }
       message = rmdir(fileController, path, fileName);
     } else
       message = "Specify a Directory name";
     print("message : $message");
-    controller.addOutputString(id, message);
+    controller.addOutputString(id!, message);
   }
 
   rmdir(FileController fileController, String path, String fileName) {
@@ -88,7 +88,7 @@ class Rmdir implements DecodeCommand {
       var dirs = ls.ls(path +
           "/$fileName"); //checking if the selected folder is empty or not
       if (dirs.isEmpty) {
-        Shell shell = Shell.init();
+        Shell shell = Shell.init()!;
         print(path + "$fileName");
         shell.remove(path + "/$fileName");
         fileController.updateUi(path + "/$fileName");

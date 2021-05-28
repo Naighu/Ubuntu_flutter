@@ -1,25 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:ubuntu/Apps/gedit/gedit.dart';
-import 'package:ubuntu/Apps/webview/webview.dart';
-import 'package:ubuntu/System_Apps/File_Explorer/file_explore.dart';
-import 'package:ubuntu/System_Apps/Settings/settings_page.dart';
-import 'package:ubuntu/constants.dart';
+import '../Apps/gedit/gedit.dart';
+import '../Apps/webview/webview.dart';
+import '../System_Apps/File_Explorer/file_explore.dart';
+import '../System_Apps/Settings/settings_page.dart';
 
 import '../Apps/terminal/terminal.dart';
 
 class App {
   final String name, icon, packageName;
-  Size _size;
+  late Size _size;
   Size get size => _getSize;
   bool hide = false, isMaximized = false;
-  Offset _offset;
+  late Offset _offset;
   Offset get offset => _getOffset;
-  Widget child;
+  Widget? child;
   App({
-    @required this.name,
-    @required this.icon,
-    @required this.packageName,
+    required this.name,
+    required this.icon,
+    required this.packageName,
   }) {
     _size = Size(60, 70);
     _offset = Offset(_size.width - 60, _size.height - 70);
@@ -105,9 +104,9 @@ List<App> getApps() => [
       ),
     ];
 
-Widget openApp(App app, {Map params}) {
+Widget? openApp(App app, {Map? params}) {
   print(params);
-  Widget wid;
+  Widget? wid;
   switch (app.packageName) {
     case "settings":
       wid = SettingsPage();

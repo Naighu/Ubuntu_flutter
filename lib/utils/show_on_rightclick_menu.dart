@@ -27,7 +27,7 @@ class MouseRightClick {
   MouseRightClick(this.rect, this.size, this.options);
 
   Future showOnRightClickMenu(context,
-      {Function(MenuOptions option) onPressed}) async {
+      {Function(MenuOptions option)? onPressed}) async {
     if (!isActive) {
       isActive = true;
       final menuItem = await showMenu(
@@ -36,30 +36,30 @@ class MouseRightClick {
           items: [
             for (MenuOptions option in options)
               PopupMenuItem(
-                  child: Text(menuName[option], style: Theme.of(context).textTheme.subtitle1),
+                  child: Text(menuName[option]!, style: Theme.of(context).textTheme.subtitle1),
                   value: menuValue[option]),
           ],
           position: RelativeRect.fromSize(rect, size));
       // Check if menu item clicked
       switch (menuItem) {
         case 1:
-          onPressed(MenuOptions.newFolder);
+          onPressed!(MenuOptions.newFolder);
           break;
         case 2:
-          onPressed(MenuOptions.newFile);
+          onPressed!(MenuOptions.newFile);
           break;
         case 3:
           print("Open in terminal");
-          onPressed(MenuOptions.openTerminal);
+          onPressed!(MenuOptions.openTerminal);
           break;
         case 4:
-          onPressed(MenuOptions.settings);
+          onPressed!(MenuOptions.settings);
           break;
         case 5:
-          onPressed(MenuOptions.delete);
+          onPressed!(MenuOptions.delete);
           break;
         case 6:
-          onPressed(MenuOptions.open);
+          onPressed!(MenuOptions.open);
           break;
 
         default:

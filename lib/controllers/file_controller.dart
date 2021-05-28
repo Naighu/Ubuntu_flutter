@@ -2,11 +2,11 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:ubuntu/Apps/terminal/commands/bash_commands/command_packages.dart';
-import 'package:ubuntu/models/file.dart';
+import '../Apps/terminal/commands/bash_commands/command_packages.dart';
+import '../models/file.dart';
 
 class FileController extends GetxController {
-  RxList fileExplorStack; //used by the file explorer app
+  RxList? fileExplorStack; //used by the file explorer app
   FileController() {
     fileExplorStack = [].obs;
   }
@@ -15,7 +15,7 @@ class FileController extends GetxController {
     update();
   }
 
-  List<MyFile> getFiles(String dir) {
+  List<MyFile> getFiles(String? dir) {
     List<MyFile> files = [];
     final items = Ls().ls(dir);
     for (var item in items) {

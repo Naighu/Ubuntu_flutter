@@ -2,16 +2,16 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
-import 'package:ubuntu/utils/cookie_manager.dart';
+import '../../../utils/cookie_manager.dart';
 
 abstract class DecodeCommand {
-  dynamic executeCommand(BuildContext context, int id, String command);
+  dynamic executeCommand(BuildContext context, int? id, String command);
 }
 
 class Shell {
   Shell._();
-  static Shell _shell;
-  static Shell init() {
+  static Shell? _shell;
+  static Shell? init() {
     if (_shell == null) _shell = Shell._();
     return _shell;
   }
@@ -36,7 +36,7 @@ class Shell {
   String _crtPath(String path, {option = "dir"}) {
     List<String> split = path.split("/");
     String newPath = split.removeAt(0);
-    String file;
+    String? file;
     if (option != "dir") file = split.removeLast();
 
     for (String p in split) {

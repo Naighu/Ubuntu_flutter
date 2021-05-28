@@ -3,7 +3,7 @@ import 'dart:html';
 
 class CookieManager {
   CookieManager._();
-  static CookieManager _manager;
+  static CookieManager? _manager;
   static init() {
     if (_manager == null) _manager = CookieManager._();
     return _manager;
@@ -42,7 +42,7 @@ class CookieManager {
   }
 
   List<String> getAllCookie() {
-    String cookies = document.cookie;
+    String cookies = document.cookie!;
     return cookies.isNotEmpty ? cookies.split(";") : [];
   }
 }

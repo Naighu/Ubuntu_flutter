@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
-import 'package:ubuntu/screens/Desktop/components/status_menu.dart';
-import 'package:ubuntu/utils/real_time_date.dart';
+
+import '../../../screens/Desktop/components/status_menu.dart';
+import '../../../utils/real_time_date.dart';
 
 import '../../../constants.dart';
 
@@ -51,7 +52,7 @@ desktopAppBar(BuildContext context, Function(OverlayEntry entry) onPressed) {
 }
 
 onTap(context) {
-  OverlayEntry entry;
+  OverlayEntry? entry;
   entry = OverlayEntry(builder: (context) {
     return Positioned(
         right: 20,
