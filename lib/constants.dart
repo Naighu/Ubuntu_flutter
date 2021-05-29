@@ -25,6 +25,7 @@ final themeData = ThemeData(
     textTheme: TextTheme(
         headline4: TextStyle(fontSize: 14, color: Colors.white),
         subtitle1: TextStyle(fontSize: 15, color: Colors.white70),
+        subtitle2: TextStyle(fontSize: 15, color: Colors.grey),
         bodyText2: TextStyle(
             fontSize: 14,
             color: Colors.lightGreen,

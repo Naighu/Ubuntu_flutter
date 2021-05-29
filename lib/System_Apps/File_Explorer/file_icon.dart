@@ -4,13 +4,12 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
+import 'package:ubuntu/utils/Rightclick/evaluate.dart';
 
-import '../../Apps/terminal/commands/commands.dart';
 import '../../controllers/app_controller.dart';
-import '../../controllers/file_controller.dart';
 import '../../models/app.dart';
 import '../../models/file.dart';
-import '../../utils/show_on_rightclick_menu.dart';
+import '../../utils/Rightclick/show_on_rightclick_menu.dart';
 import '../../utils/system_files.dart';
 
 import '../../constants.dart';
@@ -80,7 +79,8 @@ class _FileIconState extends State<FileIcon> {
                 App? app = controller.getAppByPackageName(_systemFiles!
                     .getAppPackageNameToOpenFile(widget.file.fileName!));
                 print(app != null);
-                controller.addApp(app, params: {"path": widget.file.file!.path});
+                controller
+                    .addApp(app, params: {"path": widget.file.file!.path});
               } else if (widget.openDirInNewWindow) {
                 App? app = controller.getAppByPackageName("explorer");
                 controller.addApp(app,
@@ -122,34 +122,14 @@ class _FileIconState extends State<FileIcon> {
   }
 
   Future<void> _onPointerDown(context, PointerDownEvent event) async {
-    final controller = Get.find<FileController>();
-    // Check if right mouse button clicked
-    if (event.kind == PointerDeviceKind.mouse &&
-        event.buttons == kSecondaryMouseButton) {
-      final overlay =
-          Overlay.of(context)!.context.findRenderObject() as RenderBox;
-      await MouseRightClick(
-          Rect.fromLTWH(
-              widget.file.offset.dx - 80, widget.file.offset.dy + 80, 100, 100),
-          overlay.size,
-          [
-            MenuOptions.open,
-            MenuOptions.delete,
-            MenuOptions.settings,
-          ]).showOnRightClickMenu(context, onPressed: (option) {
-        if (option == MenuOptions.delete) {
-          if (widget.file.file is File)
-            Rm().rm(controller, rootDir, widget.file.fileName!);
-          else {
-            print("folder removed");
-            Rmdir().rmdir(controller, rootDir, widget.file.fileName!);
-          }
-        } else if (option == MenuOptions.open && widget.file.file is File) {
-          final controller = Get.find<AppController>();
-          App? app = controller.getAppByPackageName("gedit");
-          controller.addApp(app, params: {"path": widget.file.file!.path});
-        }
-      });
-    }
+    await MouseRightClick(
+        rect: Rect.fromLTWH(
+            widget.file.offset.dx - 80, widget.file.offset.dy + 80, 100, 100),
+        options: [
+          MenuOptions.open,
+          MenuOptions.delete,
+          MenuOptions.settings,
+        ]).showOnRightClickMenu(context, event,
+        Evaluate(currentPath: widget.file.file!.path, file: widget.file));
   }
 }

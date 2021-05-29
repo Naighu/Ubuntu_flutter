@@ -49,7 +49,7 @@ class AppController extends GetxController {
   }
 
   void show(String packageName) {
-    for (App? app in appStack )
+    for (App? app in appStack)
       if (app!.packageName == packageName) {
         app.hide = false;
       }
@@ -81,7 +81,7 @@ class AppController extends GetxController {
 
 extension on List {
   bool checkPackageName(String packageName) {
-    for (App? a in this as Iterable<App?>) if (a!.packageName == packageName) return true;
+    for (App? a in this) if (a!.packageName == packageName) return true;
     return false;
   }
 }

@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:ubuntu/utils/Rightclick/evaluate.dart';
+import 'package:ubuntu/utils/Rightclick/show_on_rightclick_menu.dart';
 
 import '../../System_Apps/File_Explorer/file_icon.dart';
 import '../../controllers/file_controller.dart';
@@ -31,48 +33,53 @@ class _FileExplorerState extends State<FileExplorer> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Theme.of(context).backgroundColor,
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).backgroundColor,
-        toolbarHeight: 30.0 + defaultPadding,
-        elevation: 0,
-        leadingWidth: 30.0 + defaultPadding,
-        centerTitle: true,
-        title: Text(dir!, style: Theme.of(context).textTheme.subtitle1),
-        leading: Padding(
-          padding:
-              const EdgeInsets.only(left: defaultPadding, top: defaultPadding),
-          child: ElevatedButton(
-              style: ButtonStyle(
-                  backgroundColor:
-                      MaterialStateProperty.all(Theme.of(context).accentColor)),
-              onPressed: _onBackPressed,
-              child: Icon(Icons.arrow_back_ios)),
-        ),
-      ),
-      body: GetBuilder<FileController>(
-          autoRemove: false,
-          id: "explorer",
-          builder: (controller) {
-            return Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
-              child: Wrap(
-                runSpacing: 20.0,
-                spacing: 30.0,
-                children: [
-                  for (MyFile file in controller.getFiles(dir))
-                    FileIcon(
-                      file: file,
-                      onOpened: _onOpened,
-                      openDirInNewWindow: false,
-                    )
-                ],
-              ),
-            );
-          }),
-    );
+    return Listener(
+        behavior: HitTestBehavior.deferToChild,
+        onPointerDown: (event) {
+          onPointerDown(context, event);
+        },
+        child: Scaffold(
+          backgroundColor: Theme.of(context).backgroundColor,
+          appBar: AppBar(
+            backgroundColor: Theme.of(context).backgroundColor,
+            toolbarHeight: 30.0 + defaultPadding,
+            elevation: 0,
+            leadingWidth: 30.0 + defaultPadding,
+            centerTitle: true,
+            title: Text(dir!, style: Theme.of(context).textTheme.subtitle1),
+            leading: Padding(
+              padding: const EdgeInsets.only(
+                  left: defaultPadding, top: defaultPadding),
+              child: ElevatedButton(
+                  style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(
+                          Theme.of(context).accentColor)),
+                  onPressed: _onBackPressed,
+                  child: Icon(Icons.arrow_back_ios)),
+            ),
+          ),
+          body: GetBuilder<FileController>(
+              autoRemove: false,
+              id: "explorer",
+              builder: (controller) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 20.0, vertical: 20.0),
+                  child: Wrap(
+                    runSpacing: 20.0,
+                    spacing: 30.0,
+                    children: [
+                      for (MyFile file in controller.getFiles(dir))
+                        FileIcon(
+                          file: file,
+                          onOpened: _onOpened,
+                          openDirInNewWindow: false,
+                        )
+                    ],
+                  ),
+                );
+              }),
+        ));
   }
 
   void _onOpened(MyFile file) {
@@ -91,5 +98,13 @@ class _FileExplorerState extends State<FileExplorer> {
         dir = split.join("/");
       });
     }
+  }
+
+  Future<void> onPointerDown(context, PointerDownEvent event) async {
+    await MouseRightClick(options: [
+      MenuOptions.newFolder,
+      MenuOptions.newFile,
+      MenuOptions.openTerminal,
+    ]).showOnRightClickMenu(context, event, Evaluate(currentPath: dir!));
   }
 }

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:ubuntu/utils/Rightclick/evaluate.dart';
 
+import '../../utils/Rightclick/show_on_rightclick_menu.dart';
 import '../../System_Apps/App_View/app_view.dart';
 import '../../constants.dart';
 import '../../controllers/system_controller.dart';
@@ -11,7 +13,6 @@ import '../../models/file.dart';
 import 'components/file_ui.dart';
 import 'components/appbar.dart';
 import 'components/menubar.dart';
-import 'components/right_button_menu.dart';
 
 class Desktop extends StatelessWidget {
   final controller = Get.put(AppController());
@@ -81,5 +82,16 @@ class Desktop extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future<void> onPointerDown(context, PointerDownEvent event) async {
+    // Check if right mouse button clicked
+    await MouseRightClick(options: [
+      MenuOptions.newFolder,
+      MenuOptions.newFile,
+      MenuOptions.paste,
+      MenuOptions.openTerminal,
+      MenuOptions.settings,
+    ]).showOnRightClickMenu(context, event, Evaluate(currentPath: rootDir));
   }
 }

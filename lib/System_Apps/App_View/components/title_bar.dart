@@ -7,7 +7,7 @@ import '../../../models/app.dart';
 import '../../../constants.dart';
 
 PreferredSizeWidget titleBar(BuildContext context, App app, ThemeData theme,
-    {Function(bool)? onScreenSizeChanged, Function()? onClose}) {
+    {required Function(bool) onScreenSizeChanged,required Function() onClose}) {
   AppController controller = Get.find<AppController>();
   final menu = Get.find<SystemController>();
   return AppBar(
@@ -38,7 +38,7 @@ PreferredSizeWidget titleBar(BuildContext context, App app, ThemeData theme,
                 MediaQuery.of(context).size,
               );
             }
-            onScreenSizeChanged!(!app.isMaximized);
+            onScreenSizeChanged(!app.isMaximized);
           },
           child:
               Icon(Icons.crop_square, size: 16, color: theme.iconTheme.color)),
@@ -49,8 +49,7 @@ PreferredSizeWidget titleBar(BuildContext context, App app, ThemeData theme,
         decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.red),
         child: InkWell(
             onTap: () {
-              debugPrint("close");
-              onClose!();
+              onClose();
             },
             child: Icon(Icons.close, size: 16, color: theme.iconTheme.color)),
       )
