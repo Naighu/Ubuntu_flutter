@@ -41,7 +41,7 @@ class _StatusMenuItemsState extends State<StatusMenuItems> {
           padding: const EdgeInsets.only(right: defaultPadding),
           child: Row(
             children: [
-              SvgPicture.asset(widget.image!),
+              SvgPicture.asset(widget.image!, color: Colors.white),
               const SizedBox(width: defaultPadding),
               Text(
                 widget.title!,

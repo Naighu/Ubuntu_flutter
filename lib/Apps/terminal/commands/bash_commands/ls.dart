@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:ubuntu/constants.dart';
 
@@ -23,7 +24,11 @@ class Ls implements DecodeCommand {
     controller.addOutputString(id!, _items);
   }
 
-  List ls(String? path) {
+  ls(String? path) {
+    if (kIsWeb) return lsWeb(path);
+  }
+
+  List lsWeb(String? path) {
     Shell shell = Shell.init()!;
     List items = shell.listDir();
     List _items = [];

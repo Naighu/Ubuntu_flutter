@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:ubuntu/Apps/terminal/commands/commands.dart';
 import 'package:ubuntu/controllers/app_controller.dart';
 import 'package:ubuntu/controllers/file_controller.dart';
+import 'package:ubuntu/controllers/system_controller.dart';
 import 'package:ubuntu/models/app.dart';
 import 'package:ubuntu/models/file.dart';
 import 'package:ubuntu/utils/Rightclick/show_on_rightclick_menu.dart';
@@ -18,6 +19,7 @@ class Evaluate {
   void evaluate(context, menuItem) {
     final appController = Get.find<AppController>();
     final FileController fileController = Get.find<FileController>();
+    final SystemController systemController = Get.find<SystemController>();
     switch (menuItem) {
       case 1:
         if (onPressed != null) onPressed!(MenuOptions.newFolder);
@@ -55,14 +57,37 @@ class Evaluate {
         if (file!.file is File)
           Rm().rm(fileController, currentPath, file!.fileName!);
         else {
-          Rmdir().rmdir(fileController, currentPath, file!.fileName!);
+          var a = Rmdir().rmdir(fileController, currentPath, file!.fileName!);
+          print(a);
         }
         break;
       case 6:
         if (onPressed != null) onPressed!(MenuOptions.open);
-
-        App? app = appController.getAppByPackageName("gedit");
-        appController.addApp(app, params: {"path": file!.file!.path});
+        if (file!.file is File) {
+          App? app = appController.getAppByPackageName("gedit");
+          appController.addApp(app, params: {"path": file!.file!.path});
+        } else {
+          App? app = appController.getAppByPackageName("explorer");
+          appController.addApp(app, params: {"dir": file!.file!.path});
+        }
+        break;
+      case 7:
+        if (onPressed != null) onPressed!(MenuOptions.copy);
+        systemController.clipboard = file;
+        break;
+      case 8:
+        if (systemController.clipboard != null) {
+          if (onPressed != null) onPressed!(MenuOptions.paste);
+          if (systemController.clipboard!.file is File) {
+            Touch().touch(Get.find<FileController>(), currentPath,
+                "${systemController.clipboard!.fileName}",
+                contents:
+                    "${Cat().cat(systemController.clipboard!.file!.path)}");
+          } else {
+            Mkdir().mkdir(Get.find<FileController>(), currentPath,
+                "${systemController.clipboard!.fileName}");
+          }
+        }
         break;
     }
   }

@@ -10,10 +10,6 @@ class FileController extends GetxController {
   FileController() {
     fileExplorStack = [].obs;
   }
-  void changeOffset(MyFile file, Offset offset) {
-    file.setOffset = offset;
-    update();
-  }
 
   List<MyFile> getFiles(String? dir) {
     List<MyFile> files = [];
@@ -35,8 +31,7 @@ class FileController extends GetxController {
   }
 
   MyFile _file(FileSystemEntity item) => MyFile(
-      file: item,
-      fileName: item.path.split("/").last,
-      offset: Offset(
-          Random().nextInt(90).toDouble(), Random().nextInt(90).toDouble()));
+        file: item,
+        fileName: item.path.split("/").last,
+      );
 }

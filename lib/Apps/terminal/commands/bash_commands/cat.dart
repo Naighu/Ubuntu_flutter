@@ -8,45 +8,39 @@ class Cat implements DecodeCommand {
   @override
   dynamic executeCommand(BuildContext context, int? id, String command) {
     final controller = Get.find<TerminalController>();
-    String? path, fileName;
-
-    //compiling the path
-    if (command.startsWith("/") || command.split("/").length >= 2) {
-      var a = command.split("/");
-      fileName = a.removeLast();
-      path = controller.path! + "/" + a.join("/").replaceFirst("/", "");
-    } else if (command.isNotEmpty) {
-      var a = command.split("/");
-      fileName = a.removeLast();
-      path = controller.path! + a.join("/");
-    } else
-      fileName = "";
-
-    List items = Ls().ls(path);
     String output = "";
-
-    if (fileName.isEmpty)
+    String path = Shell.init()!.getCorrectPath(command, controller.path!);
+    String fileName = path.split("/").last;
+    if (fileName.isEmpty) {
       output = "Specify a name";
-    else {
-      bool isExist = false;
-      for (var item in items) {
-        List split = item.path.split("/");
-        split.removeLast();
-
-        if (item is File &&
-            item.path.trim() == (split.join("/") + "/$fileName").trim()) {
-          //check if the path is correct.
-          isExist = true;
-          break;
-        }
-      }
+    } else {
+      List split = path.split("/");
+      split.removeLast();
+      bool isExist = checkFileExistOnWeb(split.join("/"), fileName, controller);
       if (isExist)
-        output = cat(path! + "/$fileName"); //get the content of the file.
+        output = cat(path); //get the content of the file.
       else
         output = "No such file";
     }
-
     controller.addOutputString(id!, output);
+  }
+
+  bool checkFileExistOnWeb(String path, String fileName, controller) {
+    List items = Ls().ls(path);
+    print("[Path is ] $path");
+
+    bool isExist = false;
+    for (var item in items) {
+      List split = item.path.split("/");
+      split.removeLast();
+      print(item.path.trim() == (path + "/$fileName").trim());
+      if (item is File && item.path.trim() == (path + "/$fileName").trim()) {
+        //check if the path is correct.
+        isExist = true;
+        break;
+      }
+    }
+    return isExist;
   }
 
   String cat(String path) {

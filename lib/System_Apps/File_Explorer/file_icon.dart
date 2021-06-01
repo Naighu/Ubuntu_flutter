@@ -122,14 +122,18 @@ class _FileIconState extends State<FileIcon> {
   }
 
   Future<void> _onPointerDown(context, PointerDownEvent event) async {
+    List split = widget.file.file!.path.split("/");
+    split.removeLast();
+    String path = split.join("/");
     await MouseRightClick(
-        rect: Rect.fromLTWH(
-            widget.file.offset.dx - 80, widget.file.offset.dy + 80, 100, 100),
+        rect:
+            Rect.fromLTWH(event.position.dx - 80, event.position.dy, 100, 100),
         options: [
           MenuOptions.open,
+          MenuOptions.copy,
           MenuOptions.delete,
           MenuOptions.settings,
-        ]).showOnRightClickMenu(context, event,
-        Evaluate(currentPath: widget.file.file!.path, file: widget.file));
+        ]).showOnRightClickMenu(
+        context, event, Evaluate(currentPath: path, file: widget.file));
   }
 }

@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:ubuntu/controllers/file_controller.dart';
 
@@ -8,11 +9,16 @@ class Mkdir implements DecodeCommand {
   dynamic executeCommand(BuildContext context, int? id, String fileName) {
     final controller = Get.find<TerminalController>();
     final fileController = Get.find<FileController>();
-    String message = mkdir(fileController, controller.path, fileName);
+    String? message = mkdir(fileController, controller.path, fileName);
     controller.addOutputString(id!, message);
   }
 
-  String mkdir(FileController fileController, String? path, String fileName) {
+  String? mkdir(FileController fileController, String? path, String fileName) {
+    if (kIsWeb) return mkdirWeb(fileController, path, fileName);
+  }
+
+  String mkdirWeb(
+      FileController fileController, String? path, String fileName) {
     List items = Ls().ls(path);
     String error = "";
 
@@ -46,26 +52,32 @@ class Rmdir implements DecodeCommand {
     print("[Executing RMDIR]");
     final controller = Get.find<TerminalController>();
     final fileController = Get.find<FileController>();
-    String path, fileName, message;
+    String message;
     //compiling the path
     if (command.isNotEmpty) {
-      if (command.startsWith("/") || command.split("/").length >= 2) {
-        var a = command.split("/");
-        fileName = a.removeLast();
-        path = controller.path! + "/" + a.join("/").replaceFirst("/", "");
+      String path = Shell.init()!.getCorrectPath(command, controller.path!);
+      if (path.isNotEmpty) {
+        List a = path.split("/");
+
+        String fileName = a.removeLast();
+        path = a.join("/");
+
+        message = rmdir(fileController, path, fileName);
+        print(path);
       } else {
-        var a = command.split("/");
-        fileName = a.removeLast();
-        path = controller.path! + a.join("/");
+        message = "Incorrect path";
       }
-      message = rmdir(fileController, path, fileName);
     } else
       message = "Specify a Directory name";
-    print("message : $message");
     controller.addOutputString(id!, message);
   }
 
   rmdir(FileController fileController, String path, String fileName) {
+    if (kIsWeb) return rmdirWeb(fileController, path, fileName);
+  }
+
+  rmdirWeb(FileController fileController, String path, String fileName) {
+    print(path);
     Ls ls = Ls();
     List items = ls.ls(path);
     String error = "Directory Not Found";
@@ -76,6 +88,8 @@ class Rmdir implements DecodeCommand {
       for (var item in items) {
         List split = item.path.split("/");
         split.removeLast();
+        print(item.path.trim());
+        print((split.join("/") + "/$fileName").trim());
         if (item is Directory &&
             item.path.trim() == (split.join("/") + "/$fileName").trim()) {
           error = "";

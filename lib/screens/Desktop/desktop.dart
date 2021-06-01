@@ -61,16 +61,17 @@ class Desktop extends StatelessWidget {
                 id: rootDir,
                 init: FileController(),
                 builder: (controller) {
-                  return Stack(
-                    children: [
-                      for (MyFile file in controller.getFiles(rootDir))
-                        FileUi(
-                          key: Key(file.file!.path),
-                          file: file,
-                          controller: controller,
-                        ),
-                    ],
-                  );
+                  return FileUi(files: controller.getFiles(rootDir));
+                  // return Stack(
+                  //   children: [
+                  //     for (MyFile file in controller.getFiles(rootDir))
+                  //       FileUi(
+                  //         key: Key(file.file!.path),
+                  //         file: file,
+                  //         controller: controller,
+                  //       ),
+                  //   ],
+                  // );
                 }),
             GetBuilder<AppController>(builder: (_) {
               return Stack(children: [

@@ -83,7 +83,7 @@ class MouseRightClick {
   TextStyle _getStyle(context, MenuOptions option) {
     TextStyle style;
     if (option == MenuOptions.paste) {
-      if (Get.find<SystemController>().clipboard.isNotEmpty)
+      if (Get.find<SystemController>().clipboard != null)
         style = Theme.of(context).textTheme.subtitle1!;
       else
         style = Theme.of(context).textTheme.subtitle2!;

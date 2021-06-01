@@ -83,4 +83,18 @@ class Shell {
 
     return items;
   }
+
+  String getCorrectPath(String command, String currentPath) {
+    String path;
+    if (command.startsWith("/"))
+      path = command;
+    else if (command.split("/").length >= 2) {
+      path = "/" + command;
+      print("Path after Correcting $path");
+    } else {
+      path = currentPath + "/" + command;
+    }
+
+    return path;
+  }
 }

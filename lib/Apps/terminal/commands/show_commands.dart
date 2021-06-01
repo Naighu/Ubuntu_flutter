@@ -1,6 +1,4 @@
-
-
-import 'commands.dart';
+import 'package:ubuntu/Apps/terminal/commands/commands.dart';
 
 Map<String, DecodeCommand> commands = {
   "ls": Ls(),
@@ -11,5 +9,6 @@ Map<String, DecodeCommand> commands = {
   "clear": Clear(),
   "touch": Touch(),
   "cat": Cat(),
-  "rm": Rm()
+  "rm": Rm(),
+  "cp": Cp()
 };
