@@ -125,7 +125,7 @@ class _FileIconState extends State<FileIcon> {
     List split = widget.file.file!.path.split("/");
     split.removeLast();
     String path = split.join("/");
-    await MouseRightClick(
+    await MouseClick(
         rect:
             Rect.fromLTWH(event.position.dx - 80, event.position.dy, 100, 100),
         options: [

@@ -1,5 +1,8 @@
+import 'dart:html';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:ubuntu/utils/cookie_manager.dart';
 import '../../constants.dart';
 import '../../controllers/system_controller.dart';
 import '../../models/app.dart';
@@ -17,9 +20,7 @@ class _SettingsPageState extends State<SettingsPage> {
   final List<String> _wallpapers = [
     "wall-1.jpg",
     "wall-2.png",
-    "wall-3.jpg",
     "wall-4.jpg",
-    "wall-5.jpg",
     "wall-6.png",
     "wall-7.png",
     "wall-8.jpg"
@@ -60,9 +61,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         for (String name in _wallpapers)
                           InkWell(
                             onTap: () {
-                              setState(() {
-                                systemController.desktopWallpaper.value = name;
-                              });
+                              _onTap(name);
                             },
                             child: Container(
                                 height: constraints.maxHeight * 0.35,
@@ -90,5 +89,13 @@ class _SettingsPageState extends State<SettingsPage> {
         );
       }),
     );
+  }
+
+  void _onTap(String name) {
+    setState(() {
+      systemController.desktopWallpaper.value = name;
+    });
+    Storage storage = window.localStorage;
+    storage["wallpaper"] = name;
   }
 }

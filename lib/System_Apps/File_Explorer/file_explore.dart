@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:ubuntu/utils/Rightclick/evaluate.dart';
 import 'package:ubuntu/utils/Rightclick/show_on_rightclick_menu.dart';
@@ -62,22 +63,35 @@ class _FileExplorerState extends State<FileExplorer> {
               autoRemove: false,
               id: "explorer",
               builder: (controller) {
+                List<MyFile> _allFiles = controller.getFiles(dir);
                 return Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 20.0, vertical: 20.0),
-                  child: Wrap(
-                    runSpacing: 20.0,
-                    spacing: 30.0,
-                    children: [
-                      for (MyFile file in controller.getFiles(dir))
-                        FileIcon(
-                          file: file,
-                          onOpened: _onOpened,
-                          openDirInNewWindow: false,
-                        )
-                    ],
-                  ),
-                );
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20.0, vertical: 20.0),
+                    child: _allFiles.isNotEmpty
+                        ? Wrap(
+                            runSpacing: 20.0,
+                            spacing: 30.0,
+                            children: [
+                              for (MyFile file in _allFiles)
+                                FileIcon(
+                                  file: file,
+                                  onOpened: _onOpened,
+                                  openDirInNewWindow: false,
+                                )
+                            ],
+                          )
+                        : Center(
+                            child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              SvgPicture.asset("assets/system/folder.svg",
+                                  height: 80, width: 80),
+                              Text(
+                                "Empty",
+                                style: Theme.of(context).textTheme.bodyText1,
+                              )
+                            ],
+                          )));
               }),
         ));
   }
@@ -101,9 +115,10 @@ class _FileExplorerState extends State<FileExplorer> {
   }
 
   Future<void> onPointerDown(context, PointerDownEvent event) async {
-    await MouseRightClick(options: [
+    await MouseClick(options: [
       MenuOptions.newFolder,
       MenuOptions.newFile,
+      MenuOptions.paste,
       MenuOptions.openTerminal,
     ]).showOnRightClickMenu(context, event, Evaluate(currentPath: dir!));
   }

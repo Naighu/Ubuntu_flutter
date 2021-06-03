@@ -7,6 +7,8 @@ import '../System_Apps/Settings/settings_page.dart';
 
 import '../Apps/terminal/terminal.dart';
 
+final List<App> installedApps = [];
+
 class App {
   final String name, icon, packageName;
   late Size _size;
@@ -51,58 +53,10 @@ class App {
     _offset = Offset((newOffset.dx / totalSize.width) * 100,
         (newOffset.dy / totalSize.height) * 100);
   }
-}
 
-List<App> getApps() => [
-      App(
-        name: "Google Chrome",
-        icon: "assets/app_icons/chrome.png",
-        // child: WebviewFrame(
-        //   url: "https://www.google.com/webhp?igu=1",
-        //   id: "Google chrome",
-        // ),
-        packageName: "chrome",
-      ),
-      App(
-        name: "File Explorer",
-        icon: "assets/system/folder.png",
-        packageName: "explorer",
-      ),
-      App(
-        name: "Vs code",
-        icon: "assets/app_icons/vscode.png",
-        // child: WebviewFrame(
-        //   url:
-        //       "https://github1s.com/vivek9patel/vivek9patel.github.io/blob/HEAD/src/components/ubuntu.js",
-        //   id: "vscode",
-        // ),
-        packageName: "vscode",
-      ),
-      App(
-        name: "Terminal",
-        icon: "assets/app_icons/bash.png",
-        packageName: "terminal",
-      ),
-      App(
-        name: "Spotify",
-        icon: "assets/app_icons/spotify.png",
-        // child: WebviewFrame(
-        //   url: "https://open.spotify.com/embed/playlist/37i9dQZEVXbLZ52XmnySJg",
-        //   id: "spottify",
-        // ),
-        packageName: "spottify",
-      ),
-      App(
-        name: "Settings",
-        icon: "assets/app_icons/gnome-control-center.png",
-        packageName: "settings",
-      ),
-      App(
-        name: "Gedit",
-        icon: "assets/app_icons/gedit.png",
-        packageName: "gedit",
-      ),
-    ];
+  factory App.fromJson(Map json) => App(
+      icon: json["icon"], name: json["name"], packageName: json["packageName"]);
+}
 
 Widget? openApp(App app, {Map? params}) {
   print(params);

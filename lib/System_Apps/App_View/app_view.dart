@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:ubuntu/System_Apps/App_View/components/app_animation.dart';
 import '../../controllers/system_controller.dart';
 
 import '../../controllers/app_controller.dart';
@@ -19,10 +20,9 @@ class AppView extends StatefulWidget {
 
 class _AppViewState extends State<AppView> with SingleTickerProviderStateMixin {
   late Offset startDragOffset;
-  bool isClosed = false;
   late AnimationController _controller;
-  late Animation<Offset> _offsetAnimation;
-  late Animation<Size> _sizeAnimation;
+  late Tween<Offset> _offsetAnimation;
+  late Tween<Size> _sizeAnimation;
   App? get app => widget.app;
   final SystemController _menuController = Get.find<SystemController>();
   final AppController _appController = Get.find<AppController>();
@@ -33,11 +33,9 @@ class _AppViewState extends State<AppView> with SingleTickerProviderStateMixin {
     _appController.prevOffset = app!.offset;
     _appController.prevSize = app!.size;
     _controller = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 300));
-    _offsetAnimation =
-        Tween<Offset>(begin: _appController.prevOffset).animate(_controller);
-    _sizeAnimation =
-        Tween<Size>(begin: _appController.prevSize).animate(_controller);
+        vsync: this, duration: const Duration(milliseconds: 200));
+    _offsetAnimation = Tween<Offset>(begin: _appController.prevOffset);
+    _sizeAnimation = Tween<Size>(begin: _appController.prevSize);
   }
 
   @override
@@ -50,38 +48,24 @@ class _AppViewState extends State<AppView> with SingleTickerProviderStateMixin {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final Size size = MediaQuery.of(context).size;
-    print(app!.child);
     return GetBuilder<AppController>(builder: (controller) {
       Future(() {
         _conditionToShowMenubar(); //check whether if the menubar should hide or not.
       });
-      if (app!.hide)
-        return Container();
-      else
-        return AnimatedBuilder(
-            animation: _controller,
-            builder: (context, _) {
-              //when the animation starts use the animation value
-              double height = _controller.status == AnimationStatus.dismissed ||
-                      _controller.status == AnimationStatus.completed
-                  ? app!.size.height
-                  : _sizeAnimation.value.height -
-                      (100 * (topAppBarHeight / size.height));
-              double width = _controller.status == AnimationStatus.dismissed ||
-                      _controller.status == AnimationStatus.completed
-                  ? app!.size.width
-                  : _sizeAnimation.value.width;
-              return Positioned(
-                left: _controller.status ==
-                            AnimationStatus
-                                .dismissed || // use the animation value only when the window is rezized ..
-                        _controller.status == AnimationStatus.completed
-                    ? app!.offset.dx
-                    : _offsetAnimation.value.dx,
-                top: _controller.status == AnimationStatus.dismissed ||
-                        _controller.status == AnimationStatus.completed
-                    ? app!.offset.dy
-                    : _offsetAnimation.value.dy,
+
+      return AppAnimation(
+          controller: _controller,
+          offsetAnimation: _offsetAnimation.animate(_controller),
+          sizeAnimation: _sizeAnimation.animate(_controller),
+          appSize: app!.size,
+          appOffset: app!.offset,
+          builder: (height, width, left, top) {
+            return Positioned(
+              left: left,
+              top: top,
+              child: Visibility(
+                visible: !app!.hide,
+                maintainState: true,
                 child: Column(children: [
                   GestureDetector(
                       onPanStart: _onPanStart,
@@ -97,8 +81,9 @@ class _AppViewState extends State<AppView> with SingleTickerProviderStateMixin {
                       )),
                   Container(height: height, width: width, child: app!.child)
                 ]),
-              );
-            });
+              ),
+            );
+          });
     });
   }
 
@@ -134,12 +119,12 @@ class _AppViewState extends State<AppView> with SingleTickerProviderStateMixin {
       _controller.reverse();
     else {
       _controller.reset();
-      _offsetAnimation =
-          Tween<Offset>(begin: _appController.prevOffset, end: app!.offset)
-              .animate(_controller);
-      _sizeAnimation =
-          Tween<Size>(begin: _appController.prevSize, end: app!.size)
-              .animate(_controller);
+
+      // changing the begin and end values
+      _offsetAnimation.begin = _appController.prevOffset;
+      _offsetAnimation.end = app!.offset;
+      _sizeAnimation.begin = _appController.prevSize;
+      _sizeAnimation.end = app!.size;
 
       _controller.forward();
     }

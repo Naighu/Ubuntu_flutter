@@ -4,24 +4,27 @@ import '../../../Apps/terminal/commands/bash_commands/command_packages.dart';
 import '../../../Apps/terminal/commands/show_commands.dart';
 
 class Header extends StatefulWidget {
-  final int? id;
+  final int id;
   final String header;
-  const Header({this.id, this.header = ""});
+  const Header({required this.id, required this.header});
 
   @override
   _HeaderState createState() => _HeaderState();
 }
 
 class _HeaderState extends State<Header> {
-  bool readMode =
-      false; //inorder to avoid editing of the textfield when enter key is pressed;
+  ///inorder to avoid editing of the textfield when the enter key is pressed;
+  bool readMode = false;
   final controller = Get.find<TerminalController>();
   @override
   Widget build(BuildContext context) {
     return IntrinsicHeight(
       child: Row(
         children: [
-          Text("naighu@ubuntu:-\$${controller.path}",
+          Text(
+              widget.header.isEmpty
+                  ? "naighu@ubuntu:-\$${controller.path}"
+                  : widget.header + "-\$${controller.path}",
               style: Theme.of(context).textTheme.bodyText2),
           Expanded(
             child: ConstrainedBox(
@@ -62,8 +65,17 @@ class _HeaderState extends State<Header> {
         commands[val.split(" ")[0]]!
             .executeCommand(context, widget.id, commandsplit.skip(1).join(" "));
       } else {
-        controller.addOutputString(widget.id!, "no such commands");
+        controller.addOutputString(widget.id, "no such commands\n\n",
+            end: false);
+        controller.addOutputString(widget.id, "Available Commands are : \n\n",
+            end: false);
+        controller.addOutputString(
+          widget.id,
+          "* mkdir\n* rmdir\n* touch \n* rm \n* cd \n* ls\n* cat\n *sudo \n* pwd\n* clear\n",
+        );
       }
+    } else {
+      controller.addOutputString(widget.id, "");
     }
   }
 }

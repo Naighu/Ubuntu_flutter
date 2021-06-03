@@ -14,9 +14,8 @@ class Cat implements DecodeCommand {
     if (fileName.isEmpty) {
       output = "Specify a name";
     } else {
-      List split = path.split("/");
-      split.removeLast();
-      bool isExist = checkFileExistOnWeb(split.join("/"), fileName, controller);
+      bool isExist =
+          checkFileExistOnWeb(path.getParentPath(), fileName, controller);
       if (isExist)
         output = cat(path); //get the content of the file.
       else
@@ -31,9 +30,6 @@ class Cat implements DecodeCommand {
 
     bool isExist = false;
     for (var item in items) {
-      List split = item.path.split("/");
-      split.removeLast();
-      print(item.path.trim() == (path + "/$fileName").trim());
       if (item is File && item.path.trim() == (path + "/$fileName").trim()) {
         //check if the path is correct.
         isExist = true;

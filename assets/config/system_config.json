@@ -19,5 +19,14 @@
         "terminal",
         "spottify",
         "settings"
+    ],
+    "installed-apps":[
+         {"icon" : "assets/app_icons/chrome.png","name":"Chrome","packageName": "chrome"},
+         {"icon" : "assets/system/folder.png","name":"File Explorer","packageName": "explorer"},
+         {"icon" : "assets/app_icons/vscode.png","name":"VS Code","packageName": "vscode"},
+         {"icon" : "assets/app_icons/bash.png","name":"Terminal","packageName": "terminal"},
+         {"icon" : "assets/app_icons/spotify.png","name":"Spottify","packageName": "spottify"},
+         {"icon" : "assets/app_icons/gnome-control-center.png","name":"Settings","packageName": "settings"},
+         {"icon" : "assets/app_icons/gedit.png","name":"Gedit","packageName": "gedit"}
     ]
 }

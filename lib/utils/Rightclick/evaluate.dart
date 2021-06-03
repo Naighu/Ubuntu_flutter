@@ -11,15 +11,19 @@ import 'package:ubuntu/utils/Rightclick/show_on_rightclick_menu.dart';
 
 import '../dialogBox.dart';
 
+/// Evalation for the option clicked by the user on rightclick..
+
 class Evaluate {
   String currentPath;
   MyFile? file;
   Function(MenuOptions)? onPressed;
   Evaluate({required this.currentPath, this.file, this.onPressed});
+
   void evaluate(context, menuItem) {
     final appController = Get.find<AppController>();
     final FileController fileController = Get.find<FileController>();
     final SystemController systemController = Get.find<SystemController>();
+
     switch (menuItem) {
       case 1:
         if (onPressed != null) onPressed!(MenuOptions.newFolder);
@@ -31,6 +35,7 @@ class Evaluate {
               Mkdir().mkdir(Get.find<FileController>(), currentPath, "$name");
             }).show(context);
         break;
+
       case 2:
         if (onPressed != null) onPressed!(MenuOptions.newFile);
         DialogBox(
@@ -41,17 +46,20 @@ class Evaluate {
             }).show(context);
 
         break;
+
       case 3:
         if (onPressed != null) onPressed!(MenuOptions.openTerminal);
         App? terminalApp = appController.getAppByPackageName("terminal");
         appController.addApp(terminalApp, addByIgnoringDuplicates: true);
         break;
+
       case 4:
         if (onPressed != null) onPressed!(MenuOptions.settings);
         App settingsApp = appController.getAppByPackageName("settings")!;
 
         appController.addApp(settingsApp, addByIgnoringDuplicates: true);
         break;
+
       case 5:
         if (onPressed != null) onPressed!(MenuOptions.delete);
         if (file!.file is File)
@@ -61,6 +69,7 @@ class Evaluate {
           print(a);
         }
         break;
+
       case 6:
         if (onPressed != null) onPressed!(MenuOptions.open);
         if (file!.file is File) {
@@ -71,10 +80,12 @@ class Evaluate {
           appController.addApp(app, params: {"dir": file!.file!.path});
         }
         break;
+
       case 7:
         if (onPressed != null) onPressed!(MenuOptions.copy);
         systemController.clipboard = file;
         break;
+
       case 8:
         if (systemController.clipboard != null) {
           if (onPressed != null) onPressed!(MenuOptions.paste);

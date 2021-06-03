@@ -98,3 +98,11 @@ class Shell {
     return path;
   }
 }
+
+extension parentPath on String {
+  String getParentPath() {
+    List split = this.split("/");
+    split.removeLast();
+    return split.join("/");
+  }
+}

@@ -16,7 +16,6 @@ class Gedit extends StatefulWidget {
 
 class _GeditState extends State<Gedit> {
   TextEditingController? controller;
-  bool a = false;
   @override
   void initState() {
     super.initState();
@@ -28,14 +27,12 @@ class _GeditState extends State<Gedit> {
 
   @override
   void dispose() {
-    print("Disposing");
     controller!.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    print("[GEDIT] STARTING");
     return Container(
         color: Colors.white,
         padding: const EdgeInsets.all(10.0),

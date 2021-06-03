@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ubuntu/constants.dart';
 import 'package:get/get.dart';
+import 'package:ubuntu/utils/system_files.dart';
 import '../models/app.dart';
 
 class AppController extends GetxController {
@@ -9,6 +10,10 @@ class AppController extends GetxController {
   int key = 0;
   Size? prevSize;
   Offset? prevOffset;
+
+  /// add App to the stack.
+  /// [params] send the parameters to the app
+  /// [addByIgnoringDuplicates] if the app with same packagename already present in the stack ,it will not add.
 
   void addApp(App? app, {Map? params, bool addByIgnoringDuplicates = false}) {
     if (addByIgnoringDuplicates) {
@@ -23,6 +28,8 @@ class AppController extends GetxController {
     update();
   }
 
+  /// removes the first app with given package name from the [appstack]
+  /// [removeAllDuplicates] it will remove all the app with same packagename
   void removeApp(App app, {bool removeAllDuplicates = false}) {
     for (int i = 0; i < _appStack.length; i++)
       if (app.packageName == _appStack[i].packageName) {
@@ -32,15 +39,18 @@ class AppController extends GetxController {
     update();
   }
 
+  /// hide the app in the menubar
   void hide(App app) {
     app.hide = true;
 
     update();
   }
 
+  ///Returns [App] of the specified packagename
   App? getAppByPackageName(String? packageName) {
     App? a;
-    for (App app in getApps())
+
+    for (App app in installedApps)
       if (app.packageName == packageName) {
         a = app;
         break;
@@ -48,14 +58,16 @@ class AppController extends GetxController {
     return a;
   }
 
+  ///show the app on screen
   void show(String packageName) {
-    for (App? app in appStack)
-      if (app!.packageName == packageName) {
+    for (App app in appStack)
+      if (app.packageName == packageName) {
         app.hide = false;
       }
     update();
   }
 
+  ///maximize the app window size
   void maximize(App app, Size totalSize) {
     app.setSize = Size(totalSize.width, totalSize.height - topAppBarHeight);
     prevOffset = app.offset;
@@ -66,11 +78,15 @@ class AppController extends GetxController {
     update();
   }
 
+  ///remove the app from stack
+  ///it will minimize the app first then remove the app from stack
   void closeApp(App app) {
     minimize(app);
     removeApp(app);
   }
 
+  ///minimize the app window size
+  /// set the [prevSize] and [prevOffset] to the app window
   void minimize(App app) {
     app.setSize = prevSize!;
     app.setOffset = prevOffset!;

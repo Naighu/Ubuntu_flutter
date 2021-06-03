@@ -54,10 +54,7 @@ class Cp implements DecodeCommand {
       error = "Specify a name";
     else {
       for (var item in items1) {
-        List split = item.path.split("/");
-        split.removeLast();
-        print(item.path.trim() == (split.join("/") + "/$fileName1").trim());
-        if (item.path.trim() == (split.join("/") + "/$fileName1").trim()) {
+        if (item.path.trim() == (path1 + "/$fileName1").trim()) {
           if (item is Directory)
             isDir = true;
           else

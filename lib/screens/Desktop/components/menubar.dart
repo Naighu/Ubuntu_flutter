@@ -15,27 +15,32 @@ class MenuBar extends StatefulWidget {
 
 class _MenuBarState extends State<MenuBar> {
   final AppController appController = Get.find<AppController>();
+
+  ///holds the apps to be placed in the menubar
   List? menubarAppsPackageNames;
-  late List<App> apps;
+
   @override
   void initState() {
     super.initState();
     menubarAppsPackageNames = [];
-    apps = getApps();
+
+    /// get the packagenames of the apps to be placed in the menubar
     if (SystemFiles.jsonData == null) {
       SystemFiles.loadJsonData().then((value) {
         setState(() {
           menubarAppsPackageNames = value.getMenuBarApps();
+          if (installedApps.isEmpty) {
+            List a = value.getInstalledApps();
+            a.forEach((e) => installedApps.add(App.fromJson(e)));
+          }
         });
       });
-    } else {
+    } else
       menubarAppsPackageNames = SystemFiles.getObject().getMenuBarApps();
-    }
   }
 
   @override
   Widget build(BuildContext context) {
-    print("rebuilding menubar");
     return GetX<SystemController>(
         builder: (menuController) => AnimatedContainer(
               duration: const Duration(milliseconds: 300),
@@ -51,11 +56,14 @@ class _MenuBarState extends State<MenuBar> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         //default menu icons
-                        for (App app in apps)
+
+                        for (App app in installedApps)
                           if (menubarAppsPackageNames!
                               .contains(app.packageName))
                             MenuIcon(app: app),
+
                         //currently opened apps other than the menuapps
+
                         for (App app in appController.appStack)
                           if (!menubarAppsPackageNames!
                               .contains(app.packageName))
@@ -71,21 +79,12 @@ class _MenuBarState extends State<MenuBar> {
                               padding: const EdgeInsets.only(
                                 bottom: defaultPadding * 4,
                               ),
-                              onPressed: () {
-                                print("Pressed");
-                              },
+                              onPressed: () {},
                               icon: Icon(Icons.apps, size: 28)),
                         ),
                       ],
                     );
                   })),
             ));
-  }
-}
-
-extension on List {
-  bool checkPackageName(String packageName) {
-    for (App a in this) if (a.packageName == packageName) return true;
-    return false;
   }
 }

@@ -87,7 +87,7 @@ class _StatusMenuState extends State<StatusMenu> {
             ),
             StatusMenuItems(
                 title: "Settings",
-                image: "assets/status/emblem-system-symbolic.svg",
+                image: "assets/status/1.svg",
                 trailingIcon: true),
             StatusMenuItems(
                 title: "Lock Screen",
@@ -98,7 +98,7 @@ class _StatusMenuState extends State<StatusMenu> {
                 }),
             StatusMenuItems(
                 title: "Power Off",
-                image: "assets/status/system-shutdown-symbolic.svg",
+                image: "assets/status/2.svg",
                 trailingIcon: true),
           ],
         ),

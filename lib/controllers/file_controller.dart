@@ -1,16 +1,9 @@
-import 'dart:math';
-
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../Apps/terminal/commands/bash_commands/command_packages.dart';
 import '../models/file.dart';
 
 class FileController extends GetxController {
-  RxList? fileExplorStack; //used by the file explorer app
-  FileController() {
-    fileExplorStack = [].obs;
-  }
-
+  /// returns the files and directories of the given dir.
   List<MyFile> getFiles(String? dir) {
     List<MyFile> files = [];
     final items = Ls().ls(dir);
@@ -21,15 +14,17 @@ class FileController extends GetxController {
     return files;
   }
 
+  ///updating the ui if new file or folder is added.
   void updateUi(String path) {
-    var split = path.split("/");
-    split.removeLast();
     update([
-      split.join("/"),
-      "explorer"
-    ]); //"explorer" is added inorder to get the update to the file Explorer app.
+      path.getParentPath(),
+
+      /// it will rebuild the desktopui only when a new file or folder is created or deleted in the rootDir path
+      "explorer" //Always rebuild the fileExplorer app when a new file or folder is created or deleted
+    ]);
   }
 
+  ///returns the [MyFile] object from the [FileSystemEntity]
   MyFile _file(FileSystemEntity item) => MyFile(
         file: item,
         fileName: item.path.split("/").last,

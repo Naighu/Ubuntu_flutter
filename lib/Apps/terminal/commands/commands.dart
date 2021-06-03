@@ -8,3 +8,4 @@ export 'bash_commands/make_dir.dart';
 export 'bash_commands/make_file.dart';
 export 'shell.dart';
 export 'bash_commands/copy.dart';
+export 'bash_commands/sudo.dart';

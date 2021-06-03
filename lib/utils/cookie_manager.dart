@@ -4,13 +4,13 @@ import 'dart:html';
 class CookieManager {
   CookieManager._();
   static CookieManager? _manager;
+
   static init() {
     if (_manager == null) _manager = CookieManager._();
     return _manager;
   }
 
   void addToCookie(String key, String value) {
-    // 2592000 sec = 30 days.
     document.cookie =
         "$key=${value.replaceAll("\n", "~")}; max-age=2592000; path=/;";
   }

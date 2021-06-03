@@ -10,5 +10,6 @@ Map<String, DecodeCommand> commands = {
   "touch": Touch(),
   "cat": Cat(),
   "rm": Rm(),
-  "cp": Cp()
+  "cp": Cp(),
+  "sudo": Sudo()
 };

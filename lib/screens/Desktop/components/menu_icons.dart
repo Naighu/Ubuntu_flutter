@@ -6,31 +6,25 @@ import '../../../models/app.dart';
 
 import '../../../constants.dart';
 
-class MenuIcon extends StatefulWidget {
+class MenuIcon extends StatelessWidget {
   final App? app;
 
-  const MenuIcon({Key? key, this.app}) : super(key: key);
-
-  @override
-  _MenuIconState createState() => _MenuIconState();
-}
-
-class _MenuIconState extends State<MenuIcon> {
+  MenuIcon({Key? key, this.app}) : super(key: key);
   final appController = Get.find<AppController>();
   @override
   Widget build(BuildContext context) {
     return Tooltip(
-        message: widget.app!.name,
+        message: app!.name,
         margin: EdgeInsets.only(left: menuWidth),
         verticalOffset: -10.0,
         child: Container(
-          color: appController.appStack.check(widget.app)
+          color: appController.appStack.check(app)
               ? Colors.white.withOpacity(0.3)
               : Colors.transparent,
           child: Stack(
             children: [
               // selected app icon dot
-              if (appController.appStack.check(widget.app))
+              if (appController.appStack.check(app))
                 Container(
                     height: 4.0,
                     width: 4.0,
@@ -40,13 +34,13 @@ class _MenuIconState extends State<MenuIcon> {
 
               TextButton(
                 onPressed: () {
-                  _onPressed(appController, widget.app);
+                  _onPressed(appController, app);
                 },
                 child: SizedBox(
                   height: 50.0,
                   width: 30.0,
                   child: Image.asset(
-                    widget.app!.icon,
+                    app!.icon,
                   ),
                 ),
               ),
@@ -55,19 +49,15 @@ class _MenuIconState extends State<MenuIcon> {
         ));
   }
 
+  /// if the app is not present in the [appStack] then it will add the app to the [appStack]
   void _onPressed(AppController appController, App? app) {
-    print("Pressed on app");
-
-    if (!appController.appStack.check(app)) {
-      print("Pressed on if");
+    if (!appController.appStack.check(app))
       appController.addApp(app, params: getParams(app!));
-    } else {
-      print("Pressed on else");
-
+    else
       appController.show(app!.packageName);
-    }
   }
 
+  /// get the parameters to pass to the app when app's loading..
   Map getParams(App app) {
     Map params = {};
     switch (app.packageName) {
@@ -92,7 +82,6 @@ class _MenuIconState extends State<MenuIcon> {
 
 extension on List {
   bool check(App? app) {
-    // ignore: invalid_use_of_protected_member
     for (App? a in this) if (a!.packageName == app!.packageName) return true;
 
     return false;

@@ -1,11 +1,16 @@
 import 'package:flutter/rendering.dart';
 import '../Apps/terminal/commands/bash_commands/command_packages.dart';
 
+///body of the dialogbox
 enum BodyType { textField }
 
 class DialogBox {
+  /// dialogbox overlay entry
   static OverlayEntry? entry;
   String? _text;
+
+  ///[title] of the dialog
+
   final String? title, cancelBtnName, okBtnName;
   final BodyType bodyType;
   final Function(dynamic) onOk;
@@ -19,6 +24,7 @@ class DialogBox {
       required this.onOk,
       this.onCancel});
 
+  ///show the dialogbox to the screen
   void show(context) {
     if (entry != null && entry!.mounted) entry?.remove();
     entry = _createOverlayEntry(context);
@@ -48,26 +54,7 @@ class DialogBox {
                         child: Text(title!,
                             style: Theme.of(context).textTheme.subtitle1),
                       ),
-                      if (BodyType.textField == bodyType)
-                        Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 15.0),
-                            child: SizedBox(
-                              height: 30,
-                              child: TextField(
-                                autofocus: true,
-                                onChanged: (text) {
-                                  _text = text;
-                                },
-                                decoration: InputDecoration(
-                                  contentPadding: const EdgeInsets.only(
-                                      bottom: 10.0, left: 10.0),
-                                  border: _border(),
-                                  enabledBorder: _border(),
-                                  focusedBorder: _border(),
-                                ),
-                              ),
-                            )),
+                      if (BodyType.textField == bodyType) _textField(),
                       Row(
                         children: [
                           Expanded(
@@ -98,7 +85,7 @@ class DialogBox {
                                         color: Color(0xFF161616), width: 0.5))),
                                 onPressed: () {
                                   entry!.remove();
-                                  onOk(_text);
+                                  onOk(_text); //returns the text from textfield
                                 },
                                 child: Text(
                                   okBtnName ?? "Ok",
@@ -121,4 +108,22 @@ class DialogBox {
   _border() => const OutlineInputBorder(
       //  borderRadius: const BorderRadius.all(Radius.circular(12.0)),
       borderSide: BorderSide(color: Colors.orange));
+
+  Widget _textField() => Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 15.0),
+      child: SizedBox(
+        height: 30,
+        child: TextField(
+          autofocus: true,
+          onChanged: (text) {
+            _text = text;
+          },
+          decoration: InputDecoration(
+            contentPadding: const EdgeInsets.only(bottom: 10.0, left: 10.0),
+            border: _border(),
+            enabledBorder: _border(),
+            focusedBorder: _border(),
+          ),
+        ),
+      ));
 }

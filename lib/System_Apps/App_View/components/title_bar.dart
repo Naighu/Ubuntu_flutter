@@ -7,7 +7,8 @@ import '../../../models/app.dart';
 import '../../../constants.dart';
 
 PreferredSizeWidget titleBar(BuildContext context, App app, ThemeData theme,
-    {required Function(bool) onScreenSizeChanged,required Function() onClose}) {
+    {required Function(bool) onScreenSizeChanged,
+    required Function() onClose}) {
   AppController controller = Get.find<AppController>();
   final menu = Get.find<SystemController>();
   return AppBar(
@@ -20,6 +21,8 @@ PreferredSizeWidget titleBar(BuildContext context, App app, ThemeData theme,
     ),
     actions: [
       InkWell(
+          splashColor: Colors.transparent,
+          highlightColor: Colors.transparent,
           onTap: () {
             menu.menubarWidth.value = menuWidth;
             controller.hide(app);
@@ -27,12 +30,12 @@ PreferredSizeWidget titleBar(BuildContext context, App app, ThemeData theme,
           child: Icon(Icons.minimize, size: 16, color: theme.iconTheme.color)),
       const SizedBox(width: defaultPadding),
       InkWell(
+          splashColor: Colors.transparent,
+          highlightColor: Colors.transparent,
           onTap: () {
             if (app.isMaximized) {
-              //  menu.menubarWidth.value = menuWidth;
               controller.minimize(app);
             } else {
-              //menu.menubarWidth.value = 0;
               controller.maximize(
                 app,
                 MediaQuery.of(context).size,
@@ -48,6 +51,8 @@ PreferredSizeWidget titleBar(BuildContext context, App app, ThemeData theme,
         padding: const EdgeInsets.all(3.0),
         decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.red),
         child: InkWell(
+            splashColor: Colors.transparent,
+            highlightColor: Colors.transparent,
             onTap: () {
               onClose();
             },

@@ -9,7 +9,6 @@ import '../../controllers/system_controller.dart';
 import '../../controllers/app_controller.dart';
 import '../../controllers/file_controller.dart';
 import '../../models/app.dart';
-import '../../models/file.dart';
 import 'components/file_ui.dart';
 import 'components/appbar.dart';
 import 'components/menubar.dart';
@@ -21,7 +20,7 @@ class Desktop extends StatelessWidget {
     OverlayEntry? entry;
     final size = MediaQuery.of(context).size;
     return Scaffold(
-      appBar: desktopAppBar(context, (e) {
+      appBar: taskManger(context, (e) {
         if (entry == null || !entry!.mounted) {
           entry = e;
           Overlay.of(context)!.insert(e);
@@ -30,13 +29,17 @@ class Desktop extends StatelessWidget {
       }),
       body: Listener(
         onPointerDown: (event) {
+          //mouse  right click event
           onPointerDown(context, event);
         },
         onPointerUp: (event) {
+          // removing the status menu pop up overlay
           if (entry != null && entry!.mounted) entry?.remove();
         },
         child: Stack(
           children: [
+            // Desktop wallpeper
+
             GetX<SystemController>(
               init: SystemController(),
               builder: (wallpaper) => Container(
@@ -51,11 +54,17 @@ class Desktop extends StatelessWidget {
                 )),
               ),
             ),
+
+            // menu bar
+
             Positioned(
                 left: 0,
                 width: menuWidth,
                 height: size.height,
                 child: MenuBar()),
+
+            //listing the desktop files and folders
+
             GetBuilder<FileController>(
                 assignId: true,
                 id: rootDir,
@@ -63,6 +72,9 @@ class Desktop extends StatelessWidget {
                 builder: (controller) {
                   return FileUi(files: controller.getFiles(rootDir));
                 }),
+
+            // shows the opened apps in the window
+
             GetBuilder<AppController>(builder: (_) {
               return Stack(children: [
                 for (App app in controller.appStack)
@@ -77,7 +89,7 @@ class Desktop extends StatelessWidget {
 
   Future<void> onPointerDown(context, PointerDownEvent event) async {
     // Check if right mouse button clicked
-    await MouseRightClick(options: [
+    await MouseClick(options: [
       MenuOptions.newFolder,
       MenuOptions.newFile,
       MenuOptions.paste,

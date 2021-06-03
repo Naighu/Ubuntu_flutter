@@ -38,7 +38,7 @@ class Mkdir implements DecodeCommand {
     }
     if (error.isEmpty) {
       Shell shell = Shell.init()!;
-      shell.create(path! + "/$fileName");
+      shell.create((path! + "/$fileName").trim());
       fileController.updateUi(path + "/$fileName");
       return "";
     } else
@@ -86,12 +86,8 @@ class Rmdir implements DecodeCommand {
       error = "Specify a name";
     else {
       for (var item in items) {
-        List split = item.path.split("/");
-        split.removeLast();
-        print(item.path.trim());
-        print((split.join("/") + "/$fileName").trim());
         if (item is Directory &&
-            item.path.trim() == (split.join("/") + "/$fileName").trim()) {
+            item.path.trim() == (path + "/$fileName").trim()) {
           error = "";
           break;
         }

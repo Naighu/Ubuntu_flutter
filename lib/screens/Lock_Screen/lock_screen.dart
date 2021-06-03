@@ -23,12 +23,11 @@ class LockScreen extends StatelessWidget {
       child: Focus(
           autofocus: true,
           onKey: (_, __) {
-            print("Key pressed");
             Navigator.pop(context);
             return true;
           },
           child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 10, sigmaY: 40),
+            filter: ImageFilter.blur(sigmaX: 5, sigmaY: 20),
             child: Center(
                 child: StreamBuilder<DateTime>(
                     stream: dateStream(),

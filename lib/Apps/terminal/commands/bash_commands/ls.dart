@@ -1,8 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
-import 'package:ubuntu/constants.dart';
 
 import 'command_packages.dart';
+import '../shell.dart';
 
 class Ls implements DecodeCommand {
   @override
@@ -32,10 +32,8 @@ class Ls implements DecodeCommand {
     Shell shell = Shell.init()!;
     List items = shell.listDir();
     List _items = [];
-    for (var item in items) {
-      List split = item.path.split("/");
-      split.removeLast();
-      if (split.join("/").trim() == path!.trim()) {
+    for (FileSystemEntity item in items) {
+      if (item.path.getParentPath().trim() == path!.trim()) {
         _items.add(item);
       }
     }

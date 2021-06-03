@@ -37,13 +37,15 @@ Map<MenuOptions, int> menuValue = {
   MenuOptions.paste: 8,
 };
 
-class MouseRightClick {
+class MouseClick {
   Rect? rect;
   RenderBox? _renderBox;
   final List<MenuOptions> options;
+
+  /// check whether the overlay is already present on the screeen
   static bool isActive = false;
 
-  MouseRightClick({required this.options, this.rect});
+  MouseClick({required this.options, this.rect});
 
   bool _onRightClick(context, PointerDownEvent event) {
     // Check if right mouse button clicked
@@ -61,8 +63,7 @@ class MouseRightClick {
       if (!isActive) {
         isActive = true;
         final menuItem = await _createWidget(context);
-        // Check if menu item clicked
-        //   if (onPressed == null) onPressed = (_) {};
+
         evaluate.evaluate(context, menuItem);
         isActive = false;
       }
