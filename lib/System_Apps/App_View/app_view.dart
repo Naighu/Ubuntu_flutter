@@ -61,7 +61,7 @@ class _AppViewState extends State<AppView> with SingleTickerProviderStateMixin {
         return AnimatedBuilder(
             animation: _controller,
             builder: (context, _) {
-              //when the animation starts use the animation value.This is done for making responsive..
+              //when the animation starts use the animation value
               double height = _controller.status == AnimationStatus.dismissed ||
                       _controller.status == AnimationStatus.completed
                   ? app!.size.height
@@ -74,7 +74,7 @@ class _AppViewState extends State<AppView> with SingleTickerProviderStateMixin {
               return Positioned(
                 left: _controller.status ==
                             AnimationStatus
-                                .dismissed || // this is for having the animation when the app minimized or maximized ,not when dragging.
+                                .dismissed || // use the animation value only when the window is rezized ..
                         _controller.status == AnimationStatus.completed
                     ? app!.offset.dx
                     : _offsetAnimation.value.dx,
