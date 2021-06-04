@@ -39,6 +39,14 @@ class AppController extends GetxController {
     update();
   }
 
+  /// move the app to the last of the [appStack] list.
+
+  void moveToFront(App app) {
+    _appStack.remove(app);
+    _appStack.add(app);
+    update();
+  }
+
   /// hide the app in the menubar
   void hide(App app) {
     app.hide = true;
