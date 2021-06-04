@@ -136,9 +136,7 @@ class _AppViewState extends State<AppView> with SingleTickerProviderStateMixin {
   }
 
   void _onPanStart(DragStartDetails details) {
-    if (_appController.appStack.last != app) {
-      _appController.moveToFront(app!);
-    }
+    _appController.moveToFront(app!);
     startDragOffset = details.globalPosition;
   }
 }

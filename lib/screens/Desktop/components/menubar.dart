@@ -18,20 +18,21 @@ class _MenuBarState extends State<MenuBar> {
 
   ///holds the apps to be placed in the menubar
   List? menubarAppsPackageNames;
-
+  late List<App> apps;
   @override
   void initState() {
     super.initState();
     menubarAppsPackageNames = [];
+    apps = [];
 
     /// get the packagenames of the apps to be placed in the menubar
     if (SystemFiles.jsonData == null) {
       SystemFiles.loadJsonData().then((value) {
         setState(() {
           menubarAppsPackageNames = value.getMenuBarApps();
-          if (installedApps.isEmpty) {
+          if (apps.isEmpty) {
             List a = value.getInstalledApps();
-            a.forEach((e) => installedApps.add(App.fromJson(e)));
+            a.forEach((e) => apps.add(App.fromJson(e)));
           }
         });
       });
@@ -57,17 +58,25 @@ class _MenuBarState extends State<MenuBar> {
                       children: [
                         //default menu icons
 
-                        for (App app in installedApps)
+                        for (App app in apps)
                           if (menubarAppsPackageNames!
                               .contains(app.packageName))
-                            MenuIcon(app: app),
+                            if (appController.appStack
+                                    .checkApp(app.packageName) !=
+                                -1)
+                              MenuIcon(
+                                  apps: appController.appStack[appController
+                                      .appStack
+                                      .checkApp(app.packageName)])
+                            else
+                              MenuIcon(apps: [app]),
 
                         //currently opened apps other than the menuapps
 
-                        for (App app in appController.appStack)
+                        for (List<App> apps in appController.appStack)
                           if (!menubarAppsPackageNames!
-                              .contains(app.packageName))
-                            MenuIcon(app: app),
+                              .contains(apps[0].packageName))
+                            MenuIcon(apps: apps),
 
                         Spacer(),
 
@@ -86,5 +95,13 @@ class _MenuBarState extends State<MenuBar> {
                     );
                   })),
             ));
+  }
+}
+
+extension on List<List<App>> {
+  int checkApp(String packageName) {
+    for (int i = 0; i < this.length; i++)
+      if (this[i][0].packageName == packageName) return i;
+    return -1;
   }
 }

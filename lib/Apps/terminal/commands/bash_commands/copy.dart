@@ -48,6 +48,8 @@ class Cp implements DecodeCommand {
 
     print("[PATH 1] : $path1");
     print("[PATH 2] : $path2");
+    print("File1 $fileName1");
+    print("File2 $fileName2");
     String error = "File/folder not exist";
     late bool isDir;
     if (fileName1.isEmpty || fileName2.isEmpty)
@@ -65,7 +67,7 @@ class Cp implements DecodeCommand {
       }
     }
 
-    if (items2.isNotEmpty) error = "Destination folder is not Empty";
+    if (isDir && items2.isNotEmpty) error = "Destination folder is not Empty";
 
     if (error.isEmpty) {
       Shell shell = Shell.init()!;

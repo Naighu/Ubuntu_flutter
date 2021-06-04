@@ -50,14 +50,18 @@ class Evaluate {
       case 3:
         if (onPressed != null) onPressed!(MenuOptions.openTerminal);
         App? terminalApp = appController.getAppByPackageName("terminal");
-        appController.addApp(terminalApp, addByIgnoringDuplicates: true);
+        appController.addApp(
+          terminalApp,
+        );
         break;
 
       case 4:
         if (onPressed != null) onPressed!(MenuOptions.settings);
         App settingsApp = appController.getAppByPackageName("settings")!;
 
-        appController.addApp(settingsApp, addByIgnoringDuplicates: true);
+        appController.addApp(
+          settingsApp,
+        );
         break;
 
       case 5:

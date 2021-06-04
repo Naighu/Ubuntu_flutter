@@ -7,10 +7,11 @@ import '../System_Apps/Settings/settings_page.dart';
 
 import '../Apps/terminal/terminal.dart';
 
-final List<App> installedApps = [];
-
 class App {
   final String name, icon, packageName;
+
+  ///unique integer for the app
+  late int pid;
   late Size _size;
   Size get size => _getSize;
   bool hide = false, isMaximized = false;

@@ -77,8 +77,9 @@ class Desktop extends StatelessWidget {
 
             GetBuilder<AppController>(builder: (_) {
               return Stack(children: [
-                for (App app in controller.appStack)
-                  AppView(key: Key(app.name), app: app)
+                for (List<App> apps in controller.appStack)
+                  for (App app in apps)
+                    AppView(key: Key(app.pid.toString()), app: app)
               ]);
             })
           ],

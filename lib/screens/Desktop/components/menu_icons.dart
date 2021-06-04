@@ -7,40 +7,50 @@ import '../../../models/app.dart';
 import '../../../constants.dart';
 
 class MenuIcon extends StatelessWidget {
-  final App? app;
+  final List<App> apps;
 
-  MenuIcon({Key? key, this.app}) : super(key: key);
+  MenuIcon({Key? key, required this.apps}) : super(key: key);
   final appController = Get.find<AppController>();
   @override
   Widget build(BuildContext context) {
     return Tooltip(
-        message: app!.name,
+        message: apps[0].name,
         margin: EdgeInsets.only(left: menuWidth),
         verticalOffset: -10.0,
         child: Container(
-          color: appController.appStack.check(app)
+          color: appController.appStack.check(apps[0])
               ? Colors.white.withOpacity(0.3)
               : Colors.transparent,
           child: Stack(
             children: [
               // selected app icon dot
-              if (appController.appStack.check(app))
-                Container(
-                    height: 4.0,
-                    width: 4.0,
-                    margin: const EdgeInsets.only(top: 25.0, left: 5.0),
-                    decoration: BoxDecoration(
-                        color: Colors.red, shape: BoxShape.circle)),
+
+              Padding(
+                padding: EdgeInsets.only(top: (24.0 - 3 * (apps.length)).abs()),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    for (App app in apps)
+                      if (appController.appStack.check(app))
+                        Container(
+                            height: 4.0,
+                            width: 4.0,
+                            margin: const EdgeInsets.only(left: 8.0, bottom: 5),
+                            decoration: BoxDecoration(
+                                color: Colors.red, shape: BoxShape.circle)),
+                  ],
+                ),
+              ),
 
               TextButton(
                 onPressed: () {
-                  _onPressed(appController, app);
+                  _onPressed(appController, apps[0]);
                 },
                 child: SizedBox(
                   height: 50.0,
                   width: 30.0,
                   child: Image.asset(
-                    app!.icon,
+                    apps[0].icon,
                   ),
                 ),
               ),
@@ -50,11 +60,11 @@ class MenuIcon extends StatelessWidget {
   }
 
   /// if the app is not present in the [appStack] then it will add the app to the [appStack]
-  void _onPressed(AppController appController, App? app) {
+  void _onPressed(AppController appController, App app) {
     if (!appController.appStack.check(app))
-      appController.addApp(app, params: getParams(app!));
+      appController.addApp(app, params: getParams(app));
     else
-      appController.show(app!.packageName);
+      appController.show(app);
   }
 
   /// get the parameters to pass to the app when app's loading..
@@ -80,9 +90,10 @@ class MenuIcon extends StatelessWidget {
   }
 }
 
-extension on List {
-  bool check(App? app) {
-    for (App? a in this) if (a!.packageName == app!.packageName) return true;
+extension on List<List<App>> {
+  bool check(App app) {
+    for (List<App> apps in this)
+      for (App a in apps) if (a.packageName == app.packageName) return true;
 
     return false;
   }
