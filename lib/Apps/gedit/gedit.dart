@@ -46,7 +46,7 @@ class _GeditState extends State<Gedit> {
                       shadowColor: null,
                       backgroundColor: MaterialStateProperty.all(Colors.white)),
                   onPressed: () {
-                    Shell shell = Shell.init()!;
+                    WebShell shell = WebShell.init()!;
                     print(controller!.text);
                     shell.updateFile(widget.params!["path"], controller!.text);
                   },

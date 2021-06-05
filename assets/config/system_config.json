@@ -27,6 +27,7 @@
          {"icon" : "assets/app_icons/bash.png","name":"Terminal","packageName": "terminal"},
          {"icon" : "assets/app_icons/spotify.png","name":"Spottify","packageName": "spottify"},
          {"icon" : "assets/app_icons/gnome-control-center.png","name":"Settings","packageName": "settings"},
-         {"icon" : "assets/app_icons/gedit.png","name":"Gedit","packageName": "gedit"}
+         {"icon" : "assets/app_icons/gedit.png","name":"Gedit","packageName": "gedit"},
+         {"icon" : "assets/app_icons/profile.png","name":"User-Profile","packageName": "profile"}
     ]
 }
