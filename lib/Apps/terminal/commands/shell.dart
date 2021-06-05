@@ -8,11 +8,11 @@ abstract class DecodeCommand {
   dynamic executeCommand(BuildContext context, int? id, String command);
 }
 
-class Shell {
-  Shell._();
-  static Shell? _shell;
-  static Shell? init() {
-    if (_shell == null) _shell = Shell._();
+class WebShell {
+  WebShell._();
+  static WebShell? _shell;
+  static WebShell? init() {
+    if (_shell == null) _shell = WebShell._();
     return _shell;
   }
 
@@ -70,14 +70,10 @@ class Shell {
       List<String> map = cookie.split("=");
       String name = map[0].split("/").last;
 
-      if (name.startsWith("d-") ||
-          name.startsWith(
-              ".d-")) // if it starts with d then it is a directory. "." prefix indicates that it is a hidden directory
+      if (name.startsWith("d-")) // if it starts with d then it is a directory.
         items.add(
             Directory("${map[0].replaceAll("d-", "").replaceAll("~-", "")}"));
-      else if (name.startsWith("~-") ||
-          name.startsWith(
-              ".~-")) // if it starts with ~ then it is a file. "." prefix indicates that it is a hidden file
+      else if (name.startsWith("~-")) // if it starts with ~ then it is a file.
         items.add(File("${map[0].replaceAll("d-", "").replaceAll("~-", "")}"));
     }
 

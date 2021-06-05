@@ -9,7 +9,7 @@ class Cat implements DecodeCommand {
   dynamic executeCommand(BuildContext context, int? id, String command) {
     final controller = Get.find<TerminalController>();
     String output = "";
-    String path = Shell.init()!.getCorrectPath(command, controller.path!);
+    String path = WebShell.init()!.getCorrectPath(command, controller.path!);
     String fileName = path.split("/").last;
     if (fileName.isEmpty) {
       output = "Specify a name";
@@ -40,7 +40,7 @@ class Cat implements DecodeCommand {
   }
 
   String cat(String path) {
-    Shell shell = Shell.init()!;
+    WebShell shell = WebShell.init()!;
     String contents = shell.getContents(path);
     return contents;
   }

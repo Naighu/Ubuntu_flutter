@@ -66,10 +66,10 @@ class Desktop extends StatelessWidget {
             //listing the desktop files and folders
 
             GetBuilder<FileController>(
-                assignId: true,
                 id: rootDir,
                 init: FileController(),
                 builder: (controller) {
+                  debugPrint("[REBUILDING FILE EXPLORER]");
                   return FileUi(files: controller.getFiles(rootDir));
                 }),
 

@@ -15,11 +15,11 @@ class FileController extends GetxController {
   }
 
   ///updating the ui if new file or folder is added.
-  void updateUi(String path) {
+  void updateUi(String parentPath) {
     update([
-      path.getParentPath(),
+      /// it will rebuild the desktopUI only when a new file or folder is created or deleted in the rootDir path
+      parentPath,
 
-      /// it will rebuild the desktopui only when a new file or folder is created or deleted in the rootDir path
       "explorer" //Always rebuild the fileExplorer app when a new file or folder is created or deleted
     ]);
   }

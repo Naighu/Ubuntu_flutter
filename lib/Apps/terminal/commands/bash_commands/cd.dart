@@ -6,7 +6,7 @@ class Cd implements DecodeCommand {
   @override
   dynamic executeCommand(BuildContext context, int? id, String folder) {
     final controller = Get.find<TerminalController>();
-    Shell shell = Shell.init()!;
+    WebShell shell = WebShell.init()!;
     List items = shell.listDir();
     folder = folder.startsWith("/") ? folder : "/$folder";
     String? newPath = cd(items, controller.path, folder);

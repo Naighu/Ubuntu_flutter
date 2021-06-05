@@ -8,22 +8,23 @@ class AppController extends GetxController {
   final List<List<App>> _appStack = [];
   List<List<App>> get appStack => _appStack;
   int key = 0;
+
+  ///keeps track of prevSize of the appWindow
   Size? prevSize;
+
+  ///keeps track of prevOffset of the appWindow
   Offset? prevOffset;
 
   /// add App to the stack.
   /// [params] send the parameters to the app
-  /// [addByIgnoringDuplicates] if the app with same packagename already present in the stack ,it will not add.
 
   void addApp(App? app, {Map? params}) {
-    //  if (addByIgnoringDuplicates) {
-    //   if (!appStack.checkPackageName(app!.packageName)) {
     app!.child = openApp(app, params: params);
     bool flag = false;
     for (int i = 0; i < _appStack.length; i++)
       for (App a in _appStack[i]) {
         if (a.packageName == app.packageName) {
-          app.pid = i + _appStack[i].length;
+          app.pid = int.parse("$i" + "${_appStack[i].length}");
           _appStack[i].add(app);
           flag = true;
           break;
@@ -34,11 +35,6 @@ class AppController extends GetxController {
       _appStack.add([app]);
     }
 
-    //   }
-    // } else {
-    //   app!.child = openApp(app, params: params);
-    //   _appStack.add(app);
-    // }
     update();
   }
 
@@ -79,15 +75,10 @@ class AppController extends GetxController {
 
   ///Returns [App] of the specified packagename
   App? getAppByPackageName(String? packageName) {
-    List<App> installedApps = [];
     List b = SystemFiles.getObject().getInstalledApps()!;
 
-    b.forEach((e) => installedApps.add(App.fromJson(e)));
-
-    for (App app in installedApps)
-      if (app.packageName == packageName) {
-        return app;
-      }
+    for (Map c in b)
+      if (c["packageName"] == packageName) return App.fromJson(c);
   }
 
   ///show the app on screen
@@ -122,12 +113,5 @@ class AppController extends GetxController {
     app.setOffset = prevOffset!;
     app.isMaximized = false;
     update();
-  }
-}
-
-extension on List {
-  bool checkPackageName(String packageName) {
-    for (App? a in this) if (a!.packageName == packageName) return true;
-    return false;
   }
 }

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:ubuntu/controllers/app_controller.dart';
+import 'package:ubuntu/models/app.dart';
 import '../../../controllers/system_controller.dart';
 import '../../../screens/Desktop/components/status_menu_items.dart';
 import '../../../screens/Lock_Screen/lock_screen.dart';
@@ -86,9 +88,15 @@ class _StatusMenuState extends State<StatusMenu> {
               endIndent: 50.0,
             ),
             StatusMenuItems(
-                title: "Settings",
-                image: "assets/status/1.svg",
-                trailingIcon: true),
+              title: "User Profile",
+              image: "assets/status/about.svg",
+              trailingIcon: true,
+              onPressed: () {
+                AppController appController = Get.find<AppController>();
+                App? app = appController.getAppByPackageName("profile");
+                appController.addApp(app);
+              },
+            ),
             StatusMenuItems(
                 title: "Lock Screen",
                 image: "assets/status/changes-prevent-symbolic.svg",

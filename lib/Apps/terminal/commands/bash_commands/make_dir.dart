@@ -37,9 +37,9 @@ class Mkdir implements DecodeCommand {
       }
     }
     if (error.isEmpty) {
-      Shell shell = Shell.init()!;
+      WebShell shell = WebShell.init()!;
       shell.create((path! + "/$fileName").trim());
-      fileController.updateUi(path + "/$fileName");
+      fileController.updateUi(path);
       return "";
     } else
       return error;
@@ -55,7 +55,7 @@ class Rmdir implements DecodeCommand {
     String message;
     //compiling the path
     if (command.isNotEmpty) {
-      String path = Shell.init()!.getCorrectPath(command, controller.path!);
+      String path = WebShell.init()!.getCorrectPath(command, controller.path!);
       if (path.isNotEmpty) {
         List a = path.split("/");
 
@@ -98,10 +98,11 @@ class Rmdir implements DecodeCommand {
       var dirs = ls.ls(path +
           "/$fileName"); //checking if the selected folder is empty or not
       if (dirs.isEmpty) {
-        Shell shell = Shell.init()!;
+        WebShell shell = WebShell.init()!;
         print(path + "$fileName");
         shell.remove(path + "/$fileName");
-        fileController.updateUi(path + "/$fileName");
+        print("PATH:$path");
+        fileController.updateUi(path);
         return "";
       } else
         error = "Directory is not empty";

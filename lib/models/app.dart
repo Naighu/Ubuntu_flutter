@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:ubuntu/System_Apps/profile/profilepage.dart';
 import '../Apps/gedit/gedit.dart';
 import '../Apps/webview/webview.dart';
 import '../System_Apps/File_Explorer/file_explore.dart';
@@ -83,6 +84,12 @@ Widget? openApp(App app, {Map? params}) {
       break;
     case "gedit":
       wid = Gedit(
+        app: app,
+        params: params,
+      );
+      break;
+    case "profile":
+      wid = ProfilePage(
         app: app,
         params: params,
       );

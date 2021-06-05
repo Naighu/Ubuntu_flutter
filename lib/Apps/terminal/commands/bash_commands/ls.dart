@@ -29,7 +29,7 @@ class Ls implements DecodeCommand {
   }
 
   List lsWeb(String? path) {
-    Shell shell = Shell.init()!;
+    WebShell shell = WebShell.init()!;
     List items = shell.listDir();
     List _items = [];
     for (FileSystemEntity item in items) {

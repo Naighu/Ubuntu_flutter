@@ -11,14 +11,14 @@ class Cp implements DecodeCommand {
     final fileController = Get.find<FileController>();
     String message, path1, path2, fileName1, fileName2;
     if (command.isNotEmpty) {
-      path1 =
-          Shell.init()!.getCorrectPath(command.split(" ")[0], controller.path!);
+      path1 = WebShell.init()!
+          .getCorrectPath(command.split(" ")[0], controller.path!);
       if (path1.isNotEmpty) {
         List a = path1.split("/");
 
         fileName1 = a.removeLast();
         path1 = a.join("/");
-        path2 = Shell.init()!
+        path2 = WebShell.init()!
             .getCorrectPath(command.split(" ").last, controller.path!);
         if (path2.isNotEmpty) {
           List a = path2.split("/");
@@ -70,9 +70,9 @@ class Cp implements DecodeCommand {
     if (isDir && items2.isNotEmpty) error = "Destination folder is not Empty";
 
     if (error.isEmpty) {
-      Shell shell = Shell.init()!;
+      WebShell shell = WebShell.init()!;
       shell.create(path2 + "/$fileName2", option: isDir ? "dir" : "file");
-      fileController.updateUi(path2 + "/$fileName2");
+      fileController.updateUi(path2);
       return "";
     } else
       return error;

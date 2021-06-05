@@ -68,10 +68,9 @@ class Evaluate {
         if (onPressed != null) onPressed!(MenuOptions.delete);
         if (file!.file is File)
           Rm().rm(fileController, currentPath, file!.fileName!);
-        else {
-          var a = Rmdir().rmdir(fileController, currentPath, file!.fileName!);
-          print(a);
-        }
+        else
+          Rmdir().rmdir(fileController, currentPath, file!.fileName!);
+
         break;
 
       case 6:

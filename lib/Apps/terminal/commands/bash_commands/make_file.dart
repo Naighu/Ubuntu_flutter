@@ -40,9 +40,9 @@ class Touch implements DecodeCommand {
       }
     }
     if (error.isEmpty) {
-      Shell shell = Shell.init()!;
+      WebShell shell = WebShell.init()!;
       shell.create(path! + "/$fileName", option: "file", value: contents);
-      fileController.updateUi(path + "/$fileName");
+      fileController.updateUi(path);
       return "";
     } else
       return error;
@@ -57,7 +57,7 @@ class Rm implements DecodeCommand {
     String message;
     //compiling the path
     if (command.isNotEmpty) {
-      String path = Shell.init()!.getCorrectPath(command, controller.path!);
+      String path = WebShell.init()!.getCorrectPath(command, controller.path!);
       if (path.isNotEmpty) {
         List a = path.split("/");
 
@@ -86,9 +86,6 @@ class Rm implements DecodeCommand {
     String error = "File not Found";
 
     for (var item in items) {
-      List split = item.path.split("/");
-      split.removeLast();
-
       if (item is File && item.path.trim() == (path + "/$fileName").trim()) {
         error = "";
         break;
@@ -96,9 +93,9 @@ class Rm implements DecodeCommand {
     }
 
     if (error.isEmpty) {
-      Shell shell = Shell.init()!;
+      WebShell shell = WebShell.init()!;
       shell.remove(path + "/$fileName", option: "file");
-      fileController.updateUi(path + "/$fileName");
+      fileController.updateUi(path.trim());
       return "";
     }
     return error;
