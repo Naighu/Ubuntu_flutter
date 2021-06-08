@@ -91,8 +91,8 @@ class _AppViewState extends State<AppView> with SingleTickerProviderStateMixin {
     Offset newOffset = app!.offset + (details.globalPosition - startDragOffset);
     Size appSize = app!.size;
     // boundary conditions to drag
-    if (newOffset.dx + appSize.width < size.width &&
-        newOffset.dy + appSize.height < size.height &&
+    if (newOffset.dx + appSize.width * 0.5 < size.width &&
+        newOffset.dy + appSize.height * 0.5 < size.height &&
         newOffset.dy > 0 &&
         newOffset.dx > 0) {
       setState(() {

@@ -3,28 +3,35 @@ import 'package:get/get.dart';
 import '../../../Apps/terminal/commands/bash_commands/command_packages.dart';
 import '../../../Apps/terminal/commands/show_commands.dart';
 
-class Header extends StatefulWidget {
-  final int id;
-  final String header;
-  const Header({required this.id, required this.header});
+class HeaderBlock extends StatefulWidget {
+  final String tag;
+  final Header header;
+  const HeaderBlock({required this.header, required this.tag, Key? key})
+      : super(key: key);
 
   @override
   _HeaderState createState() => _HeaderState();
 }
 
-class _HeaderState extends State<Header> {
-  ///inorder to avoid editing of the textfield when the enter key is pressed;
+class _HeaderState extends State<HeaderBlock> {
+  ///inorder to avoid editing  the textfield when the enter key is pressed;
   bool readMode = false;
-  final controller = Get.find<TerminalController>();
+  late TerminalController controller;
+  @override
+  void initState() {
+    controller = Get.find<TerminalController>(tag: widget.tag);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return IntrinsicHeight(
       child: Row(
         children: [
           Text(
-              widget.header.isEmpty
+              widget.header.header.isEmpty
                   ? "naighu@ubuntu:-\$${controller.path}"
-                  : widget.header + "-\$${controller.path}",
+                  : widget.header.header + "-\$${controller.path}",
               style: Theme.of(context).textTheme.bodyText2),
           Expanded(
             child: ConstrainedBox(
@@ -59,23 +66,25 @@ class _HeaderState extends State<Header> {
   }
 
   void _onSubmitted(String val) {
+    print("[Tag NAme is] : ${widget.tag}");
+    print("[Id NAme is] : ${widget.header.id}");
     if (val.isNotEmpty) {
       List<String> commandsplit = val.split(" ");
       if (commands.containsKey(commandsplit[0])) {
-        commands[val.split(" ")[0]]!
-            .executeCommand(context, widget.id, commandsplit.skip(1).join(" "));
+        commands[val.split(" ")[0]]!.executeCommand(
+            widget.tag, widget.header.id, commandsplit.skip(1).join(" "));
       } else {
-        controller.addOutputString(widget.id, "no such commands\n\n",
-            end: false);
-        controller.addOutputString(widget.id, "Available Commands are : \n\n",
+        controller.addOutputString(widget.header.id, "no such commands\n\n",
             end: false);
         controller.addOutputString(
-          widget.id,
+            widget.header.id, "Available Commands are : \n\n",
+            end: false);
+        controller.addOutputString(
+          widget.header.id,
           "* mkdir\n* rmdir\n* touch \n* rm \n* cd \n* ls\n* cat\n *sudo \n* pwd\n* clear\n",
         );
       }
-    } else {
-      controller.addOutputString(widget.id, "");
-    }
+    } else
+      controller.addOutputString(widget.header.id, "");
   }
 }

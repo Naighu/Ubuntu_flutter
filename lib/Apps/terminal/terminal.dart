@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:ubuntu/Apps/terminal/components/header.dart';
+import 'package:ubuntu/Apps/terminal/components/output_block.dart';
+import 'package:ubuntu/controllers/system_controller.dart';
 import '../../models/app.dart';
 import 'controllers/terminal_controller.dart';
 
@@ -10,16 +13,33 @@ class Terminal extends StatelessWidget {
   const Terminal({Key? key, this.app, this.params}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return GetX<TerminalController>(
-        init: TerminalController(),
-        builder: (controller) {
-          return Container(
-              color: Theme.of(context).primaryColor,
-              child: ListView(
-                key: Key(controller.cleared
-                    .toString()), //inorder to repaint the listview when clear command is executed
-                children: [for (var block in controller.blocks) block],
-              ));
-        });
+    int tag = Get.find<SystemController>().terminalControllerTags + 1;
+    Get.find<SystemController>().terminalControllerTags = tag;
+
+    return Container(
+        color: Theme.of(context).primaryColor,
+        child: GetBuilder<TerminalController>(
+            tag: "$tag",
+            init: TerminalController(app: app!),
+            builder: (controller) {
+              return GetBuilder<TerminalController>(
+                  key: Key(controller.cleared.toString()),
+                  tag: "$tag",
+                  builder: (_) {
+                    return ListView(
+                        children:
+                            List.generate(controller.blocks.length, (index) {
+                      if (controller.blocks[index] is Header)
+                        return HeaderBlock(
+                          tag: "$tag",
+                          header: controller.blocks[index],
+                        );
+                      else if (controller.blocks[index] is TerminalOutput)
+                        return OutputBlock(
+                            tag: "$tag", output: controller.blocks[index]);
+                      return Offstage();
+                    }));
+                  });
+            }));
   }
 }

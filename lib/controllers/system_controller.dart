@@ -8,6 +8,9 @@ class SystemController extends GetxController {
   ///track the width of the menubar
   final menubarWidth = menuWidth.obs;
 
+  ///number of terminal apps opened
+  int terminalControllerTags = 0;
+
   ///desktop wallpaper
   var desktopWallpaper;
   SystemController() {

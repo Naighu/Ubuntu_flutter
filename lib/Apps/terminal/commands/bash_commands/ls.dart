@@ -6,8 +6,8 @@ import '../shell.dart';
 
 class Ls implements DecodeCommand {
   @override
-  dynamic executeCommand(BuildContext context, int? id, String command) {
-    final controller = Get.find<TerminalController>();
+  dynamic executeCommand(String tag, int id, String command) {
+    final controller = Get.find<TerminalController>(tag: tag);
 
     String path;
     if (command.startsWith("/") || command.isEmpty)
@@ -21,7 +21,7 @@ class Ls implements DecodeCommand {
       _items += item.path.split("/").last;
       _items += "  ";
     }
-    controller.addOutputString(id!, _items);
+    controller.addOutputString(id, _items);
   }
 
   ls(String? path) {

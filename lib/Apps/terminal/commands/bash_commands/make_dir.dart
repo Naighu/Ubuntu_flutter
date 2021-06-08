@@ -6,11 +6,11 @@ import 'command_packages.dart';
 
 class Mkdir implements DecodeCommand {
   @override
-  dynamic executeCommand(BuildContext context, int? id, String fileName) {
-    final controller = Get.find<TerminalController>();
+  dynamic executeCommand(String tag, int id, String folderName) {
+    final controller = Get.find<TerminalController>(tag: tag);
     final fileController = Get.find<FileController>();
-    String? message = mkdir(fileController, controller.path, fileName);
-    controller.addOutputString(id!, message);
+    String? message = mkdir(fileController, controller.path, folderName);
+    controller.addOutputString(id, message);
   }
 
   String? mkdir(FileController fileController, String? path, String fileName) {
@@ -48,9 +48,9 @@ class Mkdir implements DecodeCommand {
 
 class Rmdir implements DecodeCommand {
   @override
-  dynamic executeCommand(BuildContext context, int? id, String command) {
+  dynamic executeCommand(String tag, int id, String command) {
     print("[Executing RMDIR]");
-    final controller = Get.find<TerminalController>();
+    final controller = Get.find<TerminalController>(tag: tag);
     final fileController = Get.find<FileController>();
     String message;
     //compiling the path
@@ -69,7 +69,7 @@ class Rmdir implements DecodeCommand {
       }
     } else
       message = "Specify a Directory name";
-    controller.addOutputString(id!, message);
+    controller.addOutputString(id, message);
   }
 
   rmdir(FileController fileController, String path, String fileName) {

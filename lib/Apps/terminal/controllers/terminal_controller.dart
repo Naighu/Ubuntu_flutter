@@ -1,15 +1,14 @@
 import 'package:get/get.dart';
-import '../../../Apps/terminal/components/header.dart';
-import '../../../Apps/terminal/components/output_block.dart';
+import 'package:ubuntu/models/app.dart';
 
 import '../../../constants.dart';
 
 ///Controller for terminal screen.
 
 class TerminalController extends GetxController {
-  RxList blocks = [].obs;
-  List<TerminalOutput>? _outputs;
-  List<TerminalOutput>? get outputs => _outputs;
+  late List blocks;
+  late App app;
+  late List<TerminalOutput> outputs;
   String? _prevHeader;
 
   ///Present working path
@@ -17,14 +16,18 @@ class TerminalController extends GetxController {
 
   /// inorder to work clear command.. used as key for listView
   int cleared = 0;
-  TerminalController() {
+  TerminalController({
+    String header = "",
+    String currentPath = rootDir,
+    required this.app,
+  }) {
     _prevHeader = "";
+    blocks = [];
     blocks.add(Header(
-      id: 0, //initial id as 0
-      header: "",
-    ));
-    _outputs = [];
-    path = rootDir;
+        id: 0, //initial id as 0
+        header: header));
+    outputs = [];
+    path = currentPath;
   }
 
   /// Output result is added to the terminal...
@@ -33,18 +36,16 @@ class TerminalController extends GetxController {
   void addOutputString(int id, String? text,
       {bool end = true, String header = ""}) {
     TerminalOutput terminalOutput;
-
-    if (id > _outputs!.length - 1) {
-      blocks.add(OutputBlock(
-        id: id,
-      ));
-      terminalOutput = TerminalOutput(id)..outputs.add(text);
-      _outputs!.add(terminalOutput);
+    if (id > outputs.length - 1) {
+      terminalOutput = TerminalOutput(id);
+      blocks.add(terminalOutput);
+      terminalOutput.outputs.add(text);
+      outputs.add(terminalOutput);
     } else {
-      terminalOutput = _outputs![id];
+      terminalOutput = outputs[id];
 
       terminalOutput.outputs.add(text);
-      _outputs![id] = terminalOutput;
+      outputs[id] = terminalOutput;
     }
 
     if (end) {
@@ -52,18 +53,17 @@ class TerminalController extends GetxController {
           Header(id: id + 1, header: header.isEmpty ? _prevHeader! : header));
       _prevHeader = header.isEmpty ? _prevHeader : header;
     }
-    update([id]);
+    print("ADDED");
+    update();
   }
 
   /// removes all the blocks..
-  void removeAll() {
+  void removeAll(String tag) {
     cleared += 1;
     blocks.clear();
-    _outputs!.clear();
-    blocks.add(Header(
-      id: 0,
-      header: _prevHeader!,
-    ));
+    outputs.clear();
+    blocks.add(Header(id: 0, header: _prevHeader!));
+    update();
   }
 }
 
@@ -75,4 +75,11 @@ class TerminalOutput {
   TerminalOutput(this.id) {
     outputs = [];
   }
+}
+
+class Header {
+  final int id;
+  final String header;
+
+  Header({required this.id, required this.header});
 }

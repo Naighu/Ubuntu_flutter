@@ -6,8 +6,8 @@ import 'command_packages.dart';
 
 class Cp implements DecodeCommand {
   @override
-  dynamic executeCommand(BuildContext context, int? id, String command) {
-    final controller = Get.find<TerminalController>();
+  dynamic executeCommand(String tag, int id, String command) {
+    final controller = Get.find<TerminalController>(tag: tag);
     final fileController = Get.find<FileController>();
     String message, path1, path2, fileName1, fileName2;
     if (command.isNotEmpty) {
@@ -32,7 +32,7 @@ class Cp implements DecodeCommand {
         message = "Incorrect path";
     } else
       message = "Specify a File name";
-    controller.addOutputString(id!, message);
+    controller.addOutputString(id, message);
   }
 
   cp(FileController fileController, String path1, String fileName1,

@@ -4,8 +4,8 @@ import 'command_packages.dart';
 
 class Cd implements DecodeCommand {
   @override
-  dynamic executeCommand(BuildContext context, int? id, String folder) {
-    final controller = Get.find<TerminalController>();
+  dynamic executeCommand(String tag, int id, String folder) {
+    final controller = Get.find<TerminalController>(tag: tag);
     WebShell shell = WebShell.init()!;
     List items = shell.listDir();
     folder = folder.startsWith("/") ? folder : "/$folder";
@@ -13,7 +13,7 @@ class Cd implements DecodeCommand {
     if (newPath != controller.path) {
       controller.path = newPath;
       controller.addOutputString(
-        id!,
+        id,
         "",
       );
       //  controller.headers.add(newPath);

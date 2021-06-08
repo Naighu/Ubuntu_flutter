@@ -5,17 +5,17 @@ import 'command_packages.dart';
 
 class Sudo implements DecodeCommand {
   @override
-  executeCommand(BuildContext context, int? id, String command) async {
-    final controller = Get.find<TerminalController>();
+  executeCommand(String tag, int id, String command) async {
+    final controller = Get.find<TerminalController>(tag: tag);
 
-    controller.addOutputString(id!, "Switching to super user mode ...\n",
+    controller.addOutputString(id, "Switching to super user mode ...\n",
         end: false);
     await Future.delayed(const Duration(milliseconds: 1000));
     if (command.isNotEmpty) {
       List<String> commandsplit = command.split(" ");
       if (commands.containsKey(commandsplit[0])) {
         commands[command.split(" ")[0]]!
-            .executeCommand(context, id, commandsplit.skip(1).join(" "));
+            .executeCommand(tag, id, commandsplit.skip(1).join(" "));
       } else {
         if (commandsplit[0] == "su") {
           su(controller, id);

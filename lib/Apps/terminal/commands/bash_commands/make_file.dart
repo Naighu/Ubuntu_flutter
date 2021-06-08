@@ -8,11 +8,11 @@ import 'ls.dart';
 
 class Touch implements DecodeCommand {
   @override
-  executeCommand(BuildContext context, int? id, String fileName) {
-    final controller = Get.find<TerminalController>();
+  executeCommand(String tag, int id, String fileName) {
+    final controller = Get.find<TerminalController>(tag: tag);
     final fileController = Get.find<FileController>();
     String message = touch(fileController, controller.path, fileName);
-    controller.addOutputString(id!, message);
+    controller.addOutputString(id, message);
   }
 
   touch(FileController fileController, String? path, String fileName,
@@ -51,8 +51,8 @@ class Touch implements DecodeCommand {
 
 class Rm implements DecodeCommand {
   @override
-  dynamic executeCommand(BuildContext context, int? id, String command) {
-    final controller = Get.find<TerminalController>();
+  dynamic executeCommand(String tag, int id, String command) {
+    final controller = Get.find<TerminalController>(tag: tag);
     final fileController = Get.find<FileController>();
     String message;
     //compiling the path
@@ -73,7 +73,7 @@ class Rm implements DecodeCommand {
       }
     } else
       message = "Specify a File name";
-    controller.addOutputString(id!, message);
+    controller.addOutputString(id, message);
   }
 
   rm(FileController fileController, String path, String fileName) {

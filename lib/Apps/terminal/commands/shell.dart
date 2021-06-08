@@ -1,11 +1,10 @@
 import 'dart:io';
 
 import 'package:flutter/foundation.dart' show kIsWeb;
-import 'package:flutter/material.dart';
 import '../../../utils/cookie_manager.dart';
 
 abstract class DecodeCommand {
-  dynamic executeCommand(BuildContext context, int? id, String command);
+  dynamic executeCommand(String tag, int id, String command);
 }
 
 class WebShell {

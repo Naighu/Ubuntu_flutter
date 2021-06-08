@@ -6,8 +6,8 @@ import 'ls.dart';
 
 class Cat implements DecodeCommand {
   @override
-  dynamic executeCommand(BuildContext context, int? id, String command) {
-    final controller = Get.find<TerminalController>();
+  dynamic executeCommand(String tag, int id, String command) {
+    final controller = Get.find<TerminalController>(tag: tag);
     String output = "";
     String path = WebShell.init()!.getCorrectPath(command, controller.path!);
     String fileName = path.split("/").last;
@@ -21,7 +21,7 @@ class Cat implements DecodeCommand {
       else
         output = "No such file";
     }
-    controller.addOutputString(id!, output);
+    controller.addOutputString(id, output);
   }
 
   bool checkFileExistOnWeb(String path, String fileName, controller) {
