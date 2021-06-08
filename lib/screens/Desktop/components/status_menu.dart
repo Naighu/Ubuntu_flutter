@@ -137,8 +137,9 @@ class _StatusMenuState extends State<StatusMenu> {
       );
 
   Route _createRoute() {
-    widget.entry?.remove();
-    DialogBox.entry?.remove();
+    if (widget.entry != null && widget.entry!.mounted) widget.entry?.remove();
+    if (DialogBox.entry != null && DialogBox.entry!.mounted)
+      DialogBox.entry?.remove();
     return PageRouteBuilder(
       transitionDuration: const Duration(milliseconds: 500),
       reverseTransitionDuration: const Duration(milliseconds: 500),
