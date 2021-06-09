@@ -8,6 +8,7 @@ import '../../../constants.dart';
 class TerminalController extends GetxController {
   late List blocks;
   late App app;
+  bool sudoMode = false;
   late List<TerminalOutput> outputs;
   String? _prevHeader;
 
@@ -17,11 +18,11 @@ class TerminalController extends GetxController {
   /// inorder to work clear command.. used as key for listView
   int cleared = 0;
   TerminalController({
-    String header = "",
+    String header = "naighu@ubuntu:-\$$rootDir",
     String currentPath = rootDir,
     required this.app,
   }) {
-    _prevHeader = "";
+    _prevHeader = header;
     blocks = [];
     blocks.add(Header(
         id: 0, //initial id as 0

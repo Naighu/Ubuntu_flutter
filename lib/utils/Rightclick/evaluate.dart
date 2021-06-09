@@ -92,15 +92,13 @@ class Evaluate {
       case 8:
         if (systemController.clipboard != null) {
           if (onPressed != null) onPressed!(MenuOptions.paste);
-          if (systemController.clipboard!.file is File) {
-            Touch().touch(Get.find<FileController>(), currentPath,
-                "${systemController.clipboard!.fileName}",
-                contents:
-                    "${Cat().cat(systemController.clipboard!.file!.path)}");
-          } else {
-            Mkdir().mkdir(Get.find<FileController>(), currentPath,
-                "${systemController.clipboard!.fileName}");
-          }
+
+          Cp().cp(
+              fileController,
+              systemController.clipboard!.file!.path.getParentPath(),
+              systemController.clipboard!.fileName!,
+              currentPath,
+              systemController.clipboard!.fileName!);
         }
         break;
     }

@@ -34,7 +34,7 @@
   </head>
    <body style="background-color: #222222;">
     <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
-    <center >
+    <center id="loading" style="display: block;" >
   
     <image style="padding-top: 5%;" src="icons/logo.png" place-holder="Ubuntu logo" height="180px" width="180px">
  
@@ -45,7 +45,7 @@
       src="http://localhost:8000/icons/loading.json"
       background="transparent"
       speed="0.5"
-      style="width: 100px; height: 100px aligment:center"
+      style="width: 100px; height: 100px; margin-top: 40%"
       loop
       autoplay
     ></lottie-player>
@@ -55,15 +55,18 @@
       window.addEventListener(
         "contextmenu",
         function (e) {
-          // do something here...
-          e.preventDefault();
+        
+                    e.preventDefault();
         },
         false
       );
     </script>
     <script>
+  
       if ("serviceWorker" in navigator) {
         window.addEventListener("flutter-first-frame", function () {
+            document.getElementById("loading").style.display = "none";
+            console.log("app starting");
           navigator.serviceWorker.register("flutter_service_worker.js");
         });
       }

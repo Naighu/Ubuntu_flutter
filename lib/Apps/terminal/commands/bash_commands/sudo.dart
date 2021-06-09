@@ -27,6 +27,7 @@ class Sudo implements DecodeCommand {
   }
 
   su(TerminalController controller, int id) {
-    controller.addOutputString(id, "", header: "root");
+    controller.sudoMode = true;
+    controller.addOutputString(id, "", header: "root:-\$${controller.path}");
   }
 }

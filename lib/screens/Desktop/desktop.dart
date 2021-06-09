@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ubuntu/utils/Rightclick/evaluate.dart';
@@ -15,6 +16,7 @@ import 'components/menubar.dart';
 
 class Desktop extends StatelessWidget {
   final controller = Get.put(AppController());
+  final systemController = Get.put(SystemController());
   @override
   Widget build(BuildContext context) {
     OverlayEntry? entry;
@@ -36,53 +38,54 @@ class Desktop extends StatelessWidget {
           // removing the status menu pop up overlay
           if (entry != null && entry!.mounted) entry?.remove();
         },
-        child: Stack(
-          children: [
-            // Desktop wallpeper
+        child: MouseRegion(
+          onHover: _onMouseHover,
+          child: Stack(
+            children: [
+              // Desktop wallpeper
 
-            GetX<SystemController>(
-              init: SystemController(),
-              builder: (wallpaper) => Container(
-                height: size.height,
-                width: size.width,
-                decoration: BoxDecoration(
-                    image: DecorationImage(
-                  image: Image.asset(
-                          "assets/wallpapers/${wallpaper.desktopWallpaper.value}")
-                      .image,
-                  fit: BoxFit.cover,
-                )),
+              GetX<SystemController>(
+                builder: (wallpaper) => Container(
+                  height: size.height,
+                  width: size.width,
+                  decoration: BoxDecoration(
+                      image: DecorationImage(
+                    image: Image.asset(
+                            "assets/wallpapers/${wallpaper.desktopWallpaper.value}")
+                        .image,
+                    fit: BoxFit.cover,
+                  )),
+                ),
               ),
-            ),
 
-            // menu bar
+              //listing the desktop files and folders
 
-            Positioned(
-                left: 0,
-                width: menuWidth,
-                height: size.height,
-                child: MenuBar()),
+              GetBuilder<FileController>(
+                  id: rootDir,
+                  init: FileController(),
+                  builder: (controller) {
+                    debugPrint("[REBUILDING FILE EXPLORER]");
+                    return FileUi(files: controller.getFiles(rootDir));
+                  }),
 
-            //listing the desktop files and folders
+              // shows the opened apps in the window
 
-            GetBuilder<FileController>(
-                id: rootDir,
-                init: FileController(),
-                builder: (controller) {
-                  debugPrint("[REBUILDING FILE EXPLORER]");
-                  return FileUi(files: controller.getFiles(rootDir));
-                }),
+              GetBuilder<AppController>(builder: (_) {
+                return Stack(children: [
+                  for (List<App> apps in controller.appStack)
+                    for (App app in apps)
+                      AppView(key: Key(app.pid.toString()), app: app)
+                ]);
+              }),
+              // menu bar
 
-            // shows the opened apps in the window
-
-            GetBuilder<AppController>(builder: (_) {
-              return Stack(children: [
-                for (List<App> apps in controller.appStack)
-                  for (App app in apps)
-                    AppView(key: Key(app.pid.toString()), app: app)
-              ]);
-            })
-          ],
+              Positioned(
+                  left: 0,
+                  width: menuWidth,
+                  height: size.height,
+                  child: MenuBar()),
+            ],
+          ),
         ),
       ),
     );
@@ -97,5 +100,19 @@ class Desktop extends StatelessWidget {
       MenuOptions.openTerminal,
       MenuOptions.settings,
     ]).showOnRightClickMenu(context, event, Evaluate(currentPath: rootDir));
+  }
+
+  void _onMouseHover(PointerHoverEvent pointer) {
+    if (pointer.position.dx <= menuWidth &&
+        systemController.menubarWidth.value != menuWidth) {
+      systemController.menubarWidth.value = menuWidth;
+    } else if (pointer.position.dx > menuWidth &&
+        systemController.menubarWidth.value == menuWidth) {
+      for (List<App> apps in controller.appStack) {
+        for (App app in apps) {
+          if (app.isMaximized) systemController.menubarWidth.value = 0;
+        }
+      }
+    }
   }
 }

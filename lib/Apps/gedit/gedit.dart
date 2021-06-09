@@ -1,8 +1,11 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:ubuntu/Apps/terminal/commands/commands.dart';
 
 import 'package:ubuntu/Apps/terminal/commands/shell.dart';
+import 'package:ubuntu/constants.dart';
 import 'package:ubuntu/models/app.dart';
 
 class Gedit extends StatefulWidget {
@@ -15,7 +18,7 @@ class Gedit extends StatefulWidget {
 }
 
 class _GeditState extends State<Gedit> {
-  TextEditingController? controller;
+  late TextEditingController controller;
   @override
   void initState() {
     super.initState();
@@ -27,7 +30,7 @@ class _GeditState extends State<Gedit> {
 
   @override
   void dispose() {
-    controller!.dispose();
+    controller.dispose();
     super.dispose();
   }
 
@@ -35,34 +38,53 @@ class _GeditState extends State<Gedit> {
   Widget build(BuildContext context) {
     return Container(
         color: Colors.white,
-        padding: const EdgeInsets.all(10.0),
-        child: Column(
+        child: Stack(
           children: [
-            Align(
-              alignment: Alignment.topRight,
-              child: TextButton(
-                  style: ButtonStyle(
-                      elevation: MaterialStateProperty.all(5.0),
-                      shadowColor: null,
-                      backgroundColor: MaterialStateProperty.all(Colors.white)),
-                  onPressed: () {
-                    WebShell shell = WebShell.init()!;
-                    print(controller!.text);
-                    shell.updateFile(widget.params!["path"], controller!.text);
-                  },
-                  child: Text(
-                    "Save",
-                    style: Theme.of(context).textTheme.bodyText2,
-                  )),
+            Container(
+              color: Theme.of(context).backgroundColor,
+              padding: const EdgeInsets.only(right: defaultPadding),
+              height: 50,
+              width: double.infinity,
+              child: GestureDetector(
+                onTap: () {
+                  WebShell shell = WebShell.init()!;
+                  print(controller.text);
+                  shell.updateFile(widget.params!["path"], controller.text);
+                },
+                child: Align(
+                  alignment: Alignment.centerRight,
+                  child: Container(
+                      width: 60.0,
+                      height: 30.0,
+                      alignment: Alignment.center,
+                      decoration:
+                          BoxDecoration(color: Theme.of(context).accentColor),
+                      child: Text(
+                        "Save",
+                        style: Theme.of(context).textTheme.bodyText2,
+                      )),
+                ),
+              ),
             ),
-            TextField(
-              autofocus: true,
-              decoration: null,
-              maxLines: null,
-              style:
-                  Theme.of(context).textTheme.subtitle2!.copyWith(fontSize: 16),
-              keyboardType: TextInputType.multiline,
-              controller: controller,
+            Padding(
+              padding: const EdgeInsets.only(top: 50.0),
+              child: ListView(
+                children: [
+                  TextField(
+                    autofocus: true,
+                    decoration: null,
+                    maxLines: null,
+                    minLines: null,
+                    expands: true,
+                    style: Theme.of(context)
+                        .textTheme
+                        .subtitle2!
+                        .copyWith(fontSize: 16),
+                    keyboardType: TextInputType.multiline,
+                    controller: controller,
+                  ),
+                ],
+              ),
             ),
           ],
         ));

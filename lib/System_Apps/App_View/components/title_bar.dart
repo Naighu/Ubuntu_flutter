@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import '../../../controllers/system_controller.dart';
 import '../../../controllers/app_controller.dart';
@@ -43,8 +44,10 @@ PreferredSizeWidget titleBar(BuildContext context, App app, ThemeData theme,
             }
             onScreenSizeChanged(!app.isMaximized);
           },
-          child:
-              Icon(Icons.crop_square, size: 16, color: theme.iconTheme.color)),
+          child: Icon(
+              app.isMaximized ? FontAwesomeIcons.clone : Icons.crop_square,
+              size: 16,
+              color: theme.iconTheme.color)),
       const SizedBox(width: defaultPadding),
       Container(
         margin: const EdgeInsets.only(right: defaultPadding),

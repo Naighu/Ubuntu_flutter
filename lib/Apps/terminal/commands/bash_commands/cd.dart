@@ -10,13 +10,15 @@ class Cd implements DecodeCommand {
     List items = shell.listDir();
     folder = folder.startsWith("/") ? folder : "/$folder";
     String? newPath = cd(items, controller.path, folder);
-    if (newPath != controller.path) {
+    if (newPath != null) {
       controller.path = newPath;
-      controller.addOutputString(
-        id,
-        "",
-      );
+      controller.addOutputString(id, "",
+          header:
+              "${controller.sudoMode ? "root:\$" : "naighu@ubuntu:-\$"}$newPath");
+
       //  controller.headers.add(newPath);
+    } else {
+      controller.addOutputString(id, "folder does not exist");
     }
   }
 
@@ -30,7 +32,7 @@ class Cd implements DecodeCommand {
         }
       }
     }
-    if (newPath == null) return currentPath;
+
     return newPath;
   }
 }

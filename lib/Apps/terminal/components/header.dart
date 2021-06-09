@@ -28,10 +28,7 @@ class _HeaderState extends State<HeaderBlock> {
     return IntrinsicHeight(
       child: Row(
         children: [
-          Text(
-              widget.header.header.isEmpty
-                  ? "naighu@ubuntu:-\$${controller.path}"
-                  : widget.header.header + "-\$${controller.path}",
+          Text(widget.header.header,
               style: Theme.of(context).textTheme.bodyText2),
           Expanded(
             child: ConstrainedBox(
