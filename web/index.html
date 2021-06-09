@@ -32,10 +32,25 @@
 
     <script src="battery.js" defer></script>
   </head>
-  <body>
-    <!-- This script installs service_worker.js to provide PWA functionality to
-       application. For more information, see:
-       https://developers.google.com/web/fundamentals/primers/service-workers -->
+   <body style="background-color: #222222;">
+    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+    <center >
+  
+    <image style="padding-top: 5%;" src="icons/logo.png" place-holder="Ubuntu logo" height="180px" width="180px">
+ 
+    <div style="padding-top: 20px; font-size:20px; color: #FFFFFF">
+        Ubuntu 20.04 LTS
+    </div>
+    <lottie-player
+      src="http://localhost:8000/icons/loading.json"
+      background="transparent"
+      speed="0.5"
+      style="width: 100px; height: 100px aligment:center"
+      loop
+      autoplay
+    ></lottie-player>
+    </center>
+
     <script>
       window.addEventListener(
         "contextmenu",
