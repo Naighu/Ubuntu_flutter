@@ -11,8 +11,7 @@ class ProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Theme.of(context).backgroundColor,
+    return Padding(
       padding: const EdgeInsets.fromLTRB(
           defaultPadding, defaultPadding, defaultPadding, 0),
       child: Column(

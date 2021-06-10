@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:ubuntu/System_Apps/profile/profilepage.dart';
+
+import '../Apps/profile/profilepage.dart';
 import '../Apps/gedit/gedit.dart';
 import '../Apps/webview/webview.dart';
 import '../System_Apps/File_Explorer/file_explore.dart';
-import '../System_Apps/Settings/settings_page.dart';
-
+import '../Apps/Settings/settings_page.dart';
 import '../Apps/terminal/terminal.dart';
 
 class App {

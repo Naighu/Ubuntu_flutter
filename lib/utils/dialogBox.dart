@@ -42,7 +42,7 @@ class DialogBox {
               height: 150,
               width: 400,
               child: Material(
-                color: Theme.of(context).backgroundColor,
+                color: Theme.of(context).accentColor,
                 child: Padding(
                   padding: const EdgeInsets.only(top: 15.0),
                   child: Column(
@@ -58,38 +58,53 @@ class DialogBox {
                       Row(
                         children: [
                           Expanded(
-                            flex: 2,
-                            child: TextButton(
-                              style: ButtonStyle(
-                                  shape: MaterialStateProperty.all(
-                                      RoundedRectangleBorder()),
-                                  side: MaterialStateProperty.all(BorderSide(
-                                      color: Color(0xFF161616), width: 0.5))),
-                              onPressed: () {
-                                entry!.remove();
-                                if (onCancel != null) onCancel!();
-                              },
-                              child: Text(
-                                cancelBtnName ?? "Cancel",
-                                style: Theme.of(context).textTheme.subtitle1,
-                              ),
-                            ),
-                          ),
+                              flex: 2,
+                              child: InkWell(
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  height: 30.0,
+                                  decoration: BoxDecoration(
+                                      border: Border(
+                                          right: BorderSide(
+                                              color:
+                                                  Colors.white.withOpacity(0.5),
+                                              width: 0.5),
+                                          top: BorderSide(
+                                              color:
+                                                  Colors.white.withOpacity(0.5),
+                                              width: 0.5))),
+                                  child: Text(
+                                    cancelBtnName ?? "Cancel",
+                                    style:
+                                        Theme.of(context).textTheme.subtitle1,
+                                  ),
+                                ),
+                                onTap: () {
+                                  entry!.remove();
+                                  if (onCancel != null) onCancel!();
+                                },
+                              )),
                           Expanded(
                               flex: 2,
-                              child: TextButton(
-                                style: ButtonStyle(
-                                    shape: MaterialStateProperty.all(
-                                        RoundedRectangleBorder()),
-                                    side: MaterialStateProperty.all(BorderSide(
-                                        color: Color(0xFF161616), width: 0.5))),
-                                onPressed: () {
+                              child: InkWell(
+                                onTap: () {
                                   entry!.remove();
                                   onOk(_text); //returns the text from textfield
                                 },
-                                child: Text(
-                                  okBtnName ?? "Ok",
-                                  style: Theme.of(context).textTheme.subtitle1,
+                                child: Container(
+                                  height: 30.0,
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                      border: Border(
+                                          top: BorderSide(
+                                              color:
+                                                  Colors.white.withOpacity(0.5),
+                                              width: 0.5))),
+                                  child: Text(
+                                    okBtnName ?? "Ok",
+                                    style:
+                                        Theme.of(context).textTheme.subtitle1,
+                                  ),
                                 ),
                               ))
                         ],

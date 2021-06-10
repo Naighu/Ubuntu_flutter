@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+
 import 'package:get/get.dart';
 import '../../../controllers/system_controller.dart';
 import '../../../controllers/app_controller.dart';
@@ -28,7 +29,8 @@ PreferredSizeWidget titleBar(BuildContext context, App app, ThemeData theme,
             menu.menubarWidth.value = menuWidth;
             controller.hide(app);
           },
-          child: Icon(Icons.minimize, size: 16, color: theme.iconTheme.color)),
+          child: SvgPicture.asset("assets/window/window-minimize.svg",
+              height: 20, color: theme.iconTheme.color)),
       const SizedBox(width: defaultPadding),
       InkWell(
           splashColor: Colors.transparent,
@@ -44,9 +46,12 @@ PreferredSizeWidget titleBar(BuildContext context, App app, ThemeData theme,
             }
             onScreenSizeChanged(!app.isMaximized);
           },
-          child: Icon(
-              app.isMaximized ? FontAwesomeIcons.clone : Icons.crop_square,
-              size: 16,
+          child: SvgPicture.asset(
+              app.isMaximized
+                  ? "assets/window/window-restore.svg"
+                  : "assets/window/window-maximize.svg",
+              height: 16,
+              width: 16,
               color: theme.iconTheme.color)),
       const SizedBox(width: defaultPadding),
       Container(
@@ -59,7 +64,8 @@ PreferredSizeWidget titleBar(BuildContext context, App app, ThemeData theme,
             onTap: () {
               onClose();
             },
-            child: Icon(Icons.close, size: 16, color: theme.iconTheme.color)),
+            child: SvgPicture.asset("assets/window/window-close.svg",
+                color: theme.iconTheme.color)),
       )
     ],
   );

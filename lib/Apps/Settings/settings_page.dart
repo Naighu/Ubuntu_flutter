@@ -2,7 +2,6 @@ import 'dart:html';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:ubuntu/utils/cookie_manager.dart';
 import '../../constants.dart';
 import '../../controllers/system_controller.dart';
 import '../../models/app.dart';
@@ -28,9 +27,7 @@ class _SettingsPageState extends State<SettingsPage> {
   final SystemController systemController = Get.find<SystemController>();
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Theme.of(context).backgroundColor,
-      child: LayoutBuilder(builder: (context, constraints) {
+    return LayoutBuilder(builder: (context, constraints) {
         return RawScrollbar(
           isAlwaysShown: true,
           thumbColor: Colors.white,
@@ -87,7 +84,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 ],
               )),
         );
-      }),
+      }
     );
   }
 

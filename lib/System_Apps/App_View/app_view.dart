@@ -79,7 +79,11 @@ class _AppViewState extends State<AppView> with SingleTickerProviderStateMixin {
                             onClose: _onClose,
                             onScreenSizeChanged: _onScreenSizeChanged),
                       )),
-                  Container(height: height, width: width, child: app!.child)
+                  Container(
+                      color: Theme.of(context).backgroundColor,
+                      height: height,
+                      width: width,
+                      child: app!.child)
                 ]),
               ),
             );
@@ -104,27 +108,25 @@ class _AppViewState extends State<AppView> with SingleTickerProviderStateMixin {
 
   void _conditionToShowMenubar() {
     //condition to show menubar
-    bool flag = false;
-    // if any of the apps in full screen then no need to show the menubar.
-    for (List<App> apps in _appController.appStack) {
-      for (App a in apps)
-        if (a.isMaximized) {
-          flag = true;
-          break;
-        }
-      if (flag) break;
-    }
+    // bool flag = false;
+    // // if any of the apps in full screen then no need to show the menubar.
+    // for (List<App> apps in _appController.appStack) {
+    //   for (App a in apps)
+    //     if (a.isMaximized) {
+    //       flag = true;
+    //       break;
+    //     }
+    //   if (flag) break;
+    // }
 
-    if (!flag) {
-      if (app!.hide ||
-          (app!.offset.dx > menuWidth + 30 &&
-              _menuController.menubarWidth.value == 0))
-        _menuController.menubarWidth.value = menuWidth;
-      //condition to hide menubar
-      else if (app!.offset.dx < menuWidth + 10 &&
-          _menuController.menubarWidth.value == menuWidth)
-        _menuController.menubarWidth.value = 0;
-    }
+    if (app!.hide ||
+        (app!.offset.dx > menuWidth + 30 &&
+            _menuController.menubarWidth.value == 0))
+      _menuController.menubarWidth.value = menuWidth;
+    //condition to hide menubar
+    else if (app!.offset.dx < menuWidth + 10 &&
+        _menuController.menubarWidth.value == menuWidth)
+      _menuController.menubarWidth.value = 0;
   }
 
   void _onScreenSizeChanged(bool isMaximized) {

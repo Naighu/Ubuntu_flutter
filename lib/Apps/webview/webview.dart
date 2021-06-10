@@ -24,9 +24,11 @@ class WebviewFrame extends StatelessWidget {
     return Stack(
       children: [
         Container(
-          color: Colors.white,
           alignment: Alignment.center,
-          child: CircularProgressIndicator(),
+          child: CircularProgressIndicator(
+            valueColor:
+                AlwaysStoppedAnimation(Theme.of(context).iconTheme.color),
+          ),
         ),
         HtmlElementView(viewType: app.packageName),
       ],
