@@ -1,8 +1,6 @@
 import 'package:get/get.dart';
 import 'package:ubuntu/models/app.dart';
 
-import '../../../constants.dart';
-
 ///Controller for terminal screen.
 
 class TerminalController extends GetxController {
@@ -18,17 +16,19 @@ class TerminalController extends GetxController {
   /// inorder to work clear command.. used as key for listView
   int cleared = 0;
   TerminalController({
-    String header = "naighu@ubuntu:-\$$rootDir",
-    String currentPath = rootDir,
+    String header = "",
+    required this.path,
     required this.app,
   }) {
+    if (header.isEmpty) header = "naighu@ubuntu:-\$$path";
+
     _prevHeader = header;
+
     blocks = [];
     blocks.add(Header(
         id: 0, //initial id as 0
         header: header));
     outputs = [];
-    path = currentPath;
   }
 
   /// Output result is added to the terminal...

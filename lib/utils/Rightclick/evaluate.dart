@@ -50,9 +50,8 @@ class Evaluate {
       case 3:
         if (onPressed != null) onPressed!(MenuOptions.openTerminal);
         App? terminalApp = appController.getAppByPackageName("terminal");
-        appController.addApp(
-          terminalApp,
-        );
+
+        appController.addApp(terminalApp, params: {"pwd": currentPath});
         break;
 
       case 4:

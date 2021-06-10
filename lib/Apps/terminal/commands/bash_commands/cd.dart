@@ -11,7 +11,7 @@ class Cd implements DecodeCommand {
 
     if (folder == "..") {
       newPath = controller.path!.getParentPath();
-      if (newPath.isEmpty) newPath = controller.path;
+      if (newPath.trim().isEmpty) newPath = controller.path;
     } else if (kIsWeb) {
       folder = folder.startsWith("/") ? folder : "/$folder";
       newPath = cdWeb(controller.path, folder);

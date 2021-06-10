@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ubuntu/Apps/terminal/components/header.dart';
 import 'package:ubuntu/Apps/terminal/components/output_block.dart';
+import 'package:ubuntu/constants.dart';
 import 'package:ubuntu/controllers/system_controller.dart';
 import '../../models/app.dart';
 import 'controllers/terminal_controller.dart';
 
 class Terminal extends StatelessWidget {
-  final App? app;
+  final App app;
 
   const Terminal({Key? key, required this.app}) : super(key: key);
   @override
@@ -19,7 +20,8 @@ class Terminal extends StatelessWidget {
         color: Theme.of(context).primaryColor,
         child: GetBuilder<TerminalController>(
             tag: "$tag",
-            init: TerminalController(app: app!),
+            init: TerminalController(
+                app: app, path: app.params?["pwd"] ?? rootDir),
             builder: (controller) {
               return GetBuilder<TerminalController>(
                   key: Key(controller.cleared.toString()),
