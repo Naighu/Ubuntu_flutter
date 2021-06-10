@@ -7,6 +7,11 @@ abstract class DecodeCommand {
   dynamic executeCommand(String tag, int id, String command);
 }
 
+/// Back bone of the file/folder storage in web.
+/// files/folders are stored in cookies.
+/// files are stored using a prefix `~`.
+/// folder are stored using a prefix `d`.
+
 class WebShell {
   WebShell._();
   static WebShell? _shell;
@@ -50,9 +55,8 @@ class WebShell {
   }
 
   void remove(String path, {option = "dir"}) {
-    print("[Removing File]");
     CookieManager manager = CookieManager.init();
-    print(path);
+
     manager.removeCookie("${_crtPath(path, option: option)}");
   }
 

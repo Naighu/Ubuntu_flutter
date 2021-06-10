@@ -8,17 +8,33 @@ import '../System_Apps/File_Explorer/file_explore.dart';
 import '../Apps/Settings/settings_page.dart';
 import '../Apps/terminal/terminal.dart';
 
+/*
+Inorder to add a new app ..
+* first add the package name in the [installed-apps] section in the config file located at assets/config/system_config.json.
+* Add the app in the [openApp] function to open which widget when the app is clicked.
+*/
+
 class App {
   final String name, icon, packageName;
 
-  ///unique integer for the app
+  /// unique integer for the app in appStack.
   late int pid;
+
+  /// parameters to be passed to the respective apps to work properly.
   Map? params;
+
+  /// size of the window.
   late Size _size;
   Size get size => _getSize;
+
   bool hide = false, isMaximized = false;
+
+  /// offset of the app window.
   late Offset _offset;
   Offset get offset => _getOffset;
+
+  /// which widget to be opened when the app is clicked.
+  /// Add the widget to the [openApp] function.
   Widget? child;
   App({
     required this.name,
@@ -61,6 +77,7 @@ class App {
       icon: json["icon"], name: json["name"], packageName: json["packageName"]);
 }
 
+///Which widget should be opened when the app is clicked.
 Widget? openApp(App app) {
   Widget? wid;
 
