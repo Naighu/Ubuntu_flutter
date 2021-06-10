@@ -64,7 +64,6 @@ class Desktop extends StatelessWidget {
                   id: rootDir,
                   init: FileController(),
                   builder: (controller) {
-                    debugPrint("[REBUILDING FILE EXPLORER]");
                     return FileUi(files: controller.getFiles(rootDir));
                   }),
 

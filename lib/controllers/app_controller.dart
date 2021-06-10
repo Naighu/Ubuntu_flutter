@@ -28,14 +28,14 @@ class AppController extends GetxController {
           app.pid = int.parse("$i" + "${_appStack[i].length}");
           _appStack[i].add(app);
           flag = true;
-          print("[App IS ADDED]");
+          debugPrint("[App IS ADDED]");
           break;
         }
       }
     if (!flag) {
       app.pid = _appStack.length;
       _appStack.add([app]);
-      print("[App IS ADDED]");
+      debugPrint("[App IS ADDED]");
     }
 
     update();
@@ -49,7 +49,7 @@ class AppController extends GetxController {
         if (apps[i] == app) {
           apps.removeAt(i);
           if (apps.isEmpty) _appStack.remove(apps);
-          print("[App IS REMOVED]");
+          debugPrint("[App IS REMOVED]");
         }
       }
     update();

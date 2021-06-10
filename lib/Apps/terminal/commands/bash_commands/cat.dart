@@ -26,7 +26,6 @@ class Cat implements DecodeCommand {
 
   bool checkFileExistOnWeb(String path, String fileName, controller) {
     List items = Ls().ls(path);
-    print("[Path is ] $path");
 
     bool isExist = false;
     for (var item in items) {

@@ -54,7 +54,6 @@ class TerminalController extends GetxController {
           Header(id: id + 1, header: header.isEmpty ? _prevHeader! : header));
       _prevHeader = header.isEmpty ? _prevHeader : header;
     }
-    print("ADDED");
     update();
   }
 

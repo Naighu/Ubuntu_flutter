@@ -67,7 +67,6 @@ class Rm implements DecodeCommand {
           message = "Specify a name";
         else
           message = rm(fileController, path, fileName);
-        print(path);
       } else {
         message = "Incorrect path";
       }

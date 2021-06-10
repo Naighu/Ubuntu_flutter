@@ -63,8 +63,6 @@ class _HeaderState extends State<HeaderBlock> {
   }
 
   void _onSubmitted(String val) {
-    print("[Tag NAme is] : ${widget.tag}");
-    print("[Id NAme is] : ${widget.header.id}");
     if (val.isNotEmpty) {
       List<String> commandsplit = val.split(" ");
       if (commands.containsKey(commandsplit[0])) {

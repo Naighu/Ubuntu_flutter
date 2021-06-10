@@ -69,7 +69,6 @@ class Cp implements DecodeCommand {
     if (isDir && items2.isNotEmpty) error = "Destination folder is not Empty";
 
     if (error.isEmpty) {
-      print("ERROR is emprty");
       shell.create(path2 + "/$fileName2",
           option: isDir ? "dir" : "file", value: contents);
       fileController.updateUi(path2);

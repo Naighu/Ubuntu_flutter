@@ -49,7 +49,6 @@ class Mkdir implements DecodeCommand {
 class Rmdir implements DecodeCommand {
   @override
   dynamic executeCommand(String tag, int id, String command) {
-    print("[Executing RMDIR]");
     final controller = Get.find<TerminalController>(tag: tag);
     final fileController = Get.find<FileController>();
     String message;
@@ -63,7 +62,6 @@ class Rmdir implements DecodeCommand {
         path = a.join("/");
 
         message = rmdir(fileController, path, fileName);
-        print(path);
       } else {
         message = "Incorrect path";
       }
@@ -77,7 +75,6 @@ class Rmdir implements DecodeCommand {
   }
 
   rmdirWeb(FileController fileController, String path, String fileName) {
-    print(path);
     Ls ls = Ls();
     List items = ls.ls(path);
     String error = "Directory Not Found";
@@ -99,9 +96,9 @@ class Rmdir implements DecodeCommand {
           "/$fileName"); //checking if the selected folder is empty or not
       if (dirs.isEmpty) {
         WebShell shell = WebShell.init()!;
-        print(path + "$fileName");
+
         shell.remove(path + "/$fileName");
-        print("PATH:$path");
+
         fileController.updateUi(path);
         return "";
       } else
