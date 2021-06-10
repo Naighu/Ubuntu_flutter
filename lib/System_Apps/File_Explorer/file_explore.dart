@@ -15,10 +15,8 @@ import '../../constants.dart';
 
 class FileExplorer extends StatefulWidget {
   final App app;
-  final Map? params;
 
-  const FileExplorer({Key? key, required this.app, this.params})
-      : super(key: key);
+  const FileExplorer({Key? key, required this.app}) : super(key: key);
 
   @override
   _FileExplorerState createState() => _FileExplorerState();
@@ -29,7 +27,7 @@ class _FileExplorerState extends State<FileExplorer> {
   @override
   void initState() {
     super.initState();
-    dir = widget.params!["dir"];
+    dir = widget.app.params!["dir"];
   }
 
   @override

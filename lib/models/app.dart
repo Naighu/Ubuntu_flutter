@@ -13,6 +13,7 @@ class App {
 
   ///unique integer for the app
   late int pid;
+  Map? params;
   late Size _size;
   Size get size => _getSize;
   bool hide = false, isMaximized = false;
@@ -25,7 +26,7 @@ class App {
     required this.packageName,
   }) {
     _size = Size(60, 70);
-    _offset = Offset(_size.width - 60, _size.height - 70);
+    _offset = Offset(20, _size.height - 70);
   }
 
   get _getSize {
@@ -60,39 +61,33 @@ class App {
       icon: json["icon"], name: json["name"], packageName: json["packageName"]);
 }
 
-Widget? openApp(App app, {Map? params}) {
-  print(params);
+Widget? openApp(App app) {
   Widget? wid;
+
   switch (app.packageName) {
     case "settings":
-      wid = SettingsPage();
+      wid = SettingsPage(app: app);
       break;
     case "spottify":
-      wid = WebviewFrame(app: app, params: params);
+      wid = WebviewFrame(app: app);
       break;
     case "vscode":
-      wid = WebviewFrame(app: app, params: params);
+      wid = WebviewFrame(app: app);
       break;
     case "chrome":
-      wid = WebviewFrame(app: app, params: params);
+      wid = WebviewFrame(app: app);
       break;
     case "explorer":
-      wid = FileExplorer(app: app, params: params);
+      wid = FileExplorer(app: app);
       break;
     case "terminal":
-      wid = Terminal(app: app, params: params);
+      wid = Terminal(app: app);
       break;
     case "gedit":
-      wid = Gedit(
-        app: app,
-        params: params,
-      );
+      wid = Gedit(app: app);
       break;
     case "profile":
-      wid = ProfilePage(
-        app: app,
-        params: params,
-      );
+      wid = ProfilePage(app: app);
       break;
   }
   return wid;

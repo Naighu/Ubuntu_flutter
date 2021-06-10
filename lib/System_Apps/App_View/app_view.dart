@@ -10,7 +10,7 @@ import '../../models/app.dart';
 import 'components/title_bar.dart';
 
 class AppView extends StatefulWidget {
-  final App? app;
+  final App app;
 
   const AppView({Key? key, required this.app}) : super(key: key);
 
@@ -23,17 +23,27 @@ class _AppViewState extends State<AppView> with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Tween<Offset> _offsetAnimation;
   late Tween<Size> _sizeAnimation;
-  App? get app => widget.app;
   final SystemController _menuController = Get.find<SystemController>();
   final AppController _appController = Get.find<AppController>();
+  late TitleBar _titleBar;
 
+  App get app => widget.app;
   @override
   void initState() {
     super.initState();
-    _appController.prevOffset = app!.offset;
-    _appController.prevSize = app!.size;
+
+    _titleBar = TitleBar(
+        app: app,
+        onScreenSizeChanged: _onScreenSizeChanged,
+        onClose: _onClose,
+        title: app.params?["title"]);
+
+    _appController.prevOffset = app.offset;
+    _appController.prevSize = app.size;
+
     _controller = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 200));
+
     _offsetAnimation = Tween<Offset>(begin: _appController.prevOffset);
     _sizeAnimation = Tween<Size>(begin: _appController.prevSize);
   }
@@ -46,7 +56,6 @@ class _AppViewState extends State<AppView> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     final Size size = MediaQuery.of(context).size;
     return GetBuilder<AppController>(builder: (controller) {
       Future(() {
@@ -57,14 +66,14 @@ class _AppViewState extends State<AppView> with SingleTickerProviderStateMixin {
           controller: _controller,
           offsetAnimation: _offsetAnimation.animate(_controller),
           sizeAnimation: _sizeAnimation.animate(_controller),
-          appSize: app!.size,
-          appOffset: app!.offset,
+          appSize: app.size,
+          appOffset: app.offset,
           builder: (height, width, left, top) {
             return Positioned(
               left: left,
               top: top,
               child: Visibility(
-                visible: !app!.hide,
+                visible: !app.hide,
                 maintainState: true,
                 child: Column(children: [
                   GestureDetector(
@@ -75,15 +84,13 @@ class _AppViewState extends State<AppView> with SingleTickerProviderStateMixin {
                       child: SizedBox(
                         height: topAppBarHeight,
                         width: width,
-                        child: titleBar(context, app!, theme,
-                            onClose: _onClose,
-                            onScreenSizeChanged: _onScreenSizeChanged),
+                        child: _titleBar.titleBar(context),
                       )),
                   Container(
                       color: Theme.of(context).backgroundColor,
                       height: height,
                       width: width,
-                      child: app!.child)
+                      child: app.child)
                 ]),
               ),
             );
@@ -92,15 +99,15 @@ class _AppViewState extends State<AppView> with SingleTickerProviderStateMixin {
   }
 
   void _dragUpdate(DragUpdateDetails details, Size size) {
-    Offset newOffset = app!.offset + (details.globalPosition - startDragOffset);
-    Size appSize = app!.size;
+    Offset newOffset = app.offset + (details.globalPosition - startDragOffset);
+    Size appSize = app.size;
     // boundary conditions to drag
     if (newOffset.dx + appSize.width * 0.5 < size.width &&
         newOffset.dy + appSize.height * 0.5 < size.height &&
         newOffset.dy > 0 &&
         newOffset.dx > 0) {
       setState(() {
-        app!.setOffset = newOffset;
+        app.setOffset = newOffset;
       });
     }
     startDragOffset = details.globalPosition;
@@ -119,12 +126,12 @@ class _AppViewState extends State<AppView> with SingleTickerProviderStateMixin {
     //   if (flag) break;
     // }
 
-    if (app!.hide ||
-        (app!.offset.dx > menuWidth + 30 &&
+    if (app.hide ||
+        (app.offset.dx > menuWidth + 30 &&
             _menuController.menubarWidth.value == 0))
       _menuController.menubarWidth.value = menuWidth;
     //condition to hide menubar
-    else if (app!.offset.dx < menuWidth + 10 &&
+    else if (app.offset.dx < menuWidth + 10 &&
         _menuController.menubarWidth.value == menuWidth)
       _menuController.menubarWidth.value = 0;
   }
@@ -137,9 +144,9 @@ class _AppViewState extends State<AppView> with SingleTickerProviderStateMixin {
 
       // changing the begin and end values
       _offsetAnimation.begin = _appController.prevOffset;
-      _offsetAnimation.end = app!.offset;
+      _offsetAnimation.end = app.offset;
       _sizeAnimation.begin = _appController.prevSize;
-      _sizeAnimation.end = app!.size;
+      _sizeAnimation.end = app.size;
 
       _controller.forward();
     }
@@ -147,11 +154,11 @@ class _AppViewState extends State<AppView> with SingleTickerProviderStateMixin {
 
   void _onClose() {
     _menuController.menubarWidth.value = menuWidth;
-    _appController.closeApp(app!);
+    _appController.closeApp(app);
   }
 
   void _onPanStart(DragStartDetails details) {
-    _appController.moveToFront(app!);
+    _appController.moveToFront(app);
     startDragOffset = details.globalPosition;
   }
 }

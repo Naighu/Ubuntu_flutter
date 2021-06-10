@@ -8,9 +8,8 @@ import 'controllers/terminal_controller.dart';
 
 class Terminal extends StatelessWidget {
   final App? app;
-  final Map? params;
 
-  const Terminal({Key? key, this.app, this.params}) : super(key: key);
+  const Terminal({Key? key, required this.app}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     int tag = Get.find<SystemController>().terminalControllerTags + 1;

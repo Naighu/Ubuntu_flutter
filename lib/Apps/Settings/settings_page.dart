@@ -7,10 +7,9 @@ import '../../controllers/system_controller.dart';
 import '../../models/app.dart';
 
 class SettingsPage extends StatefulWidget {
-  final App? app;
-  final Map? params;
+  final App app;
 
-  const SettingsPage({Key? key, this.app, this.params}) : super(key: key);
+  const SettingsPage({Key? key, required this.app}) : super(key: key);
   @override
   _SettingsPageState createState() => _SettingsPageState();
 }

@@ -21,7 +21,7 @@ class Touch implements DecodeCommand {
   }
 
   touchWeb(FileController fileController, String? path, String fileName,
-      {String? contents = "null"}) {
+      {String? contents = "Type here ..."}) {
     List items = Ls().ls(path);
     String error = "";
 

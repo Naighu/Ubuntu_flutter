@@ -73,21 +73,7 @@ class _FileIconState extends State<FileIcon> {
           color: _hoverColor,
           child: InkWell(
             mouseCursor: MouseCursor.defer,
-            onDoubleTap: () {
-              final controller = Get.find<AppController>();
-              if (widget.file.file is File) {
-                App? app = controller.getAppByPackageName(_systemFiles!
-                    .getAppPackageNameToOpenFile(widget.file.fileName!));
-                print(app != null);
-                controller
-                    .addApp(app, params: {"path": widget.file.file!.path});
-              } else if (widget.openDirInNewWindow) {
-                App? app = controller.getAppByPackageName("explorer");
-                controller.addApp(app,
-                    params: {"dir": rootDir + "/${widget.file.fileName}"});
-              }
-              if (widget.onOpened != null) widget.onOpened!(widget.file);
-            },
+            onDoubleTap: _open,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -135,5 +121,23 @@ class _FileIconState extends State<FileIcon> {
           MenuOptions.settings,
         ]).showOnRightClickMenu(
         context, event, Evaluate(currentPath: path, file: widget.file));
+  }
+
+  void _open() {
+    final controller = Get.find<AppController>();
+    if (widget.file.file is File) {
+      App? app = controller.getAppByPackageName(
+          _systemFiles!.getAppPackageNameToOpenFile(widget.file.fileName!));
+
+      controller.addApp(app, params: {
+        "path": widget.file.file!.path,
+        "title": widget.file.fileName
+      });
+    } else if (widget.openDirInNewWindow) {
+      App? app = controller.getAppByPackageName("explorer");
+      controller
+          .addApp(app, params: {"dir": rootDir + "/${widget.file.fileName}"});
+    }
+    if (widget.onOpened != null) widget.onOpened!(widget.file);
   }
 }

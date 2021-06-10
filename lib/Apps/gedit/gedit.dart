@@ -9,9 +9,8 @@ import 'package:ubuntu/constants.dart';
 import 'package:ubuntu/models/app.dart';
 
 class Gedit extends StatefulWidget {
-  final App? app;
-  final Map? params;
-  const Gedit({Key? key, this.app, this.params}) : super(key: key);
+  final App app;
+  Gedit({Key? key, required this.app}) : super(key: key);
 
   @override
   _GeditState createState() => _GeditState();
@@ -19,23 +18,27 @@ class Gedit extends StatefulWidget {
 
 class _GeditState extends State<Gedit> {
   late TextEditingController controller;
+  late ScrollController _scrollController;
   @override
   void initState() {
     super.initState();
     String text = "";
-    if (widget.params!.containsKey("path"))
-      text = Cat().cat(widget.params!["path"]);
+    if (widget.app.params!.containsKey("path"))
+      text = Cat().cat(widget.app.params!["path"]);
     controller = TextEditingController(text: text);
+    _scrollController = ScrollController();
   }
 
   @override
   void dispose() {
     controller.dispose();
+    _scrollController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    print("Gedit");
     return Container(
         color: Colors.white,
         child: Stack(
@@ -45,14 +48,15 @@ class _GeditState extends State<Gedit> {
               padding: const EdgeInsets.only(right: defaultPadding),
               height: 50,
               width: double.infinity,
-              child: GestureDetector(
-                onTap: () {
-                  WebShell shell = WebShell.init()!;
-                  print(controller.text);
-                  shell.updateFile(widget.params!["path"], controller.text);
-                },
-                child: Align(
-                  alignment: Alignment.centerRight,
+              child: Align(
+                alignment: Alignment.centerRight,
+                child: TextButton(
+                  onPressed: () {
+                    WebShell shell = WebShell.init()!;
+                    print(controller.text);
+                    shell.updateFile(
+                        widget.app.params!["path"], controller.text);
+                  },
                   child: Container(
                       width: 60.0,
                       height: 30.0,
@@ -67,23 +71,35 @@ class _GeditState extends State<Gedit> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(top: 50.0),
-              child: ListView(
-                children: [
-                  TextField(
-                    autofocus: true,
-                    decoration: null,
-                    maxLines: null,
-                    minLines: null,
-                    expands: true,
-                    style: Theme.of(context)
-                        .textTheme
-                        .subtitle2!
-                        .copyWith(fontSize: 16),
-                    keyboardType: TextInputType.multiline,
-                    controller: controller,
-                  ),
-                ],
+              padding: const EdgeInsets.only(
+                  top: 50.0,
+                  left: defaultPadding * 0.5,
+                  right: defaultPadding * 0.5),
+              child: RawScrollbar(
+                controller: _scrollController,
+                isAlwaysShown: true,
+                thumbColor: Theme.of(context).accentColor,
+                radius: Radius.circular(10.0),
+                thickness: 5.0,
+                child: ListView(
+                  controller: _scrollController,
+                  padding: const EdgeInsets.only(top: defaultPadding),
+                  children: [
+                    TextField(
+                      autofocus: true,
+                      decoration: null,
+                      maxLines: null,
+                      minLines: null,
+                      expands: true,
+                      style: Theme.of(context)
+                          .textTheme
+                          .subtitle2!
+                          .copyWith(fontSize: 16),
+                      keyboardType: TextInputType.multiline,
+                      controller: controller,
+                    ),
+                  ],
+                ),
               ),
             ),
           ],

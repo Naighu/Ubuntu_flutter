@@ -19,7 +19,8 @@ class AppController extends GetxController {
   /// [params] send the parameters to the app
 
   void addApp(App? app, {Map? params}) {
-    app!.child = openApp(app, params: params);
+    app!.child = openApp(app);
+    app.params = params;
     bool flag = false;
     for (int i = 0; i < _appStack.length; i++)
       for (App a in _appStack[i]) {

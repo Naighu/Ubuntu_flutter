@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 
 import 'command_packages.dart';
@@ -6,10 +7,15 @@ class Cd implements DecodeCommand {
   @override
   dynamic executeCommand(String tag, int id, String folder) {
     final controller = Get.find<TerminalController>(tag: tag);
-    WebShell shell = WebShell.init()!;
-    List items = shell.listDir();
-    folder = folder.startsWith("/") ? folder : "/$folder";
-    String? newPath = cd(items, controller.path, folder);
+    String? newPath;
+
+    if (folder == "..") {
+      newPath = controller.path!.getParentPath();
+      if (newPath.isEmpty) newPath = controller.path;
+    } else if (kIsWeb) {
+      folder = folder.startsWith("/") ? folder : "/$folder";
+      newPath = cdWeb(controller.path, folder);
+    }
     if (newPath != null) {
       controller.path = newPath;
       controller.addOutputString(id, "",
@@ -22,7 +28,9 @@ class Cd implements DecodeCommand {
     }
   }
 
-  String? cd(List items, String? currentPath, String folder) {
+  String? cdWeb(String? currentPath, String folder) {
+    WebShell shell = WebShell.init()!;
+    List items = shell.listDir();
     String? newPath;
     for (var item in items) {
       if (item is Directory) {

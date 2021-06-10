@@ -7,9 +7,8 @@ import 'dart:ui' as ui;
 import '../../models/app.dart';
 
 class WebviewFrame extends StatelessWidget {
-  final Map? params;
   final App app;
-  const WebviewFrame({Key? key, required this.app, this.params})
+  const WebviewFrame({Key? key, required this.app})
       : super(key: key);
 
   @override
@@ -17,7 +16,7 @@ class WebviewFrame extends StatelessWidget {
     ui.platformViewRegistry.registerViewFactory(
         app.packageName,
         (int viewId) => IFrameElement()
-          ..src = params?["url"]
+          ..src = app.params?["url"]
           ..style.border = 'none'
           ..onLoad);
 
