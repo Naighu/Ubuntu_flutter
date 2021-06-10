@@ -1,16 +1,33 @@
-# ubuntu
+# Ubuntu-Flutter
 
-A new Flutter project.
+Simple Ubuntu GUI made with Flutter.<br><br>
+<img src="sample.png" place-holder="sample output" height="350px" width="600px">
 
-## Getting Started
+<h3>1. Supported Terminal Commands :</h3>
 
-This project is a starting point for a Flutter application.
+- pwd
+- clear
+- cd
+- mkdir
+- rmdir
+- touch
+- cat
+- cp
+- sudo 😁
 
-A few resources to get you started if this is your first Flutter project:
+<i>Note: Flags are not supported.</i>
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+- Usage of commands
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+  `mkdir <folder name>`<br>
+  `rmdir <folder name>`<br>
+  `cp <source file> <destination file>`<br>
+  `cd ..`<br>
+  `touch <fileName>`<br>
+  `rm <fileName>`<br>
+  `cat <fileName>`<br>
+  `sudo su`<br>
+
+<h3>2. Supports operations in GUI Mode </h3>
+&nbsp&nbsp&nbsp    such as copy and pasting a file/folder. <br>
+&nbsp&nbsp&nbsp  <i>Note: In GUI mode errors will not be shown.</i>
