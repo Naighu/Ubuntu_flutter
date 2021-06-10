@@ -96,22 +96,33 @@ class ProfilePage extends StatelessWidget {
               height: defaultPadding,
             ),
             _alignment(
-              spacing: defaultPadding,
               children: [
                 _btn(context, "assets/social_media/linked.png", "Linked In",
                     onPressed: () {
                   js.context.callMethod('open',
                       ['https://www.linkedin.com/in/naigal-roy-554217192']);
                 }),
+                const SizedBox(
+                  width: defaultPadding,
+                  height: defaultPadding,
+                ),
                 _btn(context, "assets/social_media/github.png", "Github",
                     onPressed: () {
                   js.context.callMethod('open', ['https://github.com/Naighu']);
                 }),
+                const SizedBox(
+                  height: defaultPadding,
+                  width: defaultPadding,
+                ),
                 _btn(context, "assets/social_media/instagram.png", "Instagram",
                     onPressed: () {
                   js.context.callMethod(
                       'open', ['https://www.instagram.com/andro_codo_hacks/']);
                 }),
+                const SizedBox(
+                  height: defaultPadding,
+                  width: defaultPadding,
+                ),
                 _btn(context, "assets/social_media/email.png", "Email me",
                     onPressed: () {
                   js.context.callMethod('open', [
@@ -141,31 +152,17 @@ class ProfilePage extends StatelessWidget {
         ),
       );
 
-  Widget _alignment({required List<Widget> children, double? spacing}) {
-    List<Widget> _children = [];
+  Widget _alignment({required List<Widget> children}) {
     return LayoutBuilder(builder: (context, constraints) {
-      _children.clear();
-      if (app.size.width > 530) {
-        for (Widget child in children) {
-          _children.add(child);
-          _children.add(SizedBox(
-            width: spacing,
-          ));
-        }
+      if (app.size.width > 530)
         return Row(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: _children,
+          children: children,
         );
-      } else {
-        for (Widget child in children) {
-          _children.add(child);
-          _children.add(SizedBox(
-            height: spacing,
-          ));
-        }
+      else {
         return Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: _children,
+          children: children,
         );
       }
     });
