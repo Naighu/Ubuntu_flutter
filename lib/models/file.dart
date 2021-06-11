@@ -9,11 +9,9 @@ class MyFile {
 }
 
 class LinuxFile extends FileSystemEntity {
-  LinuxFile(String path, {this.owner}) {
+  LinuxFile(String path) {
     _path = path;
   }
-
-  String? owner;
   late String _path;
   @override
   FileSystemEntity get absolute => throw UnimplementedError();
@@ -47,10 +45,9 @@ class LinuxFile extends FileSystemEntity {
 }
 
 class LinuxDirectory extends FileSystemEntity {
-  LinuxDirectory(String path, {this.owner}) {
+  LinuxDirectory(String path) {
     _path = path;
   }
-  String? owner;
   late String _path;
   @override
   FileSystemEntity get absolute => throw UnimplementedError();

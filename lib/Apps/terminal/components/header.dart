@@ -66,7 +66,6 @@ class _HeaderState extends State<HeaderBlock> {
     if (val.isNotEmpty) {
       List<String> commandsplit = val.split(" ");
       if (commands.containsKey(commandsplit[0])) {
-        print("PAth is ${controller.path}");
         commands[val.split(" ")[0]]!.executeCommand(
             widget.tag, widget.header.id, commandsplit.skip(1).join(" "));
       } else {

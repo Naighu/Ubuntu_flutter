@@ -76,12 +76,12 @@ class WebShell {
 
       if (name.startsWith("d-")) // if it starts with d then it is a directory.
         items.add(LinuxDirectory(
-            "${map[0].replaceAll("d-", "").replaceAll("~-", "")}",
-            owner: "user"));
+          "${map[0].replaceAll("d-", "").replaceAll("~-", "")}",
+        ));
       else if (name.startsWith("~-")) // if it starts with ~ then it is a file.
         items.add(LinuxFile(
-            "${map[0].replaceAll("d-", "").replaceAll("~-", "")}",
-            owner: "user"));
+          "${map[0].replaceAll("d-", "").replaceAll("~-", "")}",
+        ));
     }
 
     return items;
