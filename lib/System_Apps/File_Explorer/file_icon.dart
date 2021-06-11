@@ -86,6 +86,7 @@ class _FileIconState extends State<FileIcon> {
                   ),
                 Text(
                   widget.file.fileName!,
+                  textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.bodyText1,
                 )
               ],

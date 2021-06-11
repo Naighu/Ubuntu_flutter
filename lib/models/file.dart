@@ -24,8 +24,9 @@ class LinuxFile extends FileSystemEntity {
   @override
   bool existsSync() {
     List items = Ls().ls(path.getParentPath());
-    for (var item in items)
+    for (var item in items) {
       if (item is LinuxFile && item.path.trim() == path.trim()) return true;
+    }
     return false;
   }
 
@@ -59,10 +60,11 @@ class LinuxDirectory extends FileSystemEntity {
 
   @override
   bool existsSync() {
-    List items = Ls().ls(path);
-    for (var item in items)
+    List items = Ls().ls(path.getParentPath());
+    for (var item in items) {
       if (item is LinuxDirectory && item.path.trim() == path.trim())
         return true;
+    }
     return false;
   }
 

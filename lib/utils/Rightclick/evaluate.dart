@@ -65,7 +65,7 @@ class Evaluate {
 
       case 5:
         if (onPressed != null) onPressed!(MenuOptions.delete);
-        if (file!.file is File)
+        if (file!.file is LinuxFile)
           Rm().rm(fileController, currentPath, file!.fileName!);
         else
           Rmdir().rmdir(fileController, currentPath, file!.fileName!);

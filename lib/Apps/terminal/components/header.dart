@@ -40,8 +40,10 @@ class _HeaderState extends State<HeaderBlock> {
                 child: TextField(
                     decoration: null,
                     autofocus: true,
+                    textInputAction: TextInputAction.go,
                     readOnly: readMode,
                     cursorWidth: 7.0,
+                    keyboardType: TextInputType.name,
                     cursorHeight: 15.0,
                     cursorColor: Colors.white,
                     style: Theme.of(context).textTheme.bodyText1,

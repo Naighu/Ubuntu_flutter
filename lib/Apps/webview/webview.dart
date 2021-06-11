@@ -8,8 +8,7 @@ import '../../models/app.dart';
 
 class WebviewFrame extends StatelessWidget {
   final App app;
-  const WebviewFrame({Key? key, required this.app})
-      : super(key: key);
+  const WebviewFrame({Key? key, required this.app}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -22,13 +21,13 @@ class WebviewFrame extends StatelessWidget {
 
     return Stack(
       children: [
-        Container(
-          alignment: Alignment.center,
-          child: CircularProgressIndicator(
-            valueColor:
-                AlwaysStoppedAnimation(Theme.of(context).iconTheme.color),
-          ),
-        ),
+        // Container(
+        //   alignment: Alignment.center,
+        //   child: CircularProgressIndicator(
+        //     valueColor:
+        //         AlwaysStoppedAnimation(Theme.of(context).iconTheme.color),
+        //   ),
+        // ),
         HtmlElementView(viewType: app.packageName),
       ],
     );

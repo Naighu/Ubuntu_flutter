@@ -51,6 +51,7 @@ class _FileExplorerState extends State<FileExplorer> {
                   left: defaultPadding, top: defaultPadding),
               child: ElevatedButton(
                   style: ButtonStyle(
+                      alignment: Alignment.center,
                       backgroundColor: MaterialStateProperty.all(
                           Theme.of(context).accentColor)),
                   onPressed: _onBackPressed,
@@ -95,7 +96,7 @@ class _FileExplorerState extends State<FileExplorer> {
   }
 
   void _onOpened(MyFile file) {
-    if (file.file is Directory)
+    if (file.file is LinuxDirectory)
       setState(() {
         dir = file.file!.path;
       });

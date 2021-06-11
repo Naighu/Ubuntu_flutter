@@ -76,8 +76,7 @@ class MenuIcon extends StatelessWidget {
             "https://open.spotify.com/embed/playlist/37i9dQZEVXbLZ52XmnySJg";
         break;
       case "vscode":
-        params["url"] =
-            "https://github1s.com/vivek9patel/vivek9patel.github.io/blob/HEAD/src/components/ubuntu.js";
+        params["url"] = "https://github1s.com/naighu/naighu.github.io/#/";
         break;
       case "chrome":
         params["url"] = "https://www.google.com/webhp?igu=1";
