@@ -30,4 +30,4 @@ Simple Ubuntu GUI made with Flutter.<br><br>
 
 <h3>2. Supports operations in GUI Mode </h3>
 &nbsp&nbsp&nbsp    such as copy and pasting a file/folder. <br>
-&nbsp&nbsp&nbsp  <i>Note: In GUI mode warinings will not be shown.</i>
+&nbsp&nbsp&nbsp  <i>Note: In GUI mode warnings will not be shown.</i>
