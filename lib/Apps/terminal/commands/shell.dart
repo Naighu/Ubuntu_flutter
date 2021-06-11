@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:ubuntu/models/file.dart';
 import '../../../utils/cookie_manager.dart';
 
 abstract class DecodeCommand {
@@ -74,10 +75,13 @@ class WebShell {
       String name = map[0].split("/").last;
 
       if (name.startsWith("d-")) // if it starts with d then it is a directory.
-        items.add(
-            Directory("${map[0].replaceAll("d-", "").replaceAll("~-", "")}"));
+        items.add(LinuxDirectory(
+            "${map[0].replaceAll("d-", "").replaceAll("~-", "")}",
+            owner: "user"));
       else if (name.startsWith("~-")) // if it starts with ~ then it is a file.
-        items.add(File("${map[0].replaceAll("d-", "").replaceAll("~-", "")}"));
+        items.add(LinuxFile(
+            "${map[0].replaceAll("d-", "").replaceAll("~-", "")}",
+            owner: "user"));
     }
 
     return items;
@@ -101,4 +105,8 @@ extension parentPath on String {
     split.removeLast();
     return split.join("/");
   }
+}
+
+extension ownerShip on FileSystemEntity {
+  static String? owner;
 }

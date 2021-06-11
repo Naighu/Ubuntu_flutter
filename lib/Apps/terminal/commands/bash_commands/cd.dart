@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
+import 'package:ubuntu/models/file.dart';
 
 import 'command_packages.dart';
 
@@ -33,7 +34,7 @@ class Cd implements DecodeCommand {
     List items = shell.listDir();
     String? newPath;
     for (var item in items) {
-      if (item is Directory) {
+      if (item is LinuxDirectory) {
         if (item.path.trim() == (currentPath! + folder).trim()) {
           newPath = item.path;
           break;

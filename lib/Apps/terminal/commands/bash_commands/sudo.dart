@@ -1,4 +1,7 @@
+import 'dart:html';
+
 import 'package:get/get.dart';
+import 'dart:html' as html;
 
 import '../show_commands.dart';
 import 'command_packages.dart';
@@ -18,7 +21,7 @@ class Sudo implements DecodeCommand {
             .executeCommand(tag, id, commandsplit.skip(1).join(" "));
       } else {
         if (commandsplit[0] == "su") {
-          su(controller, id);
+          su(controller, id, true);
         } else
           controller.addOutputString(id, "no such commands");
       }
@@ -26,8 +29,15 @@ class Sudo implements DecodeCommand {
       controller.addOutputString(id, "Command not found");
   }
 
-  su(TerminalController controller, int id) {
-    controller.sudoMode = true;
-    controller.addOutputString(id, "", header: "root:-\$${controller.path}");
+  su(TerminalController controller, int id, bool permanent) {
+    controller.addOutputString(id, "Enter the sudo password(press any key)",
+        end: false);
+
+    html.document.on["keypress"].listen((_) {
+      controller.sudoMode = true;
+      if (permanent)
+        controller.addOutputString(id, "",
+            header: "root:-\$${controller.path}");
+    });
   }
 }

@@ -38,7 +38,7 @@ class _GeditState extends State<Gedit> {
 
   @override
   Widget build(BuildContext context) {
-    print("Gedit");
+   
     return Container(
         color: Colors.white,
         child: Stack(
@@ -53,7 +53,7 @@ class _GeditState extends State<Gedit> {
                 child: TextButton(
                   onPressed: () {
                     WebShell shell = WebShell.init()!;
-                    print(controller.text);
+                 
                     shell.updateFile(
                         widget.app.params!["path"], controller.text);
                   },

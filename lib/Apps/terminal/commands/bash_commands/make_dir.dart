@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:ubuntu/controllers/file_controller.dart';
+import 'package:ubuntu/models/file.dart';
 
 import 'command_packages.dart';
 
@@ -19,22 +20,13 @@ class Mkdir implements DecodeCommand {
 
   String mkdirWeb(
       FileController fileController, String? path, String fileName) {
-    List items = Ls().ls(path);
     String error = "";
 
     if (fileName.isEmpty)
       error = "Specify a name";
     else {
-      for (var item in items) {
-        List split = item.path.split("/");
-        split.removeLast();
-
-        if (item is Directory &&
-            item.path.trim() == split.join("/") + "/$fileName") {
-          error = "Directory Already exist";
-          break;
-        }
-      }
+      LinuxDirectory dir = LinuxDirectory(path! + "/$fileName");
+      if (dir.existsSync()) error = "Directory Already exist";
     }
     if (error.isEmpty) {
       WebShell shell = WebShell.init()!;
@@ -76,18 +68,14 @@ class Rmdir implements DecodeCommand {
 
   rmdirWeb(FileController fileController, String path, String fileName) {
     Ls ls = Ls();
-    List items = ls.ls(path);
+    //   List items = ls.ls(path);
     String error = "Directory Not Found";
-
     if (fileName.isEmpty)
       error = "Specify a name";
     else {
-      for (var item in items) {
-        if (item is Directory &&
-            item.path.trim() == (path + "/$fileName").trim()) {
-          error = "";
-          break;
-        }
+      LinuxDirectory dir = LinuxDirectory(path + "/$fileName");
+      if (dir.existsSync()) {
+        error = "";
       }
     }
 

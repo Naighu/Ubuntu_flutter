@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:ubuntu/controllers/file_controller.dart';
+import 'package:ubuntu/models/file.dart';
 
 import 'command_packages.dart';
 
@@ -22,22 +23,24 @@ class Touch implements DecodeCommand {
 
   touchWeb(FileController fileController, String? path, String fileName,
       {String? contents = "Type here ..."}) {
-    List items = Ls().ls(path);
+    // List items = Ls().ls(path);
     String error = "";
 
     if (fileName.isEmpty)
       error = "Specify a name";
     else {
-      for (var item in items) {
-        List split = item.path.split("/");
-        split.removeLast();
+      LinuxFile dir = LinuxFile(path! + "/$fileName");
+      if (dir.existsSync()) error = "";
+      // for (var item in items) {
+      //   List split = item.path.split("/");
+      //   split.removeLast();
 
-        if (item is File &&
-            item.path.trim() == (split.join("/") + "/$fileName").trim()) {
-          error = "File Already exist";
-          break;
-        }
-      }
+      //   if (item is File &&
+      //       item.path.trim() == (split.join("/") + "/$fileName").trim()) {
+      //     error = "File Already exist";
+      //     break;
+      //   }
+      // }
     }
     if (error.isEmpty) {
       WebShell shell = WebShell.init()!;
@@ -80,16 +83,9 @@ class Rm implements DecodeCommand {
   }
 
   rmWeb(FileController fileController, String path, String fileName) {
-    Ls ls = Ls();
-    List items = ls.ls(path);
     String error = "File not Found";
-
-    for (var item in items) {
-      if (item is File && item.path.trim() == (path + "/$fileName").trim()) {
-        error = "";
-        break;
-      }
-    }
+    LinuxFile dir = LinuxFile(path + "/$fileName");
+    if (dir.existsSync()) error = "";
 
     if (error.isEmpty) {
       WebShell shell = WebShell.init()!;

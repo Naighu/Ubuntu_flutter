@@ -80,7 +80,7 @@ class _FileIconState extends State<FileIcon> {
                 if (_systemFiles != null)
                   Image.asset(
                     getIcon(widget.file.fileName,
-                        widget.file.file is File ? true : false)!,
+                        widget.file.file is LinuxFile ? true : false)!,
                     height: 50,
                     width: 50,
                   ),
@@ -125,7 +125,7 @@ class _FileIconState extends State<FileIcon> {
 
   void _open() {
     final controller = Get.find<AppController>();
-    if (widget.file.file is File) {
+    if (widget.file.file is LinuxFile) {
       App? app = controller.getAppByPackageName(
           _systemFiles!.getAppPackageNameToOpenFile(widget.file.fileName!));
 

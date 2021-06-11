@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:ubuntu/models/file.dart';
 
 import 'command_packages.dart';
 
@@ -25,16 +26,8 @@ class Cat implements DecodeCommand {
   }
 
   bool checkFileExistOnWeb(String path, String fileName, controller) {
-    List items = Ls().ls(path);
-
-    bool isExist = false;
-    for (var item in items) {
-      if (item is File && item.path.trim() == (path + "/$fileName").trim()) {
-        //check if the path is correct.
-        isExist = true;
-        break;
-      }
-    }
+    LinuxFile dir = LinuxFile(path + "/$fileName");
+    bool isExist = dir.existsSync();
     return isExist;
   }
 
