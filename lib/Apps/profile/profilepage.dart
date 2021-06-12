@@ -108,7 +108,7 @@ class ProfilePage extends StatelessWidget {
                 ),
                 _btn(context, "assets/social_media/github.png", "Github",
                     onPressed: () {
-                  js.context.callMethod('open', ['https://github.com/Naighu']);
+                  js.context.callMethod('open', ['https://github.com/Naighu/Ubuntu_flutter']);
                 }),
                 const SizedBox(
                   height: defaultPadding,
