@@ -13,7 +13,7 @@ class TerminalController extends GetxController {
   ///Present working path
   String? path;
 
-  /// inorder to work clear command.. used as key for listView
+  /// inorder to work clear command..used as a key for the GetBuilder
   int cleared = 0;
   TerminalController({
     String header = "",
