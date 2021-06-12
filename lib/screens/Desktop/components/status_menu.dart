@@ -92,6 +92,7 @@ class _StatusMenuState extends State<StatusMenu> {
               image: "assets/status/about.svg",
               trailingIcon: true,
               onPressed: () {
+                _removeOverlays();
                 AppController appController = Get.find<AppController>();
                 App? app = appController.getAppByPackageName("profile");
                 appController.addApp(app);
@@ -137,9 +138,7 @@ class _StatusMenuState extends State<StatusMenu> {
       );
 
   Route _createRoute() {
-    if (widget.entry != null && widget.entry!.mounted) widget.entry?.remove();
-    if (DialogBox.entry != null && DialogBox.entry!.mounted)
-      DialogBox.entry?.remove();
+   _removeOverlays();
     return PageRouteBuilder(
       transitionDuration: const Duration(milliseconds: 500),
       reverseTransitionDuration: const Duration(milliseconds: 500),
@@ -158,5 +157,11 @@ class _StatusMenuState extends State<StatusMenu> {
         );
       },
     );
+  }
+
+  void _removeOverlays() {
+     if (widget.entry != null && widget.entry!.mounted) widget.entry?.remove();
+    if (DialogBox.entry != null && DialogBox.entry!.mounted)
+      DialogBox.entry?.remove();
   }
 }
